@@ -8,14 +8,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0a0a0b",
-        surface: "#111113",
-        line: "rgba(255,255,255,0.08)",
-        linestrong: "rgba(255,255,255,0.16)",
-        bone: "#f5f4f1",
-        mute: "#8a8a8f",
-        accent: "#5b5bff",
-      },
+          ink: "#f6f4ef",
+            surface: "#edeae2",
+              line: "rgba(17,17,18,0.08)",
+                linestrong: "rgba(17,17,18,0.16)",
+                  bone: "#131313",
+                    mute: "#68676c",
+                      accent: "#4640de",
+                      },
+      
       fontFamily: {
         display: ["var(--font-display)", "serif"],
         sans: ["var(--font-sans)", "sans-serif"],

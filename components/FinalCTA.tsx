@@ -24,7 +24,7 @@ export default function FinalCTA() {
       <Reveal delay={0.25}>
         <a
           href="mailto:hello@example.com?subject=Postiz%20%C3%97%20Deepak%20—%20Partnership"
-          className="group mt-14 inline-flex items-center gap-3 text-sm tracking-[0.14em] bg-bone text-ink px-8 py-4 hover:bg-white transition-colors duration-500 focus-ring"
+          className="group mt-14 inline-flex items-center gap-3 text-sm tracking-[0.14em] bg-bone text-ink px-8 py-4 hover:bg-bone/85 transition-colors duration-500 focus-ring"
         >
           PARTNER WITH ME
           <ArrowRight

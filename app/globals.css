@@ -22,57 +22,58 @@
 
 html,
 body {
-  background-color: #0a0a0b;
-  color: #f5f4f1;
-}
+  background-color: #f6f4ef;
+    color: #131313;
+    }
 
-body {
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-}
+    body {
+      font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        }
 
-::selection {
-  background: #5b5bff;
-  color: #f5f4f1;
-}
-@keyframes macfloat {
-    0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      }
+        ::selection {
+          background: #4640de;
+            color: #f6f4ef;
+            }
 
-/* thin custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #0a0a0b;
-}
-::-webkit-scrollbar-thumb {
-  background: #232326;
-  border-radius: 0;
-}
+            @keyframes macfloat {
+              0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                }
 
-.container-edge {
-  padding-left: clamp(1.5rem, 6vw, 6rem);
-  padding-right: clamp(1.5rem, 6vw, 6rem);
-}
+                /* thin custom scrollbar */
+                ::-webkit-scrollbar {
+                  width: 10px;
+                  }
+                  ::-webkit-scrollbar-track {
+                    background: #f6f4ef;
+                    }
+                    ::-webkit-scrollbar-thumb {
+                      background: #d9d5ca;
+                        border-radius: 0;
+                        }
 
-.hairline {
-  background: rgba(255, 255, 255, 0.08);
-}
+                        .container-edge {
+                          padding-left: clamp(1.5rem, 6vw, 6rem);
+                            padding-right: clamp(1.5rem, 6vw, 6rem);
+                            }
 
-.text-balance {
-  text-wrap: balance;
-}
+                            .hairline {
+                              background: rgba(17, 17, 18, 0.08);
+                              }
 
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
+                              .text-balance {
+                                text-wrap: balance;
+                                }
 
-.focus-ring:focus-visible {
-  outline: 2px solid #5b5bff;
-  outline-offset: 3px;
-}
+                                .glass {
+                                  background: rgba(17, 17, 18, 0.03);
+                                    backdrop-filter: blur(16px);
+                                      -webkit-backdrop-filter: blur(16px);
+                                        border: 1px solid rgba(17, 17, 18, 0.08);
+                                        }
+
+                                        .focus-ring:focus-visible {
+                                          outline: 2px solid #4640de;
+                                            outline-offset: 3px;
+                                            }

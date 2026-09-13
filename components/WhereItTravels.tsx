@@ -42,7 +42,7 @@ export default function WhereItTravels() {
               className="absolute inset-0 opacity-[0.14]"
               style={{
                 backgroundImage:
-                  "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+                  "linear-gradient(to right , #131313 1px, transparent 1px), linear-gradient(to bottom, #131313 1px, transparent 1px)",
                 backgroundSize: "5% 10%",
               }}
             />

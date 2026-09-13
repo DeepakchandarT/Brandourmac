@@ -11,7 +11,7 @@ const LINKS = [
 
 export default function Nav() {
   const { scrollY } = useScroll();
-  const bg = useTransform(scrollY, [0, 120], ["rgba(10,10,11,0)", "rgba(10,10,11,0.72)"]);
+  const bg = useTransform(scrollY, [0, 120],["rgba(246,244,239,0)", "rgba(246,244,239,0.82)"] );
   const borderOpacity = useTransform(scrollY, [0, 120], [0, 0.08]);
   const [open, setOpen] = useState(false);
 

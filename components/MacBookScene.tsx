@@ -55,11 +55,9 @@ function useKeyboardTexture() {
 }
 
 /**
- * Hinge convention (this is the part that was previously buggy):
+ * Hinge convention:
  *   rotation.x = 0      -> lid lies FLAT, folded forward over the keyboard (CLOSED)
  *   rotation.x = -1.72  -> lid stands upright, reclined slightly (OPEN)
- * The lid panel's own geometry extends along +Z (toward the viewer) when
- * unrotated, so "closed" naturally lies flat on top of the base.
  */
 const LID_CLOSED = 0;
 const LID_OPEN = -1.72;
@@ -110,10 +108,6 @@ function Laptop({
       const t = state.clock.getElapsedTime();
       const floatY = interactive ? Math.sin(t * 0.6) * 0.04 : 0;
 
-      // No aggressive push-in here — the earlier version zoomed the camera
-      // so close during the open transition that it filled the frame with
-      // a blurry close-up instead of a composed shot. Keep depth nearly
-      // constant; the hinge + spin/tilt alone carry the reveal.
       const targetZ = 0;
       const targetY = -0.15 + floatY - openAmount * 0.03;
 
@@ -130,17 +124,12 @@ function Laptop({
         delta
       );
 
-      // "Spin out" reveal: sweeps from a side-on angle to near-front as it
-      // opens, and tilts downward (modestly) to bring the keyboard into
-      // view without the geometry ballooning to fill the frame.
       const targetRotY = interactive
-        ? 0.3 + mouse.current.x * 0.22
-        : THREE.MathUtils.lerp(0.75, 0.08, openAmount);
+        ? 0.22 + mouse.current.x * 0.15
+        : THREE.MathUtils.lerp(0.32, 0.12, openAmount);
       const targetRotX = interactive
-        ? 0.08 + mouse.current.y * -0.08
-        : THREE.MathUtils.lerp(0.05, 0.24, openAmount);
-
-      
+        ? 0.1 + mouse.current.y * -0.06
+        : THREE.MathUtils.lerp(0.08, 0.16, openAmount);
 
       group.current.rotation.y = THREE.MathUtils.damp(
         group.current.rotation.y,
@@ -177,7 +166,7 @@ function Laptop({
   const aluminum = { color: "#d3d4d8", metalness: 0.9, roughness: 0.22 };
 
   return (
-    <group ref={group}>
+    <group ref={group} scale={0.85}>
       {/* Base — top surface sits exactly at local y = 0 */}
       <group position={[0, -0.025, 0]}>
         <RoundedBox args={[2.4, 0.05, 1.7]} radius={0.05} smoothness={5}>
@@ -233,15 +222,11 @@ function Laptop({
 
       {/* Hinge, at the back edge of the base (y matches base top surface) */}
       <group ref={hinge} position={[0, 0, -0.85]}>
-        {/* Panel — centered so it extends from the hinge (z=0) to z=+1.7 when flat,
-            matching the base's depth so it covers it fully when closed. */}
         <group position={[0, 0, 0.85]}>
           <RoundedBox args={[2.4, 0.045, 1.7]} radius={0.06} smoothness={5}>
             <meshPhysicalMaterial {...aluminum} clearcoat={0.4} clearcoatRoughness={0.4} />
           </RoundedBox>
 
-          {/* Inner face (bezel + screen) — faces -Y in this local frame, which
-              becomes "toward the viewer" once the hinge opens. */}
           <mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.28, 1.46]} />
             <meshStandardMaterial color="#020203" roughness={0.9} />
@@ -254,7 +239,6 @@ function Laptop({
               emissiveIntensity={0.4}
             />
           </mesh>
-          {/* Camera notch, near the far edge (top of screen once open) */}
           <mesh position={[0, -0.033, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
             <circleGeometry args={[0.012, 16]} />
             <meshStandardMaterial color="#111216" roughness={0.4} metalness={0.3} />
@@ -291,7 +275,7 @@ export default function MacBookScene({
     <div className="w-full h-full">
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 0.9, 4.3], fov: 30 }}
+        camera={{ position: [0, 1, 6], fov: 24 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>

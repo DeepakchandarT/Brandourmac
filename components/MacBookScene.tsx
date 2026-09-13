@@ -263,14 +263,18 @@ function Laptop({
           {brandingVisible && (
             <Text
               position={[0, 0.775, 0.04]}
-              fontSize={0.2}
+              fontSize={0.135}
+              maxWidth={1.9}
+              lineHeight={1.25}
+              textAlign="center"
               color="#f5f4f1"
-              letterSpacing={0.14}
+              letterSpacing={0.01}
               anchorX="center"
               anchorY="middle"
             >
-              POSTIZ
+              You&rsquo;re the hero,{"\n"}not a sidekick.
             </Text>
+         
           )}
         </group>
       </group>

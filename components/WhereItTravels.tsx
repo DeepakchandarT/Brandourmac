@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { Reveal, Eyebrow } from "./Reveal";
+
+const Globe = dynamic(() => import("./Globe"), { ssr: false });
 
 const CATEGORIES = [
   "Client meetings",
@@ -12,15 +14,8 @@ const CATEGORIES = [
   "Freelance projects",
 ];
 
-// Abstract, non-literal marker positions — not tied to real cities or data.
-const MARKERS = [
-  { x: "18%", y: "38%" },
-  { x: "32%", y: "62%" },
-  { x: "48%", y: "28%" },
-  { x: "61%", y: "55%" },
-  { x: "74%", y: "35%" },
-  { x: "85%", y: "60%" },
-];
+// Editable placeholder — replace with the actual upcoming stop as it's confirmed.
+const NEXT_STOP = "Next stop: to be confirmed";
 
 export default function WhereItTravels() {
   return (
@@ -37,37 +32,17 @@ export default function WhereItTravels() {
       <div className="mt-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-center">
         <Reveal delay={0.1}>
           <div className="relative aspect-[16/10] border border-line overflow-hidden">
-            {/* faint world grid instead of a literal map with fabricated data */}
-            <div
-              className="absolute inset-0 opacity-[0.14]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right , #131313 1px, transparent 1px), linear-gradient(to bottom, #131313 1px, transparent 1px)",
-                backgroundSize: "5% 10%",
-              }}
-            />
-            {MARKERS.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute w-2.5 h-2.5 -translate-x-1/2 -translate-y-1/2"
-                style={{ left: m.x, top: m.y }}
-              >
-                <span className="absolute inset-0 rounded-full bg-accent" />
-                <motion.span
-                  className="absolute inset-0 rounded-full bg-accent"
-                  animate={{ scale: [1, 2.4], opacity: [0.5, 0] }}
-                  transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.3 }}
-                />
-              </motion.div>
-            ))}
+            <Globe />
+            <div className="absolute bottom-4 left-4 text-[11px] tracking-[0.14em] text-mute">
+              {NEXT_STOP.toUpperCase()}
+            </div>
           </div>
         </Reveal>
 
         <Reveal delay={0.2}>
+          <p className="text-[12px] tracking-[0.18em] text-mute mb-5">
+            WHERE THE BRAND SHOWS UP
+          </p>
           <ul className="flex flex-col gap-5">
             {CATEGORIES.map((c) => (
               <li

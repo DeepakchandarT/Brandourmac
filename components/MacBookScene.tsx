@@ -106,37 +106,41 @@ function Laptop({
       );
     }
 
-    const zoom = THREE.MathUtils.smoothstep(p, 0.6, 0.85);
-    const pullback = THREE.MathUtils.smoothstep(p, 0.85, 1);
-
     if (group.current) {
       const t = state.clock.getElapsedTime();
       const floatY = interactive ? Math.sin(t * 0.6) * 0.04 : 0;
 
-      const baseZ = THREE.MathUtils.lerp(0, 1.1, zoom) - pullback * 0.6;
-      const baseY = -0.15 + floatY - zoom * 0.12;
+      // No aggressive push-in here — the earlier version zoomed the camera
+      // so close during the open transition that it filled the frame with
+      // a blurry close-up instead of a composed shot. Keep depth nearly
+      // constant; the hinge + spin/tilt alone carry the reveal.
+      const targetZ = 0;
+      const targetY = -0.15 + floatY - openAmount * 0.03;
 
       group.current.position.z = THREE.MathUtils.damp(
         group.current.position.z,
-        baseZ,
+        targetZ,
         4,
         delta
       );
       group.current.position.y = THREE.MathUtils.damp(
         group.current.position.y,
-        baseY,
+        targetY,
         4,
         delta
       );
 
       // "Spin out" reveal: sweeps from a side-on angle to near-front as it
-      // opens, and tilts downward to bring the keyboard clearly into view.
+      // opens, and tilts downward (modestly) to bring the keyboard into
+      // view without the geometry ballooning to fill the frame.
       const targetRotY = interactive
         ? 0.3 + mouse.current.x * 0.22
-        : THREE.MathUtils.lerp(1.05, 0.05, openAmount);
+        : THREE.MathUtils.lerp(0.75, 0.08, openAmount);
       const targetRotX = interactive
         ? 0.08 + mouse.current.y * -0.08
-        : THREE.MathUtils.lerp(0.06, 0.4, openAmount);
+        : THREE.MathUtils.lerp(0.05, 0.24, openAmount);
+
+      
 
       group.current.rotation.y = THREE.MathUtils.damp(
         group.current.rotation.y,

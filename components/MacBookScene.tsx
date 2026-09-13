@@ -1,14 +1,14 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, RoundedBox, Text, ContactShadows, Environment } from "@react-three/drei";
+import { Html, RoundedBox, ContactShadows, Environment } from "@react-three/drei";
 import { MotionValue } from "framer-motion";
 import { Suspense, useRef, useState, useMemo, useEffect } from "react";
 import * as THREE from "three";
 
 // Procedural canvas texture standing in for a keyboard deck — a faint grid
 // of key outlines is enough to read as "keyboard" without modeling ~80
-// individual keycaps (expensive, and unnecessary at this camera distance).
+// individual keycaps.
 function useKeyboardTexture() {
   return useMemo(() => {
     if (typeof document === "undefined") return null;
@@ -45,7 +45,6 @@ function useKeyboardTexture() {
         ctx.fill();
       }
     }
-    // spacebar row hint
     ctx.fillStyle = "#767781";
     ctx.fillRect(padX + keyW * 3, padY + rows * keyH, keyW * 8, 26);
 
@@ -55,6 +54,16 @@ function useKeyboardTexture() {
   }, []);
 }
 
+/**
+ * Hinge convention (this is the part that was previously buggy):
+ *   rotation.x = 0      -> lid lies FLAT, folded forward over the keyboard (CLOSED)
+ *   rotation.x = -1.72  -> lid stands upright, reclined slightly (OPEN)
+ * The lid panel's own geometry extends along +Z (toward the viewer) when
+ * unrotated, so "closed" naturally lies flat on top of the base.
+ */
+const LID_CLOSED = 0;
+const LID_OPEN = -1.72;
+
 function Laptop({
   progress,
   interactive,
@@ -63,19 +72,19 @@ function Laptop({
   interactive: boolean;
 }) {
   const group = useRef<THREE.Group>(null);
-  const lid = useRef<THREE.Group>(null);
+  const hinge = useRef<THREE.Group>(null);
   const mouse = useRef({ x: 0, y: 0 });
   const [hovered, setHovered] = useState<number | null>(null);
   const keyboardTexture = useKeyboardTexture();
 
   const spots = useMemo(() => {
-    const arr: { x: number; y: number; id: number }[] = [];
+    const arr: { x: number; z: number; id: number }[] = [];
     let id = 1;
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 4; col++) {
         arr.push({
           x: (col - 1.5) * 0.34,
-          y: (row - 1.5) * 0.2,
+          z: -0.55 + row * 0.22,
           id: id++,
         });
       }
@@ -86,25 +95,26 @@ function Laptop({
   useFrame((state, delta) => {
     const p = progress.get(); // 0 -> closed, 1 -> fully open & documented
 
-    const targetLid = THREE.MathUtils.lerp(-0.02, -1.92, Math.min(p / 0.55, 1));
-    if (lid.current) {
-      lid.current.rotation.x = THREE.MathUtils.damp(
-        lid.current.rotation.x,
-        targetLid,
+    const openAmount = Math.min(p / 0.6, 1);
+    const targetHinge = THREE.MathUtils.lerp(LID_CLOSED, LID_OPEN, openAmount);
+    if (hinge.current) {
+      hinge.current.rotation.x = THREE.MathUtils.damp(
+        hinge.current.rotation.x,
+        targetHinge,
         6,
         delta
       );
     }
 
-    const zoom = THREE.MathUtils.smoothstep(p, 0.55, 0.85);
+    const zoom = THREE.MathUtils.smoothstep(p, 0.6, 0.85);
     const pullback = THREE.MathUtils.smoothstep(p, 0.85, 1);
 
     if (group.current) {
       const t = state.clock.getElapsedTime();
-      const floatY = interactive ? Math.sin(t * 0.6) * 0.05 : 0;
+      const floatY = interactive ? Math.sin(t * 0.6) * 0.04 : 0;
 
       const baseZ = THREE.MathUtils.lerp(0, 1.1, zoom) - pullback * 0.6;
-      const baseY = -0.2 + floatY - zoom * 0.15;
+      const baseY = -0.15 + floatY - zoom * 0.12;
 
       group.current.position.z = THREE.MathUtils.damp(
         group.current.position.z,
@@ -119,21 +129,25 @@ function Laptop({
         delta
       );
 
+      // "Spin out" reveal: sweeps from a side-on angle to near-front as it
+      // opens, and tilts downward to bring the keyboard clearly into view.
       const targetRotY = interactive
-        ? mouse.current.x * 0.22
-        : THREE.MathUtils.lerp(0.35, 0, Math.min(p / 0.4, 1));
-      const targetRotX = interactive ? mouse.current.y * -0.08 : 0.05;
+        ? 0.3 + mouse.current.x * 0.22
+        : THREE.MathUtils.lerp(1.05, 0.05, openAmount);
+      const targetRotX = interactive
+        ? 0.08 + mouse.current.y * -0.08
+        : THREE.MathUtils.lerp(0.06, 0.4, openAmount);
 
       group.current.rotation.y = THREE.MathUtils.damp(
         group.current.rotation.y,
         targetRotY,
-        5,
+        4.5,
         delta
       );
       group.current.rotation.x = THREE.MathUtils.damp(
         group.current.rotation.x,
         targetRotX,
-        5,
+        4.5,
         delta
       );
     }
@@ -141,7 +155,7 @@ function Laptop({
 
   const [brandingVisible, setBrandingVisible] = useState(false);
   useFrame(() => {
-    const next = progress.get() > 0.5;
+    const next = progress.get() > 0.55;
     setBrandingVisible((prev) => (prev === next ? prev : next));
   });
 
@@ -156,22 +170,18 @@ function Laptop({
     return () => window.removeEventListener("pointermove", handleWindowPointerMove);
   }, [interactive]);
 
-  const aluminum = {
-    color: "#d3d4d8",
-    metalness: 0.9,
-    roughness: 0.22,
-  };
+  const aluminum = { color: "#d3d4d8", metalness: 0.9, roughness: 0.22 };
 
   return (
-    <group ref={group} rotation={[0.05, 0.35, 0]}>
-      {/* Base — slim wedge deck */}
-      <group position={[0, -0.05, 0]}>
+    <group ref={group}>
+      {/* Base — top surface sits exactly at local y = 0 */}
+      <group position={[0, -0.025, 0]}>
         <RoundedBox args={[2.4, 0.05, 1.7]} radius={0.05} smoothness={5}>
           <meshPhysicalMaterial {...aluminum} clearcoat={0.4} clearcoatRoughness={0.4} />
         </RoundedBox>
 
-        {/* Keyboard deck recess */}
-        <mesh position={[0, 0.026, -0.14]} rotation={[-Math.PI / 2, 0, 0]}>
+        {/* Keyboard deck */}
+        <mesh position={[0, 0.026, -0.32]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[1.86, 0.72]} />
           {keyboardTexture ? (
             <meshStandardMaterial map={keyboardTexture} roughness={0.6} metalness={0.15} />
@@ -183,19 +193,14 @@ function Laptop({
         {/* Trackpad */}
         <mesh position={[0, 0.027, 0.42]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.82, 0.56]} />
-          <meshPhysicalMaterial
-            color="#c7c8cd"
-            metalness={0.5}
-            roughness={0.25}
-            clearcoat={0.6}
-          />
+          <meshPhysicalMaterial color="#c7c8cd" metalness={0.5} roughness={0.25} clearcoat={0.6} />
         </mesh>
 
-        {/* 16 spot markers, spread across the deck */}
+        {/* 16 spot markers */}
         {spots.map((s) => (
           <mesh
             key={s.id}
-            position={[s.x, 0.03, -0.35 + s.y]}
+            position={[s.x, 0.03, s.z]}
             rotation={[-Math.PI / 2, 0, 0]}
             onPointerOver={(e) => {
               e.stopPropagation();
@@ -222,30 +227,22 @@ function Laptop({
         ))}
       </group>
 
-      {/* Lid, hinged at the back edge */}
-      <group position={[0, -0.02, -0.85]}>
-        <group ref={lid}>
-          <RoundedBox
-            args={[2.4, 1.55, 0.045]}
-            radius={0.06}
-            smoothness={5}
-            position={[0, 0.775, 0]}
-          >
+      {/* Hinge, at the back edge of the base (y matches base top surface) */}
+      <group ref={hinge} position={[0, 0, -0.85]}>
+        {/* Panel — centered so it extends from the hinge (z=0) to z=+1.7 when flat,
+            matching the base's depth so it covers it fully when closed. */}
+        <group position={[0, 0, 0.85]}>
+          <RoundedBox args={[2.4, 0.045, 1.7]} radius={0.06} smoothness={5}>
             <meshPhysicalMaterial {...aluminum} clearcoat={0.4} clearcoatRoughness={0.4} />
           </RoundedBox>
 
-          {/* Screen bezel */}
-          <RoundedBox
-            args={[2.28, 1.46, 0.01]}
-            radius={0.03}
-            smoothness={4}
-            position={[0, 0.775, 0.026]}
-          >
+          {/* Inner face (bezel + screen) — faces -Y in this local frame, which
+              becomes "toward the viewer" once the hinge opens. */}
+          <mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.28, 1.46]} />
             <meshStandardMaterial color="#020203" roughness={0.9} />
-          </RoundedBox>
-
-          {/* Screen face (slightly inset from the bezel) */}
-          <mesh position={[0, 0.775, 0.032]}>
+          </mesh>
+          <mesh position={[0, -0.032, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.18, 1.36]} />
             <meshStandardMaterial
               color="#050506"
@@ -253,28 +250,25 @@ function Laptop({
               emissiveIntensity={0.4}
             />
           </mesh>
-
-          {/* Camera notch */}
-          <mesh position={[0, 1.47, 0.033]}>
+          {/* Camera notch, near the far edge (top of screen once open) */}
+          <mesh position={[0, -0.033, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
             <circleGeometry args={[0.012, 16]} />
             <meshStandardMaterial color="#111216" roughness={0.4} metalness={0.3} />
           </mesh>
 
           {brandingVisible && (
-            <Text
-              position={[0, 0.775, 0.04]}
-              fontSize={0.135}
-              maxWidth={1.9}
-              lineHeight={1.25}
-              textAlign="center"
-              color="#f5f4f1"
-              letterSpacing={0.01}
-              anchorX="center"
-              anchorY="middle"
+            <Html
+              position={[0, -0.05, 0]}
+              center
+              distanceFactor={2.6}
+              style={{ pointerEvents: "none" }}
             >
-              You&rsquo;re the hero,{"\n"}not a sidekick.
-            </Text>
-         
+              <div className="text-[#f5f4f1] font-sans font-medium text-[13px] leading-snug text-center tracking-[0.01em] whitespace-nowrap">
+                You&rsquo;re the hero,
+                <br />
+                not a sidekick.
+              </div>
+            </Html>
           )}
         </group>
       </group>
@@ -293,7 +287,7 @@ export default function MacBookScene({
     <div className="w-full h-full">
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 0.6, 3.6], fov: 30 }}
+        camera={{ position: [0, 0.85, 3.5], fov: 34 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
@@ -302,13 +296,7 @@ export default function MacBookScene({
           <directionalLight position={[-2, 1.2, -1.5]} intensity={0.4} />
           <directionalLight position={[0, 0.4, -2.5]} intensity={0.35} color="#eef0ff" />
           <Laptop progress={progress} interactive={interactive} />
-          <ContactShadows
-            position={[0, -0.42, 0]}
-            opacity={0.4}
-            scale={6}
-            blur={2.8}
-            far={2}
-          />
+          <ContactShadows position={[0, -0.42, 0]} opacity={0.4} scale={6} blur={2.8} far={2} />
           <Environment preset="studio" />
         </Suspense>
       </Canvas>

@@ -291,7 +291,7 @@ export default function MacBookScene({
     <div className="w-full h-full">
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 0.85, 3.5], fov: 34 }}
+        camera={{ position: [0, 0.9, 4.3], fov: 30 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>

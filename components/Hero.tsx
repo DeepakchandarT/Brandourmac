@@ -2,13 +2,13 @@
 
 import { motion, useMotionValue } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useMediaQuery } from "@/lib/useMediaQuery";
+import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
 import CSSMacBook from "./CSSMacBook";
 
 const MacBookScene = dynamic(() => import("./MacBookScene"), { ssr: false });
 
 export default function Hero() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const reduceMotion = usePrefersReducedMotion();
   const staticProgress = useMotionValue(0);
 
   return (
@@ -54,12 +54,12 @@ export default function Hero() {
 
       {/* MacBook visual layer — sits below the copy, never overlapping it */}
       <div className="relative z-0 flex items-center justify-center h-[34vh] md:h-[38vh] mt-6">
-        {isMobile ? (
+        {reduceMotion ? (
           <div className="pointer-events-none w-full h-full opacity-95">
-            <CSSMacBook progress={staticProgress} idleFloat brandedWhenOpen={false} />
+            <CSSMacBook progress={staticProgress} brandedWhenOpen={false} />
           </div>
         ) : (
-          <div className="pointer-events-auto w-[70vw] max-w-[620px] h-full">
+          <div className="pointer-events-auto w-[80vw] max-w-[620px] h-full">
             <MacBookScene progress={staticProgress} interactive />
           </div>
         )}

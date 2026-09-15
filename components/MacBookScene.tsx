@@ -91,7 +91,7 @@ function Laptop({
   }, []);
 
   useFrame((state, delta) => {
-    const p = progress.get(); // 0 -> closed, 1 -> fully open & documented
+    const p = progress.get();
 
     const openAmount = Math.min(p / 0.6, 1);
     const targetHinge = THREE.MathUtils.lerp(LID_CLOSED, LID_OPEN, openAmount);
@@ -163,17 +163,15 @@ function Laptop({
     return () => window.removeEventListener("pointermove", handleWindowPointerMove);
   }, [interactive]);
 
-  const aluminum = { color: "#d3d4d8", metalness: 0.9, roughness: 0.22 };
+  const aluminum = { color: "#d3d4d8", metalness: 0.55, roughness: 0.42 };
 
   return (
-    <group ref={group} scale={0.85}>
-      {/* Base — top surface sits exactly at local y = 0 */}
+    <group ref={group} scale={0.95}>
       <group position={[0, -0.025, 0]}>
         <RoundedBox args={[2.4, 0.05, 1.7]} radius={0.05} smoothness={5}>
-          <meshPhysicalMaterial {...aluminum} clearcoat={0.4} clearcoatRoughness={0.4} />
+          <meshPhysicalMaterial {...aluminum} clearcoat={0.12} clearcoatRoughness={0.7} />
         </RoundedBox>
 
-        {/* Keyboard deck */}
         <mesh position={[0, 0.026, -0.32]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[1.86, 0.72]} />
           {keyboardTexture ? (
@@ -183,13 +181,11 @@ function Laptop({
           )}
         </mesh>
 
-        {/* Trackpad */}
         <mesh position={[0, 0.027, 0.42]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.82, 0.56]} />
-          <meshPhysicalMaterial color="#c7c8cd" metalness={0.5} roughness={0.25} clearcoat={0.6} />
+          <meshPhysicalMaterial color="#c7c8cd" metalness={0.4} roughness={0.35} clearcoat={0.15} />
         </mesh>
 
-        {/* 16 spot markers */}
         {spots.map((s) => (
           <mesh
             key={s.id}
@@ -220,11 +216,10 @@ function Laptop({
         ))}
       </group>
 
-      {/* Hinge, at the back edge of the base (y matches base top surface) */}
       <group ref={hinge} position={[0, 0, -0.85]}>
         <group position={[0, 0, 0.85]}>
           <RoundedBox args={[2.4, 0.045, 1.7]} radius={0.06} smoothness={5}>
-            <meshPhysicalMaterial {...aluminum} clearcoat={0.4} clearcoatRoughness={0.4} />
+            <meshPhysicalMaterial {...aluminum} clearcoat={0.12} clearcoatRoughness={0.7} />
           </RoundedBox>
 
           <mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
@@ -275,7 +270,7 @@ export default function MacBookScene({
     <div className="w-full h-full">
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 1, 6], fov: 24 }}
+        camera={{ position: [0, 0.95, 4.6], fov: 30 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
@@ -285,7 +280,7 @@ export default function MacBookScene({
           <directionalLight position={[0, 0.4, -2.5]} intensity={0.35} color="#eef0ff" />
           <Laptop progress={progress} interactive={interactive} />
           <ContactShadows position={[0, -0.42, 0]} opacity={0.4} scale={6} blur={2.8} far={2} />
-          <Environment preset="studio" />
+          <Environment preset="city" background={false} />
         </Suspense>
       </Canvas>
     </div>

@@ -221,19 +221,15 @@ function Laptop({
           <RoundedBox args={[2.4, 0.045, 1.7]} radius={0.06} smoothness={5}>
             <meshPhysicalMaterial {...aluminum} clearcoat={0.12} clearcoatRoughness={0.7} />
           </RoundedBox>
-
-          <mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
+<mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.28, 1.46]} />
-            <meshStandardMaterial color="#020203" roughness={0.9} />
+            <meshBasicMaterial color="#020203" />
           </mesh>
           <mesh position={[0, -0.032, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.18, 1.36]} />
-            <meshStandardMaterial
-              color="#050506"
-              emissive={brandingVisible ? "#0a0a12" : "#000000"}
-              emissiveIntensity={0.4}
-            />
+            <meshBasicMaterial color={brandingVisible ? "#0d0d14" : "#050506"} />
           </mesh>
+          
           <mesh position={[0, -0.033, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
             <circleGeometry args={[0.012, 16]} />
             <meshStandardMaterial color="#111216" roughness={0.4} metalness={0.3} />
@@ -274,10 +270,10 @@ export default function MacBookScene({
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.55} />
-          <directionalLight position={[2, 3, 2]} intensity={1.2} />
-          <directionalLight position={[-2, 1.2, -1.5]} intensity={0.4} />
-          <directionalLight position={[0, 0.4, -2.5]} intensity={0.35} color="#eef0ff" />
+          <ambientLight intensity={0.7} />
+          <directionalLight position={[2, 3, 2]} intensity={0.75} />
+          <directionalLight position={[-2, 1.2, -1.5]} intensity={0.35} />
+          <directionalLight position={[0, 0.4, -2.5]} intensity={0.3} color="#eef0ff" />
           <Laptop progress={progress} interactive={interactive} />
           <ContactShadows position={[0, -0.42, 0]} opacity={0.4} scale={6} blur={2.8} far={2} />
           <Environment preset="city" background={false} />

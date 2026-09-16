@@ -23,7 +23,7 @@ export function Brand({ position, scale = 1, rotation = [0, 0, 0] }: {
     onClick={e => { e.stopPropagation(); window.location.assign("https://postiz.com/"); }}
     onPointerOver={() => { document.body.style.cursor = "pointer"; }}
     onPointerOut={() => { document.body.style.cursor = ""; }}>
-    <planeGeometry args={[1.22, .41]} />
+    <planeGeometry args={[1.22, .275]} />
     <meshBasicMaterial map={texture} transparent alphaTest={.03} toneMapped={false} polygonOffset polygonOffsetFactor={-2} />
   </mesh>;
 }

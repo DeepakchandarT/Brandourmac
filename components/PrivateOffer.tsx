@@ -1,6 +1,6 @@
 "use client";
 import { FormEvent, useRef, useState } from "react";
-import { ArrowUpRight, Check, LockKeyhole } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Check, LockKeyhole } from "lucide-react";
 import InvitationForm from "./InvitationForm";
 import PostizLogo from "./PostizLogo";
 
@@ -27,22 +27,27 @@ export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocke
   return <section id="private-offer" className="private-offer-section container-edge">
     <div className="offer-introduction">
       <PostizLogo/>
-      <h2>Your brand.<br/>Your call.<br/><em>Your price.</em></h2>
-      <p>This invitation is for one brand only. Name the price that makes sense for a twelve-month, exclusive partnership.</p>
-      <dl className="offer-inclusions"><div><dt>MacBook</dt><dd>All 16 placements</dd></div><div><dt>Everyday kit</dt><dd>T-shirt, pen, notebook & bottle</dd></div><div><dt>Documentation</dt><dd>12 monthly reports</dd></div></dl>
-      <p className="offer-reference">For context: Postiz previously offered €1,200 (approximately $1,404 at the time) for one lid placement on BrandMyMac. This proposal includes the entire kit.</p>
+      <h2>Quote<br/><em>your price.</em></h2>
+      <p>One brand. Twelve months. No competition.</p>
+      <div className="previous-bid" aria-label="Postiz previously bid 1,404 US dollars for one of fourteen lid placements">
+        <span>YOUR PREVIOUS BID</span>
+        <strong>$1,404</strong>
+        <p>for 1 of 14 MacBook lid spaces</p>
+        <ArrowDownRight className="bid-direction-arrow" aria-hidden="true" />
+      </div>
+      <p className="offer-scope"><strong>This time:</strong> all 16 placements, the full everyday kit and twelve monthly reports.</p>
     </div>
     <div className="offer-form-panel">
       {reference?<div className="offer-success" role="status"><Check size={30}/><h3>Your offer is in.</h3><p>Your proposal has been saved privately. Thank you for taking the first step.</p><span>Reference: {reference}</span></div>:<>
-        <div className="offer-form-heading"><span><LockKeyhole size={15}/>{unlocked?"Invitation verified":"Reserved for Postiz"}</span><h3>Make it yours.</h3><p>No competing bids. One private conversation.</p></div>
+        <div className="offer-form-heading"><span><LockKeyhole size={15}/>{unlocked?"Invitation verified":"Reserved for Postiz"}</span><h3>Your number.</h3><p>Quote privately. Once agreed, the final partnership price will be displayed here.</p></div>
         {!unlocked?<InvitationForm onSuccess={()=>{setUnlocked(true);setError("");}}/>:<form className="bid-form" onSubmit={submit}>
           <div className="bid-amount-row"><label>Currency<select value={values.currency} onChange={e=>setValues(v=>({...v,currency:e.target.value}))}><option>USD</option><option>EUR</option><option>INR</option></select></label>
           <label>Your offer for 12 months<input aria-label="Your offer amount for twelve months" type="number" inputMode="decimal" min="0.01" max="999999999.99" step="0.01" required placeholder="Your amount" value={values.amount} onChange={e=>setValues(v=>({...v,amount:e.target.value}))}/></label></div>
           <label>Your name<input autoComplete="name" required maxLength={120} value={values.contact} onChange={e=>setValues(v=>({...v,contact:e.target.value}))}/></label>
           <label>Work email<input type="email" autoComplete="email" required maxLength={254} value={values.email} onChange={e=>setValues(v=>({...v,email:e.target.value}))}/></label>
-          <label>Anything you would like to add? <span>(optional)</span><textarea rows={3} maxLength={3000} value={values.note} onChange={e=>setValues(v=>({...v,note:e.target.value}))}/></label>
+          <label>Note <span>(optional)</span><textarea rows={3} maxLength={3000} value={values.note} onChange={e=>setValues(v=>({...v,note:e.target.value}))}/></label>
           <button className="primary-action" disabled={busy} type="submit">{busy?"Saving your offer…":"Submit private offer"}<ArrowUpRight size={18}/></button>
-          <p className="bid-privacy">Your name, email and offer are stored privately for this partnership conversation. They are never displayed on the public site.</p>
+          <p className="bid-privacy">Your quote stays private until we agree.</p>
         </form>}
         {error&&<p className="form-error" role="alert">{error}</p>}
       </>}

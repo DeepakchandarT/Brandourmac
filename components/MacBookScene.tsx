@@ -7,6 +7,25 @@ import { Suspense, useMemo, useRef, useEffect } from "react";
 import { Brand } from "./BrandTexture";
 import * as THREE from "three";
 
+const APPLE_PATH = "M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.32.03-1.75-.79-3.27-.79-1.52 0-2 .77-3.24.82-1.3.05-2.28-1.32-3.12-2.54C4.31 16.96 3 12.41 4.91 9.08c.95-1.65 2.67-2.7 4.53-2.73 1.41-.03 2.75.95 3.62.95.87 0 2.5-1.18 4.21-1.01.72.03 2.74.29 4.03 2.18-.1.06-2.41 1.4-2.38 4.21.03 3.36 2.94 4.48 2.98 4.5-.03.09-.46 1.58-1.19 3M14.24 4.43c.73-.83 1.22-1.98 1.09-3.13-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.1 3.02 1.17.09 2.37-.59 3.07-1.42";
+
+function useAppleTexture() {
+  const texture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const context = canvas.getContext("2d")!;
+    context.scale(512 / 24, 512 / 24);
+    context.fillStyle = "#24252a";
+    context.fill(new Path2D(APPLE_PATH));
+    const result = new THREE.CanvasTexture(canvas);
+    result.colorSpace = THREE.SRGBColorSpace;
+    return result;
+  }, []);
+  useEffect(() => () => texture.dispose(), [texture]);
+  return texture;
+}
+
 function useArtwork(kind: "screen" | "lid" | "keys") {
   const texture = useMemo(() => {
     const c = document.createElement("canvas");
@@ -24,6 +43,7 @@ function useArtwork(kind: "screen" | "lid" | "keys") {
     } else if(kind === "lid") {
       x.fillStyle="#d7d8dc"; x.fillRect(0,0,1536,1024);
       for(let row=0;row<4;row++)for(let col=0;col<4;col++){
+        if((row===1||row===2)&&(col===1||col===2)) continue;
         const left=90+col*350,top=64+row*230;
         x.fillStyle="#faf9fd"; x.beginPath(); x.roundRect(left,top,305,183,20); x.fill();
         x.textAlign="center";
@@ -45,6 +65,7 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
   const root=useRef<THREE.Group>(null);
   const hinge=useRef<THREE.Group>(null);
   const screen=useArtwork("screen"), lid=useArtwork("lid"), keys=useArtwork("keys");
+  const apple=useAppleTexture();
   const {camera,size}=useThree();
   useEffect(()=>{
     const cam=camera as THREE.PerspectiveCamera;
@@ -85,7 +106,15 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
       <group position={[0,0,1.37]}>
         <RoundedBox args={[4.2,.07,2.79]} radius={.034} smoothness={4}><meshStandardMaterial {...silver}/></RoundedBox>
         <mesh position={[0,.037,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[4.02,2.64]}/><meshStandardMaterial map={lid} roughness={.48} metalness={.15}/></mesh>
-        {Array.from({length:16},(_,i)=><Brand key={i} position={[-1.375+(i%4)*.916,.039,.88-Math.floor(i/4)*.593]} rotation={[-Math.PI/2,0,0]} scale={.5}/>)}
+        {Array.from({length:16},(_,i)=>{
+          const row=Math.floor(i/4), col=i%4;
+          if((row===1||row===2)&&(col===1||col===2)) return null;
+          return <Brand key={i} position={[-1.375+col*.916,.039,.88-row*.593]} rotation={[-Math.PI/2,0,Math.PI]} scale={.5}/>;
+        })}
+        <mesh position={[0,.041,0]} rotation={[-Math.PI/2,0,Math.PI]}>
+          <planeGeometry args={[.88,.88]}/>
+          <meshBasicMaterial map={apple} transparent alphaTest={.02} toneMapped={false} polygonOffset polygonOffsetFactor={-3}/>
+        </mesh>
         <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
         <Brand position={[0,-.053,.22]} rotation={[Math.PI/2,0,0]} scale={1.1}/>

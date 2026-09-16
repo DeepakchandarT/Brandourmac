@@ -2,6 +2,10 @@
 
 import { motion, useTransform, MotionValue, useSpring } from "framer-motion";
 
+const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[34%] w-[34%] fill-[#27282d]">
+  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.32.03-1.75-.79-3.27-.79-1.52 0-2 .77-3.24.82-1.3.05-2.28-1.32-3.12-2.54C4.31 16.96 3 12.41 4.91 9.08c.95-1.65 2.67-2.7 4.53-2.73 1.41-.03 2.75.95 3.62.95.87 0 2.5-1.18 4.21-1.01.72.03 2.74.29 4.03 2.18-.1.06-2.41 1.4-2.38 4.21.03 3.36 2.94 4.48 2.98 4.5-.03.09-.46 1.58-1.19 3M14.24 4.43c.73-.83 1.22-1.98 1.09-3.13-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.1 3.02 1.17.09 2.37-.59 3.07-1.42"/>
+</svg>;
+
 /**
  * A pure CSS/3D-transform MacBook. No WebGL, so it's cheap enough for any
  * phone, but it still folds open exactly in sync with scroll (or stays
@@ -125,15 +129,20 @@ export default function CSSMacBook({
                 className="absolute inset-[3.2%] rounded-[6px] grid grid-cols-4 gap-[2.3%] p-[2.3%] bg-[#c6c7cb]"
                 style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
               >
-                {Array.from({ length: 16 }).map((_, index) => (
+                {Array.from({ length: 16 }).map((_, index) => {
+                  const row=Math.floor(index/4), col=index%4;
+                  const center=(row===1||row===2)&&(col===1||col===2);
+                  return center ? <div key={index} className="flex items-center justify-center">
+                    {index===5&&<div className="absolute inset-0 flex items-center justify-center"><AppleMark/></div>}
+                  </div> : (
                   <div
                     key={index}
-                    className="flex flex-col items-center justify-center rounded-[3px] bg-gradient-to-br from-[#6b63f1] to-[#3730b7] text-white shadow-sm"
+                    className="flex rotate-180 flex-col items-center justify-center rounded-[3px] bg-gradient-to-br from-[#6b63f1] to-[#3730b7] text-white shadow-sm"
                   >
                     <span className="text-[4px] opacity-65">{String(index + 1).padStart(2, "0")}</span>
                     <span className="text-[5px] font-semibold tracking-[0.06em]">POSTIZ</span>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
           </motion.div>

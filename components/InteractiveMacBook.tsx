@@ -23,12 +23,17 @@ export default function InteractiveMacBook() {
   return (
     <section id="idea" ref={ref} className="relative h-[320vh] bg-ink">
       <div className="sticky top-0 h-[100svh] flex flex-col items-center justify-center overflow-hidden">
-        <div className="w-[92vw] max-w-[820px] h-[52vh]">
+        <div className="neo-inset rounded-[2.25rem] w-[92vw] max-w-[900px] h-[56vh] p-3 md:p-6">
+          <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] bg-ink">
           {reduceMotion ? (
             <CSSMacBook progress={scrollYProgress} />
           ) : (
             <MacBookScene progress={scrollYProgress} interactive={false} />
           )}
+          <div className="pointer-events-none absolute left-5 top-5 rounded-full bg-ink/80 px-4 py-2 text-[10px] tracking-[0.18em] text-mute backdrop-blur">
+            SCROLL TO REVEAL
+          </div>
+          </div>
         </div>
 
         <motion.div
@@ -45,6 +50,14 @@ export default function InteractiveMacBook() {
             DEDICATED TO POSTIZ
           </p>
         </motion.div>
+
+        <div className="pointer-events-none absolute left-1/2 top-24 hidden w-[min(86vw,880px)] -translate-x-1/2 items-center justify-between md:flex">
+          {["01  CLAIM THE LID", "02  OPEN THE STORY", "03  CARRY THE BRAND"].map((label) => (
+            <span key={label} className="text-[10px] tracking-[0.18em] text-mute">
+              {label}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

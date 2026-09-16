@@ -4,17 +4,22 @@ const PILLARS = [
   {
     n: "01",
     title: "Laptop",
-    copy: "Postiz branding across all 16 available surfaces.",
+    copy: "Every one of the 16 available MacBook surfaces belongs to Postiz.",
   },
   {
     n: "02",
-    title: "Apparel",
-    copy: "Postiz-branded apparel at appropriate professional events.",
+    title: "What I wear",
+    copy: "A Postiz T-shirt and cap at relevant meetings, events and conferences.",
   },
   {
     n: "03",
-    title: "Documentation",
-    copy: "Monthly photographs documenting where the brand travels.",
+    title: "What I carry",
+    copy: "A branded notebook, pen and water bottle in day-to-day professional settings.",
+  },
+  {
+    n: "04",
+    title: "Proof",
+    copy: "A monthly photo log and activity summary documenting every meaningful appearance.",
   },
 ];
 
@@ -29,15 +34,17 @@ export default function PostizPresence() {
         </h2>
       </Reveal>
 
-      <div className="mt-20 grid md:grid-cols-3 gap-px bg-line">
+      <div className="mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {PILLARS.map((p, i) => (
           <Reveal key={p.n} delay={i * 0.1}>
-            <div className="bg-ink p-10 h-full flex flex-col gap-6">
+            <div className="neo-card rounded-[1.75rem] p-8 h-full min-h-[250px] flex flex-col gap-6">
               <span className="text-[13px] tracking-[0.18em] text-mute">
                 {p.n}
               </span>
-              <h3 className="font-display text-2xl">{p.title}</h3>
+              <div className="mt-auto">
+              <h3 className="font-display text-2xl mb-3">{p.title}</h3>
               <p className="text-mute text-balance">{p.copy}</p>
+              </div>
             </div>
           </Reveal>
         ))}

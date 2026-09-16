@@ -22,7 +22,7 @@ export default function MonthlyReports() {
       </Reveal>
 
       <Reveal delay={0.1}>
-        <div className="glass p-8 md:p-12">
+        <div className="glass rounded-[2rem] p-7 md:p-12">
           <div className="flex items-baseline justify-between mb-10 flex-wrap gap-4">
             <span className="font-display text-2xl tracking-tightest2">
               {REPORT_MONTH.toUpperCase()}
@@ -34,7 +34,7 @@ export default function MonthlyReports() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {METRICS.map((m) => (
-              <div key={m.label}>
+              <div key={m.label} className="neo-inset rounded-2xl p-5 min-h-[116px]">
                 <p className="text-mute text-sm mb-2">{m.label}</p>
                 <p className="font-display text-xl md:text-2xl italic text-mute">
                   {m.value}
@@ -47,7 +47,7 @@ export default function MonthlyReports() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="aspect-square border border-line flex items-center justify-center"
+                className="neo-inset aspect-square rounded-xl flex items-center justify-center"
               >
                 <span className="text-[10px] tracking-[0.12em] text-mute">
                   PHOTO

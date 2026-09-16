@@ -18,13 +18,13 @@ export default function Nav() {
   return (
     <motion.header
       style={{ backgroundColor: bg }}
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+      className="fixed top-3 left-3 right-3 md:top-5 md:left-6 md:right-6 z-50 backdrop-blur-md rounded-2xl shadow-[0_10px_30px_rgba(145,141,132,0.12)]"
     >
       <motion.div
         style={{ opacity: borderOpacity }}
         className="absolute bottom-0 left-0 right-0 h-px bg-white"
       />
-      <nav className="container-edge flex items-center justify-between h-20">
+      <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
         <a
           href="#top"
           className="text-sm tracking-[0.25em] font-medium text-bone focus-ring"

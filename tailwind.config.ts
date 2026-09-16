@@ -8,13 +8,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-          ink: "#f6f4ef",
-            surface: "#edeae2",
+          ink: "#f1efe9",
+            surface: "#e8e5dd",
               line: "rgba(17,17,18,0.08)",
                 linestrong: "rgba(17,17,18,0.16)",
                   bone: "#131313",
                     mute: "#68676c",
-                      accent: "#4640de",
+                      accent: "#5148e5",
                       },
       
       fontFamily: {

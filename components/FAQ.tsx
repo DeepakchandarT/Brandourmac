@@ -27,7 +27,7 @@ const ITEMS = [
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-line">
+    <div className={`rounded-2xl px-5 md:px-7 transition-shadow ${open ? "neo-inset" : "neo-card"}`}>
       <button
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between py-7 text-left focus-ring"
@@ -69,7 +69,7 @@ export default function FAQ() {
         </h2>
       </Reveal>
 
-      <div className="max-w-2xl">
+      <div className="max-w-3xl flex flex-col gap-5">
         {ITEMS.map((item) => (
           <FAQItem key={item.q} {...item} />
         ))}

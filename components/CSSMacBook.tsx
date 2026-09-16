@@ -90,7 +90,7 @@ export default function CSSMacBook({
             className="absolute left-0 right-0 bottom-full mx-auto"
           >
             <div
-              className="relative mx-auto rounded-t-[10px] rounded-b-[2px] overflow-hidden"
+              className="relative mx-auto rounded-t-[10px] rounded-b-[2px]"
               style={{
                 width: "100%",
                 aspectRatio: "16 / 10.2",
@@ -99,9 +99,13 @@ export default function CSSMacBook({
                 boxShadow:
                   "0 10px 30px -12px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.25)",
                 padding: "3.2%",
+                transformStyle: "preserve-3d",
               }}
             >
-              <div className="w-full h-full rounded-[6px] bg-[#050506] flex items-center justify-center relative overflow-hidden">
+              <div
+                className="absolute inset-[3.2%] rounded-[6px] bg-[#050506] flex items-center justify-center overflow-hidden"
+                style={{ backfaceVisibility: "hidden" }}
+              >
                 {/* camera notch */}
                 <div className="absolute top-[6%] left-1/2 -translate-x-1/2 w-[5%] aspect-square rounded-full bg-black ring-1 ring-white/10" />
 
@@ -115,6 +119,21 @@ export default function CSSMacBook({
                     not a sidekick.
                   </motion.span>
                 )}
+              </div>
+
+              <div
+                className="absolute inset-[3.2%] rounded-[6px] grid grid-cols-4 gap-[2.3%] p-[2.3%] bg-[#c6c7cb]"
+                style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
+              >
+                {Array.from({ length: 16 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center justify-center rounded-[3px] bg-gradient-to-br from-[#6b63f1] to-[#3730b7] text-white shadow-sm"
+                  >
+                    <span className="text-[4px] opacity-65">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="text-[5px] font-semibold tracking-[0.06em]">POSTIZ</span>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

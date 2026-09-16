@@ -16,6 +16,7 @@ export default function Hero() {
       id="top"
       className="relative min-h-[100svh] flex flex-col justify-between overflow-hidden"
     >
+      <div className="pointer-events-none absolute left-1/2 top-[24%] h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-accent/[0.07] blur-3xl" />
       <div className="relative container-edge pt-40 md:pt-48 flex-1 flex flex-col items-center text-center z-10">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
@@ -46,9 +47,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-8 text-lg md:text-xl text-mute max-w-md text-balance"
+          className="mt-8 text-lg md:text-xl text-mute max-w-xl text-balance"
         >
-          One MacBook. One brand. Everywhere I go.
+          All 16 MacBook spaces, apparel and everyday accessories—carried into
+          every room where work and opportunity happen.
         </motion.p>
       </div>
 
@@ -73,7 +75,7 @@ export default function Hero() {
       >
         <a
           href="#idea"
-          className="text-[12px] tracking-[0.2em] text-mute hover:text-bone transition-colors duration-300 focus-ring"
+          className="neo-button rounded-full px-6 py-3 text-[11px] tracking-[0.2em] text-mute focus-ring"
         >
           EXPLORE THE IDEA ↓
         </a>

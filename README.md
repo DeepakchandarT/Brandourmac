@@ -26,6 +26,12 @@ npm run build
 
 Push to a Git repo and import it in Vercel, or run `vercel` from the CLI.
 
+### Private invitation code
+
+The quote form is protected by a server-validated invitation code. Add
+`SPONSOR_INVITE_CODE` to the deployment's environment variables before going
+live. Use `.env.example` as the local reference. Never commit the real code.
+
 ## Before this goes live
 
 **Branding placeholders.** The site currently uses generic wordmark text

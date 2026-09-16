@@ -10,6 +10,7 @@ import LongTerm from "@/components/LongTerm";
 import Proposal from "@/components/Proposal";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
+import PrivateOffer from "@/components/PrivateOffer";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -27,6 +28,7 @@ export default function Home() {
       <Proposal />
       <FAQ />
       <FinalCTA />
+      <PrivateOffer />
       <Footer />
     </main>
   );

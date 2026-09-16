@@ -5,8 +5,8 @@ export default function About() {
     <section className="relative container-edge py-28 md:py-40 border-t border-line">
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <Reveal>
-          <div className="aspect-[4/5] w-full max-w-md mx-auto md:mx-0 border border-line relative overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center bg-surface">
+          <div className="neo-panel aspect-[4/5] w-full max-w-md mx-auto md:mx-0 rounded-[2rem] p-4 relative overflow-hidden">
+            <div className="neo-inset absolute inset-4 rounded-[1.35rem] flex items-center justify-center">
               <span className="text-[12px] tracking-[0.18em] text-mute">
                 PHOTOGRAPH PLACEHOLDER
               </span>

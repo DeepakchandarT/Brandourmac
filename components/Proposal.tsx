@@ -20,7 +20,7 @@ export default function Proposal() {
       <div className="grid md:grid-cols-4 gap-10 md:gap-6 mb-24">
         {STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08}>
-            <div className="border-t border-line pt-6">
+            <div className="neo-card rounded-2xl p-6 min-h-[170px]">
               <p className="font-display text-4xl md:text-5xl tracking-tightest2 mb-3">
                 {s.value}
               </p>
@@ -41,8 +41,8 @@ export default function Proposal() {
 
         <Reveal delay={0.1}>
           <a
-            href="#final-cta"
-            className="group inline-flex items-center gap-3 text-sm tracking-[0.14em] border border-linestrong px-7 py-4 hover:bg-bone hover:text-ink transition-colors duration-500 focus-ring w-fit"
+            href="#private-offer"
+            className="neo-button group inline-flex items-center gap-3 rounded-full text-sm tracking-[0.14em] px-7 py-4 focus-ring w-fit"
           >
             DISCUSS THE PARTNERSHIP
             <ArrowRight

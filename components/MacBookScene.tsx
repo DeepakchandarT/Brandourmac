@@ -62,6 +62,92 @@ function useKeyboardTexture() {
 const LID_CLOSED = 0;
 const LID_OPEN = -1.72;
 
+function useSponsorTexture(id: number) {
+  return useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 384;
+    canvas.height = 224;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, "#6b63f1");
+    gradient.addColorStop(1, "#3730b7");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(255,255,255,.34)";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+    ctx.fillStyle = "rgba(255,255,255,.62)";
+    ctx.font = "500 22px Arial";
+    ctx.fillText(String(id).padStart(2, "0"), 26, 42);
+    ctx.fillStyle = "#fff";
+    ctx.font = "700 42px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("POSTIZ", canvas.width / 2, canvas.height / 2 + 10);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+    return texture;
+  }, [id]);
+}
+
+function SponsorSlot({
+  id,
+  x,
+  z,
+  progress,
+  interactive,
+}: {
+  id: number;
+  x: number;
+  z: number;
+  progress: MotionValue<number>;
+  interactive: boolean;
+}) {
+  const mesh = useRef<THREE.Mesh>(null);
+  const material = useRef<THREE.MeshStandardMaterial>(null);
+  const texture = useSponsorTexture(id);
+
+  useEffect(() => () => texture?.dispose(), [texture]);
+
+  useFrame((state, delta) => {
+    const sequence = interactive
+      ? Math.min(1, Math.max(0, state.clock.getElapsedTime() * 0.55 - id * 0.055))
+      : Math.min(1, Math.max(0, (progress.get() - 0.04 - id * 0.009) / 0.18));
+    const eased = 1 - Math.pow(1 - sequence, 3);
+    if (mesh.current) {
+      const next = THREE.MathUtils.lerp(0.72, 1, eased);
+      mesh.current.scale.x = THREE.MathUtils.damp(mesh.current.scale.x, next, 9, delta);
+      mesh.current.scale.y = THREE.MathUtils.damp(mesh.current.scale.y, next, 9, delta);
+    }
+    if (material.current) {
+      material.current.opacity = THREE.MathUtils.damp(material.current.opacity, eased, 10, delta);
+      material.current.emissiveIntensity = 0.08 + Math.sin(state.clock.elapsedTime * 1.2 + id) * 0.025;
+    }
+  });
+
+  return (
+    <mesh ref={mesh} position={[x, 0.032, z]} rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[0.49, 0.3]} />
+      <meshStandardMaterial
+        ref={material}
+        map={texture ?? undefined}
+        color={texture ? "#ffffff" : "#5148e5"}
+        emissive="#5148e5"
+        transparent
+        opacity={0}
+        roughness={0.48}
+        metalness={0.08}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}
+
 function Laptop({
   progress,
   interactive,
@@ -81,8 +167,8 @@ function Laptop({
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 4; col++) {
         arr.push({
-          x: (col - 1.5) * 0.34,
-          z: -0.55 + row * 0.22,
+          x: (col - 1.5) * 0.54,
+          z: -0.53 + row * 0.35,
           id: id++,
         });
       }
@@ -93,7 +179,7 @@ function Laptop({
   useFrame((state, delta) => {
     const p = progress.get();
 
-    const openAmount = Math.min(p / 0.6, 1);
+    const openAmount = Math.min(Math.max((p - 0.28) / 0.42, 0), 1);
     const targetHinge = THREE.MathUtils.lerp(LID_CLOSED, LID_OPEN, openAmount);
     if (hinge.current) {
       hinge.current.rotation.x = THREE.MathUtils.damp(
@@ -108,8 +194,8 @@ function Laptop({
       const t = state.clock.getElapsedTime();
       const floatY = interactive ? Math.sin(t * 0.6) * 0.04 : 0;
 
-      const targetZ = 0;
-      const targetY = -0.15 + floatY - openAmount * 0.03;
+      const targetZ = interactive ? 0 : THREE.MathUtils.lerp(0.18, 0, openAmount);
+      const targetY = -0.12 + floatY - openAmount * 0.08;
 
       group.current.position.z = THREE.MathUtils.damp(
         group.current.position.z,
@@ -125,11 +211,15 @@ function Laptop({
       );
 
       const targetRotY = interactive
-        ? 0.22 + mouse.current.x * 0.15
-        : THREE.MathUtils.lerp(0.32, 0.12, openAmount);
+        ? -0.16 + mouse.current.x * 0.2
+        : THREE.MathUtils.lerp(-0.2, 0.14, openAmount);
       const targetRotX = interactive
-        ? 0.1 + mouse.current.y * -0.06
-        : THREE.MathUtils.lerp(0.08, 0.16, openAmount);
+        ? -0.12 + mouse.current.y * -0.08
+        : THREE.MathUtils.lerp(-0.12, 0.15, openAmount);
+
+      const targetScale = interactive ? 1.04 : THREE.MathUtils.lerp(0.9, 1.02, openAmount);
+      const currentScale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 5, delta);
+      group.current.scale.setScalar(currentScale);
 
       group.current.rotation.y = THREE.MathUtils.damp(
         group.current.rotation.y,
@@ -148,7 +238,7 @@ function Laptop({
 
   const [brandingVisible, setBrandingVisible] = useState(false);
   useFrame(() => {
-    const next = progress.get() > 0.55;
+    const next = progress.get() > 0.58;
     setBrandingVisible((prev) => (prev === next ? prev : next));
   });
 
@@ -166,7 +256,7 @@ function Laptop({
   const aluminum = { color: "#d3d4d8", metalness: 0.55, roughness: 0.42 };
 
   return (
-    <group ref={group} scale={0.95}>
+    <group ref={group} scale={0.9}>
       <group position={[0, -0.025, 0]}>
         <RoundedBox args={[2.4, 0.05, 1.7]} radius={0.05} smoothness={5}>
           <meshPhysicalMaterial {...aluminum} clearcoat={0.12} clearcoatRoughness={0.7} />
@@ -221,7 +311,17 @@ function Laptop({
           <RoundedBox args={[2.4, 0.045, 1.7]} radius={0.06} smoothness={5}>
             <meshPhysicalMaterial {...aluminum} clearcoat={0.12} clearcoatRoughness={0.7} />
           </RoundedBox>
-<mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
+
+          {spots.map((spot) => (
+            <SponsorSlot
+              key={`lid-${spot.id}`}
+              {...spot}
+              progress={progress}
+              interactive={interactive}
+            />
+          ))}
+
+          <mesh position={[0, -0.026, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.28, 1.46]} />
             <meshBasicMaterial color="#020203" />
           </mesh>
@@ -229,7 +329,7 @@ function Laptop({
             <planeGeometry args={[2.18, 1.36]} />
             <meshBasicMaterial color={brandingVisible ? "#0d0d14" : "#050506"} />
           </mesh>
-          
+
           <mesh position={[0, -0.033, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
             <circleGeometry args={[0.012, 16]} />
             <meshStandardMaterial color="#111216" roughness={0.4} metalness={0.3} />
@@ -266,14 +366,14 @@ export default function MacBookScene({
     <div className="w-full h-full">
       <Canvas
         dpr={[1, 1.75]}
-        camera={{ position: [0, 0.95, 4.6], fov: 30 }}
+        camera={{ position: [0, 1.15, 4.45], fov: 30 }}
         gl={{ antialias: true, alpha: true }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[2, 3, 2]} intensity={0.75} />
-          <directionalLight position={[-2, 1.2, -1.5]} intensity={0.35} />
-          <directionalLight position={[0, 0.4, -2.5]} intensity={0.3} color="#eef0ff" />
+          <ambientLight intensity={0.62} />
+          <directionalLight position={[2.5, 3.5, 3]} intensity={1.1} />
+          <directionalLight position={[-2, 1.2, -1.5]} intensity={0.45} color="#b9b5ff" />
+          <pointLight position={[0, 0.8, 2.2]} intensity={0.55} color="#5148e5" />
           <Laptop progress={progress} interactive={interactive} />
           <ContactShadows position={[0, -0.42, 0]} opacity={0.4} scale={6} blur={2.8} far={2} />
           <Environment preset="city" background={false} />

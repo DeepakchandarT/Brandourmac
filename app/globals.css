@@ -5,6 +5,11 @@
 :root {
   --font-display: "Fraunces", serif;
   --font-sans: "Inter", sans-serif;
+  --canvas: #f1efe9;
+  --canvas-highlight: #fffefa;
+  --canvas-shadow: #d7d3c9;
+  --ink: #151515;
+  --accent: #5148e5;
 }
 
 * {
@@ -22,14 +27,14 @@
 
 html,
 body {
-  background-color: #f6f4ef;
-    color: #131313;
-    }
+  background-color: var(--canvas);
+  color: var(--ink);
+}
 
-    body {
-      font-family: var(--font-sans);
-        -webkit-font-smoothing: antialiased;
-        }
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
 
         ::selection {
           background: #4640de;
@@ -53,10 +58,10 @@ body {
                         border-radius: 0;
                         }
 
-                        .container-edge {
-                          padding-left: clamp(1.5rem, 6vw, 6rem);
-                            padding-right: clamp(1.5rem, 6vw, 6rem);
-                            }
+.container-edge {
+  padding-left: clamp(1.25rem, 6vw, 6rem);
+  padding-right: clamp(1.25rem, 6vw, 6rem);
+}
 
                             .hairline {
                               background: rgba(17, 17, 18, 0.08);
@@ -66,12 +71,71 @@ body {
                                 text-wrap: balance;
                                 }
 
-                                .glass {
-                                  background: rgba(17, 17, 18, 0.03);
-                                    backdrop-filter: blur(16px);
-                                      -webkit-backdrop-filter: blur(16px);
-                                        border: 1px solid rgba(17, 17, 18, 0.08);
-                                        }
+.glass,
+.neo-panel {
+  background: linear-gradient(145deg, rgba(255, 254, 250, 0.74), rgba(231, 228, 219, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  box-shadow:
+    20px 20px 46px rgba(198, 194, 184, 0.72),
+    -20px -20px 46px rgba(255, 255, 255, 0.9);
+}
+
+.neo-card {
+  background: linear-gradient(145deg, #f8f6f0, #e8e5dd);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  box-shadow:
+    12px 12px 28px rgba(198, 194, 184, 0.68),
+    -12px -12px 28px rgba(255, 255, 255, 0.88);
+  transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    17px 17px 34px rgba(198, 194, 184, 0.76),
+    -17px -17px 34px rgba(255, 255, 255, 0.94);
+}
+
+.neo-inset {
+  background: rgba(232, 229, 220, 0.72);
+  box-shadow:
+    inset 8px 8px 18px rgba(198, 194, 184, 0.72),
+    inset -8px -8px 18px rgba(255, 255, 255, 0.9);
+}
+
+.neo-button {
+  background: linear-gradient(145deg, #fbfaf5, #e5e2da);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    8px 8px 18px rgba(190, 186, 176, 0.72),
+    -8px -8px 18px rgba(255, 255, 255, 0.94);
+  transition: color 300ms ease, transform 300ms ease, box-shadow 300ms ease;
+}
+
+.neo-button:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.neo-button:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 5px 5px 12px rgba(190, 186, 176, 0.72),
+    inset -5px -5px 12px rgba(255, 255, 255, 0.9);
+}
+
+.accent-glow {
+  box-shadow: 0 14px 44px rgba(81, 72, 229, 0.22);
+}
+
+@media (max-width: 767px) {
+  .glass,
+  .neo-panel {
+    box-shadow:
+      12px 12px 28px rgba(198, 194, 184, 0.66),
+      -12px -12px 28px rgba(255, 255, 255, 0.84);
+  }
+}
 
                                         .focus-ring:focus-visible {
                                           outline: 2px solid #4640de;

@@ -1,21 +1,5 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import { Reveal, Eyebrow } from "./Reveal";
-
-const Globe = dynamic(() => import("./Globe"), { ssr: false });
-
-const CATEGORIES = [
-  "Client meetings",
-  "Startup events",
-  "Tech conferences",
-  "Community meetings",
-  "Investor gatherings",
-  "Freelance projects",
-];
-
-// Editable placeholder — replace with the actual upcoming stop as it's confirmed.
-const NEXT_STOP = "Next stop: to be confirmed";
+import PresenceBookStack from "./PresenceBookStack";
 
 export default function WhereItTravels() {
   return (
@@ -29,31 +13,22 @@ export default function WhereItTravels() {
         </h2>
       </Reveal>
 
-      <div className="mt-20 grid md:grid-cols-[1.4fr_1fr] gap-16 items-center">
+      <div className="mt-16 grid items-center gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
         <Reveal delay={0.1}>
-          <div className="relative aspect-[16/10] border border-line overflow-hidden">
-            <Globe />
-            <div className="absolute bottom-4 left-4 text-[11px] tracking-[0.14em] text-mute">
-              {NEXT_STOP.toUpperCase()}
-            </div>
+          <div className="max-w-lg">
+            <p className="text-lg leading-relaxed text-mute text-balance">
+              Postiz becomes part of the objects I carry and the rooms I enter—not
+              a logo placed in a gallery of stock photographs.
+            </p>
+            <p className="mt-6 text-lg leading-relaxed text-mute text-balance">
+              The stack moves as you scroll, revealing each setting only when the
+              brand arrives there.
+            </p>
           </div>
         </Reveal>
 
         <Reveal delay={0.2}>
-          <p className="text-[12px] tracking-[0.18em] text-mute mb-5">
-            WHERE THE BRAND SHOWS UP
-          </p>
-          <ul className="flex flex-col gap-5">
-            {CATEGORIES.map((c) => (
-              <li
-                key={c}
-                className="flex items-center gap-4 pb-5 border-b border-line last:border-0"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                <span className="text-lg text-bone">{c}</span>
-              </li>
-            ))}
-          </ul>
+          <PresenceBookStack />
         </Reveal>
       </div>
     </section>

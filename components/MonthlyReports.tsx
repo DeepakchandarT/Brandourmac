@@ -95,6 +95,6 @@ export default function MonthlyReports() {
       </div><a href="#private-offer">Start our first chapter <ArrowUpRight size={16}/></a></div>
     </div>
     <p className="timeline-disclosure">Planned chapters. Real photographs and results begin with the partnership.</p>
-    <div className="timeline-signature"><PostizLogo/></div>
+    <div className="timeline-signature"><PostizLogo compact/><span>Postiz</span></div>
   </section>;
 }

@@ -15,9 +15,9 @@ export default function WhereItTravels() {
         <Reveal delay={0.1}>
           <div className="max-w-lg">
             <p className="text-lg leading-relaxed text-mute text-balance">
-              Meetings. Client work. Startup events. Conferences.
+              Campus. Client rooms. Events. Conferences. Travel days.
             </p>
-            <p className="mt-6 text-sm leading-relaxed text-mute text-balance">Carried by Deepak—an India-based marketer building across clients, products and events.</p>
+            <p className="mt-6 text-sm leading-relaxed text-mute text-balance">I&rsquo;m a student, marketer and builder—always moving, always meeting people.</p>
           </div>
         </Reveal>
 

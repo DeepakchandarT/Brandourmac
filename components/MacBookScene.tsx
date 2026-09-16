@@ -16,7 +16,11 @@ function useAppleTexture() {
     canvas.height = 512;
     const context = canvas.getContext("2d")!;
     context.scale(512 / 24, 512 / 24);
-    context.fillStyle = "#24252a";
+    const metallic = context.createLinearGradient(0, 1, 0, 23);
+    metallic.addColorStop(0, "#55575d");
+    metallic.addColorStop(.45, "#202126");
+    metallic.addColorStop(1, "#3b3c42");
+    context.fillStyle = metallic;
     context.fill(new Path2D(APPLE_PATH));
     const result = new THREE.CanvasTexture(canvas);
     result.colorSpace = THREE.SRGBColorSpace;
@@ -109,15 +113,15 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
         {Array.from({length:16},(_,i)=>{
           const row=Math.floor(i/4), col=i%4;
           if((row===1||row===2)&&(col===1||col===2)) return null;
-          return <Brand key={i} position={[-1.375+col*.916,.039,.88-row*.593]} rotation={[-Math.PI/2,0,Math.PI]} scale={.5}/>;
+          return <Brand key={i} variant="mark" position={[-1.375+col*.916,.039,.88-row*.593]} rotation={[-Math.PI/2,0,Math.PI]} scale={.62}/>;
         })}
         <mesh position={[0,.041,0]} rotation={[-Math.PI/2,0,Math.PI]}>
-          <planeGeometry args={[.88,.88]}/>
+          <planeGeometry args={[.68,.68]}/>
           <meshBasicMaterial map={apple} transparent alphaTest={.02} toneMapped={false} polygonOffset polygonOffsetFactor={-3}/>
         </mesh>
         <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
-        <Brand position={[0,-.053,.22]} rotation={[Math.PI/2,0,0]} scale={1.1}/>
+        <Brand variant="mark" position={[0,-.053,.27]} rotation={[Math.PI/2,0,0]} scale={1.8}/>
         <mesh position={[0,-.054,1.175]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[.34,.075]}/><meshBasicMaterial color="#111216"/></mesh>
         <mesh position={[0,-.057,1.19]} rotation={[Math.PI/2,0,0]}><circleGeometry args={[.012,16]}/><meshBasicMaterial color="#283343"/></mesh>
       </group>

@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useTransform, MotionValue, useSpring } from "framer-motion";
+import Image from "next/image";
 
-const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[34%] w-[34%] fill-[#27282d]">
+const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[28%] w-[28%] fill-[#34353a] drop-shadow-[0_1px_0_rgba(255,255,255,.28)]">
   <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.32.03-1.75-.79-3.27-.79-1.52 0-2 .77-3.24.82-1.3.05-2.28-1.32-3.12-2.54C4.31 16.96 3 12.41 4.91 9.08c.95-1.65 2.67-2.7 4.53-2.73 1.41-.03 2.75.95 3.62.95.87 0 2.5-1.18 4.21-1.01.72.03 2.74.29 4.03 2.18-.1.06-2.41 1.4-2.38 4.21.03 3.36 2.94 4.48 2.98 4.5-.03.09-.46 1.58-1.19 3M14.24 4.43c.73-.83 1.22-1.98 1.09-3.13-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.1 3.02 1.17.09 2.37-.59 3.07-1.42"/>
 </svg>;
 
@@ -114,14 +115,15 @@ export default function CSSMacBook({
                 <div className="absolute top-[6%] left-1/2 -translate-x-1/2 w-[5%] aspect-square rounded-full bg-black ring-1 ring-white/10" />
 
                 {brandedWhenOpen && (
-                  <motion.span
+                  <motion.div
                     style={{ opacity: screenOpacity, y: wordmarkY }}
-                    className="text-[#f5f4f1] font-sans font-medium tracking-[0.02em] text-[clamp(0.62rem,2.6vw,0.95rem)] text-center leading-snug px-[8%]"
+                    className="flex w-full flex-col items-center px-[8%] text-center"
                   >
-                    Lead the room.
-                    <br />
-                    Never the corner.
-                  </motion.span>
+                    <Image src="/postiz-mark.svg" alt="Postiz" width={112} height={112} className="h-auto w-[24%] max-w-[66px]" />
+                    <span className="mt-[7%] text-[clamp(0.48rem,1.9vw,0.72rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
+                      Lead the room. Never the corner.
+                    </span>
+                  </motion.div>
                 )}
               </div>
 
@@ -137,10 +139,9 @@ export default function CSSMacBook({
                   </div> : (
                   <div
                     key={index}
-                    className="flex rotate-180 flex-col items-center justify-center rounded-[3px] bg-gradient-to-br from-[#6b63f1] to-[#3730b7] text-white shadow-sm"
+                    className="flex rotate-180 items-center justify-center rounded-[3px] bg-white shadow-[0_2px_5px_rgba(34,28,64,.12)]"
                   >
-                    <span className="text-[4px] opacity-65">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="text-[5px] font-semibold tracking-[0.06em]">POSTIZ</span>
+                    <Image src="/postiz-mark.svg" alt="" width={112} height={112} className="h-[70%] w-[70%]" />
                   </div>
                 )})}
               </div>

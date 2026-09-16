@@ -31,7 +31,7 @@ export function Tee() {
     <Line points={[[-.83,-1.26,.072],[-.4,-1.3,.075],[0,-1.27,.075],[.4,-1.3,.072],[.83,-1.26,.073]]} color="#dddce3" lineWidth={1} />
     <Line points={[[-1.47,.52,.072],[-1.34,.29,.072],[-1.19,.09,.072]]} color="#dddce3" lineWidth={1} />
     <Line points={[[1.47,.52,.072],[1.34,.29,.072],[1.19,.09,.072]]} color="#dddce3" lineWidth={1} />
-    <Brand position={[0, .36, .095]} scale={.85} />
+    <Brand position={[0, .36, .095]} scale={1} />
     <mesh position={[.82,-1.13,.073]}><planeGeometry args={[.065,.11]} /><meshBasicMaterial color="#5148e5" /></mesh>
   </group>;
 }
@@ -42,7 +42,7 @@ export function Pen() {
     <mesh position={[-1.57,0,0]} rotation={[0,0,Math.PI/2]}><coneGeometry args={[.13,.32,40]} /><meshStandardMaterial color="#9699a3" metalness={.85} roughness={.24} /></mesh>
     <mesh position={[1.44,0,0]} rotation={[0,0,Math.PI/2]}><cylinderGeometry args={[.13,.13,.14,32]} /><meshStandardMaterial color="#5148e5" /></mesh>
     <RoundedBox args={[.68,.03,.055]} radius={.012} position={[1.07,.16,0]}><meshStandardMaterial color="#9296a0" metalness={.8} roughness={.2} /></RoundedBox>
-    <Brand position={[-.15,0,.132]} scale={.42} />
+    <Brand position={[-.15,0,.132]} scale={.52} />
   </group>;
 }
 
@@ -52,7 +52,7 @@ export function Notebook() {
     {[-.145,.145].map(z=><RoundedBox key={z} args={[2.15,2.94,.04]} radius={.015} position={[0,0,z]}><meshStandardMaterial color="#ffffff" roughness={.85} /></RoundedBox>)}
     <RoundedBox args={[.13,2.93,.33]} radius={.045} position={[-1.04,0,0]}><meshStandardMaterial color="#5148e5" roughness={.8} /></RoundedBox>
     <mesh position={[.78,0,.176]}><boxGeometry args={[.065,2.95,.012]} /><meshStandardMaterial color="#b9b4e6" /></mesh>
-    <Brand position={[-.05,.15,.171]} scale={.92} />
+    <Brand position={[-.05,.15,.171]} scale={1.05} />
   </group>;
 }
 
@@ -62,6 +62,6 @@ export function Bottle() {
     <mesh><latheGeometry args={[profile,64]} /><meshStandardMaterial color="#ffffff" metalness={.2} roughness={.5} /></mesh>
     <mesh position={[0,1.43,0]}><cylinderGeometry args={[.39,.39,.22,48]} /><meshStandardMaterial color="#5148e5" roughness={.4} /></mesh>
     <mesh position={[0,1.18,0]} rotation={[Math.PI/2,0,0]}><torusGeometry args={[.367,.018,8,48]} /><meshStandardMaterial color="#999aa5" metalness={.8} /></mesh>
-    <Brand position={[0,.05,.62]} scale={.65} />
+    <Brand position={[0,.05,.62]} scale={.76} />
   </group>;
 }

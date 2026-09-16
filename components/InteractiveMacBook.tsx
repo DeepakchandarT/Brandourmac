@@ -2,6 +2,7 @@
 import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { useScroll, useMotionValue, useMotionValueEvent, animate, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { ArrowDown } from "lucide-react";
 import CSSMacBook from "./CSSMacBook";
 const Scene = dynamic(()=>import("./MacBookScene"),{ssr:false,loading:()=> <div className="model-loading" role="status">Preparing the laptop…</div>});
 
@@ -42,7 +43,7 @@ export default function InteractiveMacBook(){
         {["The lid","Open it","All yours"].map((label,i)=><button key={label} className="focus-ring" aria-pressed={phase===i} onClick={()=>select([0,.55,1][i])}>{label}</button>)}
       </div>
       <p className="laptop-caption">One brand. Every surface.</p>
-      <span className="scroll-hint">Scroll to explore, or choose a view</span>
+      <span className="scroll-hint"><ArrowDown size={13} aria-hidden="true"/> Scroll to explore, or choose a view</span>
     </div>
   </section>;
 }

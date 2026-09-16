@@ -118,6 +118,6 @@ export default function MerchCarousel() {
       </div>
     </div>
     <p className="orbit-hint"><MoveHorizontal size={15}/> Drag to explore · {modulo(step)+1} / 4</p>
-    <div className="orbit-credit"><span>Branding concepts for</span><PostizLogo/></div>
+    <div className="orbit-credit"><span>Branding concepts for</span><PostizLogo compact/><strong>Postiz</strong></div>
   </div>;
 }

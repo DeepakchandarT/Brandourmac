@@ -8,14 +8,20 @@ export function namespace() {
 }
 
 export function configured() {
-  return !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN &&
+  return !!(redisCredentials().url && redisCredentials().token &&
     process.env.SPONSOR_INVITE_CODE && process.env.SPONSOR_INVITE_CODE.length >= 12 &&
     process.env.SPONSOR_SESSION_SECRET && process.env.SPONSOR_SESSION_SECRET.length >= 32);
 }
 
+function redisCredentials() {
+  return {
+    url: process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN,
+  };
+}
+
 export async function redis<T>(command: (string | number)[]): Promise<T> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const { url, token } = redisCredentials();
   if (!url || !token) throw new Error("Campaign storage is unavailable");
   const response = await fetch(url, {
     method: "POST", cache: "no-store", signal: AbortSignal.timeout(6000),

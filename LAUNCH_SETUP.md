@@ -12,7 +12,8 @@ or session secret revokes existing sessions without making the site private agai
 Connect a persistent Upstash Redis database in Vercel's Storage/Marketplace, then
 set these server-only environment variables for the intended environment:
 
-- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`: the database REST credentials.
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, or Vercel's
+  `KV_REST_API_URL` and `KV_REST_API_TOKEN`: the database REST credentials.
 - `SPONSOR_INVITE_CODE`: a random private code of at least 12 characters.
 - `SPONSOR_SESSION_SECRET`: an independent random secret of at least 32 characters.
 - `CAMPAIGN_NAMESPACE`: `postiz-preview` for Preview and `postiz-production` for Production.

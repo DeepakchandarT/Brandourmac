@@ -47,11 +47,20 @@ export default function MerchCarousel() {
   const root=useRef<HTMLDivElement>(null);
   const inView=useInView(root,{amount:.2});
   const reduced=useReducedMotion();
+  const [webgl,setWebgl]=useState(false);
   const [pageVisible,setPageVisible]=useState(true);
   const [step,setStep]=useState(0);
   const [paused,setPaused]=useState(false);
   const target=useRef(0);
   const drag=useRef<{x:number;y:number;angle:number;horizontal:boolean}|null>(null);
+  useEffect(()=>{
+    try {
+      const canvas=document.createElement("canvas");
+      const context=canvas.getContext("webgl2")||canvas.getContext("webgl");
+      setWebgl(!!context);
+      context?.getExtension("WEBGL_lose_context")?.loseContext();
+    } catch {setWebgl(false);}
+  },[]);
   useEffect(()=>{target.current=-step*STEP;},[step]);
   useEffect(()=>{const update=()=>setPageVisible(!document.hidden);document.addEventListener("visibilitychange",update);return()=>document.removeEventListener("visibilitychange",update);},[]);
   useEffect(()=>{
@@ -74,10 +83,13 @@ export default function MerchCarousel() {
         if(Math.abs(dx)>8){d.horizontal=true;setPaused(true);e.currentTarget.setPointerCapture(e.pointerId);target.current=d.angle+dx/e.currentTarget.clientWidth*Math.PI;}
       }}
       onPointerUp={finishDrag} onPointerCancel={finishDrag}>
-      <Canvas frameloop={inView&&pageVisible?"always":"never"} camera={{position:[0,.2,8],fov:36}} dpr={[1,1.5]} gl={{antialias:true,alpha:true}}
+      {webgl?<Canvas frameloop={inView&&pageVisible?"always":"never"} camera={{position:[0,.2,8],fov:36}} dpr={[1,1.5]} gl={{antialias:true,alpha:true}}
         fallback={<p className="model-loading">The kit includes a Postiz T-shirt, pen, notebook and water bottle.</p>}>
         <Suspense fallback={null}><Orbit target={target} reduced={!!reduced} /></Suspense>
-      </Canvas>
+      </Canvas>:<div className="orbit-static-fallback" aria-label={`Postiz branded ${PRODUCTS[modulo(step)]}`}>
+        <PostizLogo/>
+        <strong>{PRODUCTS[modulo(step)]}</strong>
+      </div>}
     </div>
     <div className="orbit-footer">
       <div className="orbit-caption"><span className="concept-note">The everyday collection</span><h3>{PRODUCTS[modulo(step)]}</h3></div>

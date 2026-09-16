@@ -8,8 +8,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-          ink: "#f1efe9",
-            surface: "#e8e5dd",
+          ink: "#fafafa",
+            surface: "#f0f0f3",
               line: "rgba(17,17,18,0.08)",
                 linestrong: "rgba(17,17,18,0.16)",
                   bone: "#131313",
@@ -22,7 +22,7 @@ const config: Config = {
         sans: ["var(--font-sans)", "sans-serif"],
       },
       letterSpacing: {
-        tightest2: "-0.045em",
+        tightest2: "-0.035em",
       },
       transitionTimingFunction: {
         expensive: "cubic-bezier(0.16, 1, 0.3, 1)",

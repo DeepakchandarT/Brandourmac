@@ -17,12 +17,11 @@ export default function WhereItTravels() {
         <Reveal delay={0.1}>
           <div className="max-w-lg">
             <p className="text-lg leading-relaxed text-mute text-balance">
-              Postiz becomes part of the objects I carry and the rooms I enter—not
-              a logo placed in a gallery of stock photographs.
+              Postiz becomes part of the objects I carry and the rooms I enter.
             </p>
             <p className="mt-6 text-lg leading-relaxed text-mute text-balance">
-              The stack moves as you scroll, revealing each setting only when the
-              brand arrives there.
+              From client work to startup events, the partnership travels with
+              me. Monthly documentation records the actual appearances.
             </p>
           </div>
         </Reveal>

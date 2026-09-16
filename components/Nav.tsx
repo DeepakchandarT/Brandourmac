@@ -18,7 +18,7 @@ export default function Nav() {
   return (
     <motion.header
       style={{ backgroundColor: bg }}
-      className="fixed top-3 left-3 right-3 md:top-5 md:left-6 md:right-6 z-50 backdrop-blur-md rounded-2xl shadow-[0_10px_30px_rgba(145,141,132,0.12)]"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-line bg-white/95"
     >
       <motion.div
         style={{ opacity: borderOpacity }}
@@ -29,7 +29,7 @@ export default function Nav() {
           href="#top"
           className="text-sm tracking-[0.25em] font-medium text-bone focus-ring"
         >
-          DEEPAK
+          DEEPAK × POSTIZ
         </a>
 
         <ul className="hidden md:flex items-center gap-10">
@@ -47,6 +47,7 @@ export default function Nav() {
 
         <button
           aria-label="Toggle menu"
+          aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
           className="md:hidden flex flex-col gap-1.5 w-6 focus-ring"
         >

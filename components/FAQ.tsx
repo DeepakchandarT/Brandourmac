@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
-import { Reveal, Eyebrow } from "./Reveal";
+import { Reveal } from "./Reveal";
 
 const ITEMS = [
   {
@@ -26,12 +26,14 @@ const ITEMS = [
 
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
+  const id = useId();
   return (
-    <div className={`rounded-2xl px-5 md:px-7 transition-shadow ${open ? "neo-inset" : "neo-card"}`}>
+    <div className="border-b border-line">
       <button
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between py-7 text-left focus-ring"
         aria-expanded={open}
+        aria-controls={id}
       >
         <span className="text-lg md:text-xl text-bone pr-8">{q}</span>
         <motion.span
@@ -45,6 +47,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            id={id}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -62,14 +65,13 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function FAQ() {
   return (
     <section className="relative container-edge py-28 md:py-40 border-t border-line">
-      <Eyebrow>QUESTIONS</Eyebrow>
       <Reveal>
-        <h2 className="font-display font-light text-4xl md:text-5xl tracking-tightest2 mb-16">
+        <h2 className="section-title mb-8">
           A few things worth clarifying.
         </h2>
       </Reveal>
 
-      <div className="max-w-3xl flex flex-col gap-5">
+      <div className="max-w-3xl flex flex-col">
         {ITEMS.map((item) => (
           <FAQItem key={item.q} {...item} />
         ))}

@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useScroll, useMotionValue, useMotionValueEvent, animate, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
 const Scene = dynamic(()=>import("./MacBookScene"),{ssr:false,loading:()=> <div className="model-loading" role="status">Preparing the laptop…</div>});
@@ -10,10 +10,11 @@ export default function InteractiveMacBook(){
   const {scrollYProgress}=useScroll({target:ref,offset:["start 65%","end 95%"]});
   const progress=useMotionValue(.12);
   const [phase,setPhase]=useState(0);
-  const manual=useRef(false);
-  useMotionValueEvent(scrollYProgress,"change",v=>{manual.current=false;progress.set(v);});
+  const animation=useRef<ReturnType<typeof animate> | null>(null);
+  useEffect(()=>{if(reduced) progress.set(.55);return ()=>animation.current?.stop();},[reduced,progress]);
+  useMotionValueEvent(scrollYProgress,"change",v=>{if(!reduced){animation.current?.stop();progress.set(v);}});
   useMotionValueEvent(progress,"change",v=>setPhase(v<.27?0:v<.72?1:2));
-  function select(v:number){manual.current=true;animate(progress,v,{duration:reduced?0:1.35,ease:[.22,1,.36,1]});}
+  function select(v:number){animation.current?.stop();animation.current=animate(progress,v,{duration:reduced?0:1.35,ease:[.22,1,.36,1]});}
   return <section ref={ref} id="idea" className="laptop-story">
     <div className="laptop-sticky">
       <div className="laptop-canvas" role="img" aria-label="Interactive silver laptop with detailed keyboard, trackpad and sixteen Postiz lid placements">

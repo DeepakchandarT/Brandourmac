@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, LockKeyhole } from "lucide-react";
-import { Eyebrow, Reveal } from "./Reveal";
+import { Reveal } from "./Reveal";
 
 export default function PrivateOffer() {
   const [code, setCode] = useState("");
@@ -77,7 +77,6 @@ export default function PrivateOffer() {
       id="private-offer"
       className="relative container-edge py-28 md:py-40 border-t border-line"
     >
-      <Eyebrow>PRIVATE INVITATION</Eyebrow>
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <Reveal>
           <div>
@@ -91,11 +90,8 @@ export default function PrivateOffer() {
               sense for a twelve-month, category-exclusive partnership.
             </p>
 
-            <div className="neo-inset mt-10 max-w-md rounded-2xl p-5">
-              <p className="text-[10px] tracking-[0.18em] text-mute mb-2">
-                A USEFUL REFERENCE POINT
-              </p>
-              <p className="font-display text-xl leading-snug">
+            <div className="mt-8 max-w-md border-t border-line pt-5">
+              <p className="text-sm leading-relaxed text-mute">
                 Postiz previously offered €1,200—approximately $1,404 at the
                 time—for one lid placement on BrandMyMac.
               </p>
@@ -108,7 +104,7 @@ export default function PrivateOffer() {
         </Reveal>
 
         <Reveal delay={0.12}>
-          <div className="neo-panel rounded-[2rem] p-6 md:p-10 min-h-[470px]">
+          <div className="neo-panel rounded-2xl p-6 md:p-10">
             <AnimatePresence mode="wait">
               {!unlocked ? (
                 <motion.div
@@ -116,7 +112,7 @@ export default function PrivateOffer() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  className="flex min-h-[390px] flex-col justify-center"
+                  className="flex min-h-[340px] flex-col justify-center"
                 >
                   <div className="neo-inset mb-8 flex h-14 w-14 items-center justify-center rounded-2xl">
                     <LockKeyhole className="h-5 w-5 text-accent" strokeWidth={1.5} />
@@ -135,6 +131,8 @@ export default function PrivateOffer() {
                         value={code}
                         onChange={(event) => setCode(event.target.value)}
                         autoComplete="off"
+                        autoCapitalize="none"
+                        spellCheck={false}
                         required
                         className="neo-inset min-w-0 flex-1 rounded-full px-6 py-4 text-sm outline-none focus:ring-2 focus:ring-accent/40"
                         placeholder="Enter private code"

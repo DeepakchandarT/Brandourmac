@@ -5,23 +5,17 @@ const STATS = [
   { value: "16/16", label: "MacBook branding" },
   { value: "12 months", label: "Campaign period" },
   { value: "12", label: "Monthly documentation reports" },
-  { value: "∞", label: "Professional exposure" },
+  { value: "1 brand", label: "Exclusive partnership" },
 ];
 
 export default function Proposal() {
   return (
     <section id="proposal" className="relative container-edge py-28 md:py-40 border-t border-line">
-      <Reveal>
-        <p className="text-[13px] tracking-[0.22em] text-mute mb-6">
-          POSTIZ × DEEPAK
-        </p>
-      </Reveal>
-
-      <div className="grid md:grid-cols-4 gap-10 md:gap-6 mb-24">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
         {STATS.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.08}>
-            <div className="neo-card rounded-2xl p-6 min-h-[170px]">
-              <p className="font-display text-4xl md:text-5xl tracking-tightest2 mb-3">
+            <div className="border-t border-line pt-6">
+              <p className="text-2xl md:text-3xl tracking-tightest2 mb-3">
                 {s.value}
               </p>
               <p className="text-mute text-sm max-w-[16ch]">{s.label}</p>

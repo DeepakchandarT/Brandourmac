@@ -2,6 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 :root { --canvas:#fafafa; --ink:#17181b; --accent:#5148e5; }
+html {scrollbar-color:#b9b7c8 #fafafa;}
+.section-title {font-family:var(--font-display),serif;font-size:clamp(34px,4.5vw,58px);font-weight:300;line-height:1.1;letter-spacing:-.035em;text-wrap:balance;}
+.section-copy {font-size:17px;line-height:1.6;color:#68676c;max-width:50ch;}
+.about-section,.report-section,.presence-section {display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(32px,6vw,90px);align-items:start;}
+.about-intro {font-size:clamp(21px,2.4vw,30px);line-height:1.4;letter-spacing:-.02em;}
+.presence-list>div {display:grid;grid-template-columns:125px 1fr;gap:24px;padding:23px 0;border-bottom:1px solid #e1e1e7;}
+.presence-list>div:first-child {padding-top:0;}
+.presence-list dt {font-weight:500;font-size:16px;}
+.presence-list dd {color:#68676c;font-size:15px;line-height:1.6;}
+.report-preview {background:#fff;border:1px solid #e3e3ea;border-radius:16px;padding:clamp(24px,4vw,42px);}
+.report-heading {display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;color:#68676c;}
+.status-label {white-space:nowrap;padding:6px 10px;border-radius:20px;background:#efedf9;color:#51449d;font-size:11px;}
+.report-preview h3 {font-size:clamp(25px,3vw,34px);line-height:1.2;letter-spacing:-.025em;margin:30px 0 18px;}
+.report-preview>p {font-size:14px;color:#68676c;line-height:1.6;max-width:46ch;}
+.report-deliverables {margin-top:28px;border-top:1px solid #e8e8ee;}
+.report-deliverables li {display:flex;align-items:center;gap:12px;padding-top:18px;font-size:13px;color:#52515d;}
+.report-deliverables svg {color:#5148e5;flex-shrink:0;}
+.merch-showcase {position:relative;width:100%;max-width:580px;margin:auto;}
+.merch-stage {height:400px;background:#f2f2f6;border-radius:16px;overflow:hidden;touch-action:pan-y;}
+.merch-tools {position:absolute;right:14px;top:14px;display:flex;gap:6px;}
+.merch-tools button {display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#fff;color:#555460;box-shadow:0 2px 7px #2421380b;}
+.merch-selector {display:flex;flex-wrap:wrap;justify-content:center;gap:3px;margin-top:18px;}
+.merch-selector button {min-height:44px;padding:8px 12px;font-size:12px;border-radius:22px;color:#65636e;transition:background .2s;}
+.merch-selector button[aria-pressed=true] {background:#eae8fc;color:#4238b8;}
+.merch-selector button:hover {background:#eeedf5;}
+.merch-description {text-align:center;font-size:14px;line-height:1.5;margin:15px 12px 7px;min-height:42px;color:#4b4a55;}
+.concept-note {text-align:center;font-size:11px;color:#73717d;}
+.book-stage {position:relative;padding:32px 24px 18px;overflow:hidden;}
+.book-assembly {display:flex;align-items:flex-end;gap:28px;max-width:580px;margin:auto;min-height:340px;padding-bottom:18px;}
+.book-upright {position:relative;flex-shrink:0;width:64px;height:300px;transform-origin:bottom right;border-radius:6px 6px 3px 3px;background:#5148e5;box-shadow:6px 8px 16px #34324b1c;z-index:2;}
+.book-pile {display:flex;flex:1;min-width:0;flex-direction:column-reverse;align-items:center;gap:5px;padding-bottom:2px;}
+.book-spine {position:relative;height:66px;border-radius:4px 8px 8px 4px;box-shadow:3px 5px 7px #26223d13,inset 0 1px 0 #ffffffb3;transform-origin:center;}
+.book-label {display:flex;align-items:center;justify-content:space-between;gap:12px;height:100%;padding:0 24px;color:#35333f;font-size:15px;font-weight:500;}
+.book-detail {display:none;}
+@media(min-width:1440px){.book-detail{display:block;font-size:10px;font-weight:400;color:#676371;}}
+@media(max-width:767px){
+ .about-section,.report-section,.presence-section {grid-template-columns:1fr;gap:30px;}
+ .presence-list>div {grid-template-columns:94px 1fr;gap:18px;}
+ .merch-stage {height:340px;}
+ .merch-selector button {padding-inline:10px;}
+ .book-stage {padding:15px 0;}
+ .book-assembly {gap:20px;min-height:285px;padding-inline:5px;}
+ .book-upright {width:45px;height:260px;}
+ .book-spine {height:56px;}
+ .book-label {font-size:12px;padding-inline:20px;gap:0;}
+}
 html { scroll-behavior:smooth; scroll-padding-top:88px; }
 body { margin:0; background:var(--canvas); color:var(--ink); font-family:var(--font-sans),sans-serif; -webkit-font-smoothing:antialiased; }
 ::selection {background:#dfdcff;color:#252048;}

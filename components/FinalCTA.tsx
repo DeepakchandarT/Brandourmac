@@ -9,12 +9,6 @@ export default function FinalCTA() {
     >
       <div className="pointer-events-none absolute h-[34rem] w-[34rem] rounded-full bg-accent/[0.09] blur-3xl" />
       <div className="neo-panel relative rounded-[2.5rem] px-7 py-16 md:px-20 md:py-24 w-full max-w-5xl">
-      <Reveal>
-        <p className="text-[13px] tracking-[0.22em] text-mute mb-10">
-          POSTIZ × DEEPAK
-        </p>
-      </Reveal>
-
       <Reveal delay={0.1}>
         <h2 className="font-display font-light text-balance text-[11vw] leading-[0.98] md:text-7xl tracking-tightest2 max-w-4xl">
           Let&rsquo;s make it impossible

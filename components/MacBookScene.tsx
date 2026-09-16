@@ -52,29 +52,29 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
     cam.position.set(0,distance*.43,distance);cam.lookAt(0,.55,0);cam.updateProjectionMatrix();
   },[camera,size]);
   useFrame((_,delta)=>{
-    const p=reduced?.52:progress.get();
+    const p=progress.get();
     const open=THREE.MathUtils.smoothstep(p,.04,.52);
     const orbit=THREE.MathUtils.smoothstep(p,.65,.98);
-    if(hinge.current)hinge.current.rotation.x=THREE.MathUtils.damp(hinge.current.rotation.x,-1.9*open,8,Math.min(delta,.05));
+    if(hinge.current)hinge.current.rotation.x=reduced ? -1.9*open : THREE.MathUtils.damp(hinge.current.rotation.x,-1.9*open,8,Math.min(delta,.05));
     if(root.current){
-      root.current.rotation.y=THREE.MathUtils.damp(root.current.rotation.y,-.18+orbit*3.1,6,Math.min(delta,.05));
+      root.current.rotation.y=reduced ? -.18+orbit*3.1 : THREE.MathUtils.damp(root.current.rotation.y,-.18+orbit*3.1,6,Math.min(delta,.05));
       root.current.position.y=-.25;
     }
   });
   const silver={color:"#c9ccd1",metalness:.65,roughness:.3};
   return <group ref={root} rotation={[0,-.18,0]}>
     <RoundedBox args={[4.2,.12,2.85]} radius={.055} smoothness={4}><meshStandardMaterial {...silver}/></RoundedBox>
-    <RoundedBox position={[0,.068,-.42]} args={[3.36,.025,1.58]} radius={.04}><meshStandardMaterial color="#111216" roughness={.7}/></RoundedBox>
+    <RoundedBox position={[0,.068,-.42]} args={[3.36,.025,1.58]} radius={.01}><meshStandardMaterial color="#111216" roughness={.7}/></RoundedBox>
     {Array.from({length:5},(_,r)=>Array.from({length:13},(_,c)=>
-      <RoundedBox key={r+"-"+c} args={[.226,.033,r===0?.17:.235]} radius={.018} smoothness={2} position={[(c-6)*.25,.097,-1.06+r*.275]}>
+      <RoundedBox key={r+"-"+c} args={[.226,.033,r===0?.17:.235]} radius={.012} smoothness={2} position={[(c-6)*.25,.097,-1.06+r*.275]}>
         <meshStandardMaterial color="#25262a" roughness={.55}/>
       </RoundedBox>
     ))}
     <mesh position={[0,.116,-.51]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[3.27,1.39]}/><meshBasicMaterial map={keys} transparent polygonOffset polygonOffsetFactor={-1}/></mesh>
     {[-1.39,-1.11,-.83,.83,1.11,1.39].map(v=><RoundedBox key={v} args={[.23,.032,.21]} position={[v,.097,.35]} radius={.018}><meshStandardMaterial color="#25262a"/></RoundedBox>)}
     <RoundedBox args={[1.29,.033,.21]} position={[0,.097,.35]} radius={.018}><meshStandardMaterial color="#25262a"/></RoundedBox>
-    <RoundedBox args={[1.55,.012,.67]} position={[0,.067,.9]} radius={.04}><meshStandardMaterial color="#a9adb4" metalness={.4} roughness={.35}/></RoundedBox>
-    <RoundedBox args={[1.52,.014,.64]} position={[0,.071,.9]} radius={.035}><meshStandardMaterial {...silver}/></RoundedBox>
+    <RoundedBox args={[1.55,.012,.67]} position={[0,.067,.9]} radius={.005}><meshStandardMaterial color="#8f939b" metalness={.4} roughness={.35}/></RoundedBox>
+    <RoundedBox args={[1.52,.014,.64]} position={[0,.071,.9]} radius={.006}><meshStandardMaterial {...silver}/></RoundedBox>
     {[-1.85,1.85].map(side=><group key={side}>
       {Array.from({length:22},(_,i)=><mesh key={i} position={[side,.065,-1.05+i*.058]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[.17,.009]}/><meshBasicMaterial color="#70737a"/></mesh>)}
     </group>)}
@@ -84,7 +84,7 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
       <group position={[0,0,1.37]}>
         <RoundedBox args={[4.2,.07,2.79]} radius={.034} smoothness={4}><meshStandardMaterial {...silver}/></RoundedBox>
         <mesh position={[0,.037,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[4.02,2.64]}/><meshStandardMaterial map={lid} roughness={.48} metalness={.15}/></mesh>
-        <RoundedBox args={[4.07,.018,2.66]} radius={.04} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
+        <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
         <mesh position={[0,-.054,1.175]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[.34,.075]}/><meshBasicMaterial color="#111216"/></mesh>
         <mesh position={[0,-.057,1.19]} rotation={[Math.PI/2,0,0]}><circleGeometry args={[.012,16]}/><meshBasicMaterial color="#283343"/></mesh>

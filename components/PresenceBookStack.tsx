@@ -5,6 +5,7 @@ import {
   MotionValue,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
 } from "framer-motion";
 import { useRef } from "react";
@@ -47,16 +48,19 @@ function BookSpine({
   progress: MotionValue<number>;
   reduceMotion: boolean | null;
 }) {
-  const start = 0.35 + index * 0.09;
+  const start = 0.5 + index * 0.065;
   const end = Math.min(start + 0.18, 0.95);
   const labelOpacity = useTransform(progress, [start, end], [0, 1]);
   const labelX = useTransform(progress, [start, end], [14, 0]);
-  const bookX = useTransform(progress, [0, 0.72], [book.x, 0]);
+  const impact = .42 + (3-index)*.055;
+  const bookX = useTransform(progress, [0, impact, impact+.1, impact+.23, 1], [book.x,book.x,book.x+14+index*3,book.x+9,book.x+9]);
+  const bookY = useTransform(progress, [0,impact,impact+.09,impact+.22,1], [0,0,-3-index*1.2,0,0]);
+  const bookRotate = useTransform(progress, [0,impact,impact+.09,impact+.22,1], [index%2?1:-1.4,index%2?1:-1.4,2.5+index*.5,index%2?.8:-.9,index%2?.8:-.9]);
 
   return (
     <motion.div
       className={`book-spine ${book.className}`}
-      style={{ x: reduceMotion ? 0 : bookX }}
+      style={{ x: reduceMotion ? 0 : bookX, y:reduceMotion?0:bookY,rotate:reduceMotion?(index%2?.8:-.9):bookRotate }}
     >
       <div className="absolute inset-y-2 left-3 w-px bg-black/10" />
       <div className="absolute inset-y-[7px] right-2 w-[5px] rounded-full bg-black/[0.05]" />
@@ -86,14 +90,15 @@ export default function PresenceBookStack() {
     offset: ["start 88%", "center 46%"],
   });
 
-  const uprightRotate = useTransform(scrollYProgress, [0, 0.72], [-5, 7]);
-  const uprightX = useTransform(scrollYProgress, [0, 0.72], [-8, 0]);
-  const uprightY = useTransform(scrollYProgress, [0, 0.72], [18, 0]);
-  const stackX = useTransform(scrollYProgress, [0, 0.75], [24, 0]);
-  const stackY = useTransform(scrollYProgress, [0, 0.75], [26, 0]);
-  const stackRotate = useTransform(scrollYProgress, [0, 0.75], [2.5, 0]);
-  const uprightLabelOpacity = useTransform(scrollYProgress, [0.34, 0.58], [0, 1]);
-  const captionOpacity = useTransform(scrollYProgress, [0.68, 0.9], [0, 1]);
+  const progress=useSpring(scrollYProgress,{stiffness:90,damping:25,mass:.7});
+  const uprightRotate = useTransform(progress, [0,.18,.45,.56,.7,1], [-7,-7,13,10,11,11]);
+  const uprightX = useTransform(progress, [0,.45,1], [-5,0,0]);
+  const uprightY = useTransform(progress, [0,.45,1], [0,0,0]);
+  const stackX = useTransform(progress, [0,.45,.65,1], [0,0,7,7]);
+  const stackY = useTransform(progress, [0,.45,.53,.7,1], [0,0,-2,0,0]);
+  const stackRotate = useTransform(progress, [0,.45,.53,.7,1], [0,0,.7,0,0]);
+  const uprightLabelOpacity = useTransform(progress, [.45,.65], [.15,1]);
+  const captionOpacity = useTransform(progress, [.65,.85], [.3,1]);
 
   return (
     <div
@@ -106,7 +111,7 @@ export default function PresenceBookStack() {
           className="book-upright"
           style={
             reduceMotion
-              ? { rotate: 7, x: 0, y: 0 }
+              ? { rotate: 11, x: 0, y: 0 }
               : { rotate: uprightRotate, x: uprightX, y: uprightY }
           }
         >
@@ -135,7 +140,7 @@ export default function PresenceBookStack() {
               key={book.label}
               book={book}
               index={index}
-              progress={scrollYProgress}
+              progress={progress}
               reduceMotion={reduceMotion}
             />
           ))}

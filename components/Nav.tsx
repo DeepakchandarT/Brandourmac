@@ -2,11 +2,12 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
+import PostizLogo from "./PostizLogo";
 
 const LINKS = [
   { label: "The Idea", href: "#idea" },
   { label: "The Journey", href: "#journey" },
-  { label: "Partner", href: "#proposal" },
+  { label: "Make an offer", href: "#private-offer" },
 ];
 
 export default function Nav() {
@@ -25,12 +26,7 @@ export default function Nav() {
         className="absolute bottom-0 left-0 right-0 h-px bg-white"
       />
       <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
-        <a
-          href="#top"
-          className="text-sm tracking-[0.25em] font-medium text-bone focus-ring"
-        >
-          DEEPAK × POSTIZ
-        </a>
+        <div className="brand-lockup"><a href="#top">DEEPAK</a><span aria-hidden="true">×</span><PostizLogo /></div>
 
         <ul className="hidden md:flex items-center gap-10">
           {LINKS.map((l) => (

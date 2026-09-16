@@ -1,6 +1,6 @@
 const PILLARS = [
   { title: "Laptop", copy: "Every one of the 16 available MacBook surfaces belongs to Postiz." },
-  { title: "What I wear", copy: "A Postiz T-shirt and cap at relevant meetings, events and conferences." },
+  { title: "What I wear", copy: "A Postiz T-shirt at relevant meetings, events and conferences." },
   { title: "What I carry", copy: "A branded notebook, pen and water bottle in day-to-day professional settings." },
   { title: "Proof", copy: "A monthly photo log and activity summary documenting every meaningful appearance." },
 ];

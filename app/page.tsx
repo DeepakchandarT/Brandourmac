@@ -12,8 +12,19 @@ import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
 import PrivateOffer from "@/components/PrivateOffer";
 import Footer from "@/components/Footer";
+import LaunchGate from "@/components/LaunchGate";
+import OfferDock from "@/components/OfferDock";
+import { cookies } from "next/headers";
+import { configured, isPublished, readSession, SESSION_COOKIE } from "@/lib/campaign";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  let published=false;
+  let available=configured();
+  try {published=await isPublished();} catch {available=false;}
+  if(!published) return <LaunchGate available={available}/>;
+  const sponsor=!!readSession(cookies().get(SESSION_COOKIE)?.value);
   return (
     <main className="relative bg-ink text-bone">
       <Nav />
@@ -28,8 +39,9 @@ export default function Home() {
       <Proposal />
       <FAQ />
       <FinalCTA />
-      <PrivateOffer />
+      <PrivateOffer initialUnlocked={sponsor}/>
       <Footer />
+      <OfferDock/>
     </main>
   );
 }

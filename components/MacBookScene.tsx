@@ -3,7 +3,8 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox, ContactShadows } from "@react-three/drei";
 import { MotionValue } from "framer-motion";
-import { useMemo, useRef, useEffect } from "react";
+import { Suspense, useMemo, useRef, useEffect } from "react";
+import { Brand } from "./BrandTexture";
 import * as THREE from "three";
 
 function useArtwork(kind: "screen" | "lid" | "keys") {
@@ -18,14 +19,14 @@ function useArtwork(kind: "screen" | "lid" | "keys") {
       x.strokeStyle = "#ffffff22"; x.lineWidth = 100;
       for(let i=0;i<4;i++){x.beginPath();x.ellipse(1200,650,480+i*160,700, -.6,0,Math.PI*2);x.stroke();}
       x.textAlign="center"; x.fillStyle="#fff"; x.font="600 104px Arial";
-      x.fillText("Postiz",768,470); x.font="32px Arial"; x.fillText("One brand. Every possibility.",768,540);
+      x.font="32px Arial"; x.fillText("One brand. Every possibility.",768,620);
       x.fillStyle="#ffffffaa";x.font="22px Arial";x.fillText("A PRIVATE PARTNERSHIP WITH DEEPAK",768,920);
     } else if(kind === "lid") {
       x.fillStyle="#d7d8dc"; x.fillRect(0,0,1536,1024);
       for(let row=0;row<4;row++)for(let col=0;col<4;col++){
         const left=90+col*350,top=64+row*230;
         x.fillStyle="#faf9fd"; x.beginPath(); x.roundRect(left,top,305,183,20); x.fill();
-        x.fillStyle="#5148e5";x.font="600 45px Arial";x.textAlign="center";x.fillText("Postiz",left+152,top+102);
+        x.textAlign="center";
         x.fillStyle="#6c6a77";x.font="17px Arial";x.fillText(String(row*4+col+1).padStart(2,"0")+" / 16",left+152,top+140);
       }
     } else {
@@ -84,8 +85,10 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
       <group position={[0,0,1.37]}>
         <RoundedBox args={[4.2,.07,2.79]} radius={.034} smoothness={4}><meshStandardMaterial {...silver}/></RoundedBox>
         <mesh position={[0,.037,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[4.02,2.64]}/><meshStandardMaterial map={lid} roughness={.48} metalness={.15}/></mesh>
+        {Array.from({length:16},(_,i)=><Brand key={i} position={[-1.375+(i%4)*.916,.039,.88-Math.floor(i/4)*.593]} rotation={[-Math.PI/2,0,0]} scale={.5}/>)}
         <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
+        <Brand position={[0,-.053,.22]} rotation={[Math.PI/2,0,0]} scale={1.1}/>
         <mesh position={[0,-.054,1.175]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[.34,.075]}/><meshBasicMaterial color="#111216"/></mesh>
         <mesh position={[0,-.057,1.19]} rotation={[Math.PI/2,0,0]}><circleGeometry args={[.012,16]}/><meshBasicMaterial color="#283343"/></mesh>
       </group>
@@ -98,7 +101,7 @@ export default function MacBookScene({progress, reduced=false}: {progress:Motion
     <hemisphereLight args={["#ffffff","#a8aab5",2]}/>
     <directionalLight position={[-3,7,5]} intensity={3}/>
     <directionalLight position={[5,3,-4]} intensity={2}/>
-    <Hardware progress={progress} reduced={reduced}/>
+    <Suspense fallback={null}><Hardware progress={progress} reduced={reduced}/></Suspense>
     <ContactShadows position={[0,-.38,0]} opacity={.22} scale={10} blur={2.8} far={4} frames={1}/>
   </Canvas>;
 }

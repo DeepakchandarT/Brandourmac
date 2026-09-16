@@ -23,6 +23,10 @@ Never prefix these variables with `NEXT_PUBLIC_`, commit real values, or send th
 in chat. Redeploy after setting them. Missing configuration or a storage outage
 fails closed and displays the invitation screen.
 
+The campaign code may reference Postiz's 20 November 2024 Product Hunt
+announcement and the complete partnership. Keep the complete value only in
+Vercel and share it only with the invited Postiz team.
+
 Optional notification settings: `OFFER_EMAIL`, `RESEND_API_KEY`, and
 `RESEND_FROM_EMAIL` (a verified sender). The complete offer is stored regardless
 of email delivery. There is no background email retry worker; failed notifications

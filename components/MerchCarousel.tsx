@@ -1,7 +1,7 @@
 "use client";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows } from "@react-three/drei";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Component, ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Pause, Play, MoveHorizontal } from "lucide-react";
 import * as THREE from "three";
@@ -12,6 +12,21 @@ const PRODUCTS = ["T-shirt", "Pen", "Notebook", "Water bottle"];
 const OBJECTS = [Tee, Pen, Notebook, Bottle];
 const STEP = Math.PI / 2;
 const modulo = (n: number) => ((n % 4) + 4) % 4;
+
+class CanvasBoundary extends Component<
+  { fallback: ReactNode; children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
 
 function Orbit({ target, reduced }: { target: React.MutableRefObject<number>; reduced: boolean }) {
   const groups = useRef<Array<THREE.Group | null>>([]);
@@ -73,6 +88,10 @@ export default function MerchCarousel() {
     if(drag.current.horizontal){const next=Math.round(-target.current/STEP);target.current=-next*STEP;setStep(next);}
     drag.current=null;
   }
+  const staticFallback=<div className="orbit-static-fallback" aria-label={`Postiz branded ${PRODUCTS[modulo(step)]}`}>
+    <PostizLogo/>
+    <strong>{PRODUCTS[modulo(step)]}</strong>
+  </div>;
   return <div ref={root} className="orbit-showcase">
     <div className="orbit-stage" aria-label="Drag horizontally to rotate the branded merchandise"
       onPointerDown={e=>{drag.current={x:e.clientX,y:e.clientY,angle:target.current,horizontal:false};}}
@@ -83,13 +102,12 @@ export default function MerchCarousel() {
         if(Math.abs(dx)>8){d.horizontal=true;setPaused(true);e.currentTarget.setPointerCapture(e.pointerId);target.current=d.angle+dx/e.currentTarget.clientWidth*Math.PI;}
       }}
       onPointerUp={finishDrag} onPointerCancel={finishDrag}>
-      {webgl?<Canvas frameloop={inView&&pageVisible?"always":"never"} camera={{position:[0,.2,8],fov:36}} dpr={[1,1.5]} gl={{antialias:true,alpha:true}}
-        fallback={<p className="model-loading">The kit includes a Postiz T-shirt, pen, notebook and water bottle.</p>}>
-        <Suspense fallback={null}><Orbit target={target} reduced={!!reduced} /></Suspense>
-      </Canvas>:<div className="orbit-static-fallback" aria-label={`Postiz branded ${PRODUCTS[modulo(step)]}`}>
-        <PostizLogo/>
-        <strong>{PRODUCTS[modulo(step)]}</strong>
-      </div>}
+      {webgl?<CanvasBoundary fallback={staticFallback}>
+        <Canvas frameloop={inView&&pageVisible?"always":"never"} camera={{position:[0,.2,8],fov:36}} dpr={[1,1.5]} gl={{antialias:true,alpha:true}}
+          fallback={<p className="model-loading">The kit includes a Postiz T-shirt, pen, notebook and water bottle.</p>}>
+          <Suspense fallback={null}><Orbit target={target} reduced={!!reduced} /></Suspense>
+        </Canvas>
+      </CanvasBoundary>:staticFallback}
     </div>
     <div className="orbit-footer">
       <div className="orbit-caption"><span className="concept-note">The everyday collection</span><h3>{PRODUCTS[modulo(step)]}</h3></div>

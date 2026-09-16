@@ -27,7 +27,7 @@ export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocke
   return <section id="private-offer" className="private-offer-section container-edge">
     <div className="offer-introduction">
       <PostizLogo/>
-      <h2>Quote<br/><em>your price.</em></h2>
+      <h2>What are all 16<br/><em>worth to you?</em></h2>
       <p>One brand. Twelve months. No competition.</p>
       <div className="previous-bid" aria-label="Postiz previously bid 1,404 US dollars for one of fourteen lid placements">
         <span>YOUR PREVIOUS BID</span>
@@ -35,7 +35,7 @@ export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocke
         <p>for 1 of 14 MacBook lid spaces</p>
         <ArrowDownRight className="bid-direction-arrow" aria-hidden="true" />
       </div>
-      <p className="offer-scope"><strong>This time:</strong> all 16 placements, the full everyday kit and twelve monthly reports.</p>
+      <p className="offer-scope">All 16 spaces. The full kit. Twelve monthly reports.</p>
     </div>
     <div className="offer-form-panel">
       {reference?<div className="offer-success" role="status"><Check size={30}/><h3>Your offer is in.</h3><p>Your proposal has been saved privately. Thank you for taking the first step.</p><span>Reference: {reference}</span></div>:<>

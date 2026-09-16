@@ -118,9 +118,9 @@ export default function CSSMacBook({
                     style={{ opacity: screenOpacity, y: wordmarkY }}
                     className="text-[#f5f4f1] font-sans font-medium tracking-[0.02em] text-[clamp(0.62rem,2.6vw,0.95rem)] text-center leading-snug px-[8%]"
                   >
-                    You&rsquo;re the hero,
+                    Lead the room.
                     <br />
-                    not a sidekick.
+                    Never the corner.
                   </motion.span>
                 )}
               </div>

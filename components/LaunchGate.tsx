@@ -8,10 +8,10 @@ export default function LaunchGate({ available }: { available:boolean }) {
     <header className="gate-header"><span>DEEPAK ×</span><PostizLogo/></header>
     <div className="gate-content">
       <LockKeyhole size={23} strokeWidth={1.3} className="gate-lock"/>
-      <h1>You launched<br/>to stand out.</h1>
-      <p>Now own the whole canvas.<br/>A private proposal created for Postiz.</p>
+      <h1>Don&rsquo;t rent a corner.<br/>Own the canvas.</h1>
+      <p>A private proposal for Postiz.</p>
       <InvitationForm launch onSuccess={()=>window.location.assign("/")}/>
-      <p className="gate-disclosure">Opening this invitation unveils the proposal to everyone. Making an offer stays exclusive to the invited team.</p>
+      <p className="gate-disclosure">Open once. View publicly. Quote privately.</p>
       {!available&&<p className="gate-status" role="status">The invitation is being prepared. Please check back shortly.</p>}
     </div>
     <footer><span>Made for Postiz. Carried by Deepak.</span><a href="https://postiz.com/">Discover Postiz <ArrowUpRight size={14}/></a></footer>

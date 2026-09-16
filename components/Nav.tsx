@@ -5,9 +5,9 @@ import { useState } from "react";
 import PostizLogo from "./PostizLogo";
 
 const LINKS = [
-  { label: "The Idea", href: "#idea" },
-  { label: "The Journey", href: "#journey" },
-  { label: "Make an offer", href: "#private-offer" },
+  { label: "The Canvas", href: "#idea" },
+  { label: "The Presence", href: "#journey" },
+  { label: "Quote your price", href: "#private-offer" },
 ];
 
 export default function Nav() {

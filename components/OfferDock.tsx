@@ -10,7 +10,7 @@ export default function OfferDock(){
     observer.observe(offer);return()=>observer.disconnect();
   },[]);
   return <aside className={`offer-dock ${hidden?"is-hidden":""}`} aria-label="Private partnership offer" aria-hidden={hidden}>
-    <div><strong>$1,404 was for one space.</strong><span>Now quote all 16.</span></div>
+    <div><strong>$1,404 was for one.</strong><span>Now quote all 16.</span></div>
     <a href="#private-offer" tabIndex={hidden?-1:0}>Quote your price <ArrowUpRight size={17}/></a>
   </aside>;
 }

@@ -151,7 +151,7 @@ export default function PresenceBookStack() {
         className="relative z-30 mx-auto mt-3 max-w-md text-center text-sm leading-relaxed text-mute"
         style={{ opacity: reduceMotion ? 1 : captionOpacity }}
       >
-        One brand, carried into every room where work and opportunity happen.
+        Four rooms. One unmistakable presence.
       </motion.p>
     </div>
   );

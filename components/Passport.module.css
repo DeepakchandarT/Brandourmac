@@ -67,7 +67,7 @@
 @media(prefers-reduced-motion:reduce){.section[data-phase] *{animation:none!important;opacity:1!important;scroll-behavior:auto!important}.signature path,.flightLine{stroke-dashoffset:0!important}}
 
 /* The route remains readable immediately; only its plane runs continuously. */
-.identityText{min-width:0}.identityText h3{font-size:clamp(24px,2.25vw,32px);overflow-wrap:anywhere}
+.identityText{min-width:0}.identityText h3{font-size:clamp(20px,2.15cqi,28px);overflow-wrap:anywhere}
 .visas{animation:none!important;opacity:1!important}
 .visaHeading{font-size:36px;line-height:1.08;margin-bottom:10px}.visaHeading em{font-weight:400}
 .map{display:block;width:100%;height:auto;min-height:125px;margin:8px 0 22px}

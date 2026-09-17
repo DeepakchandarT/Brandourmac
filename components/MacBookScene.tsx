@@ -7,7 +7,7 @@ import { Suspense, useMemo, useRef, useEffect } from "react";
 import { Brand } from "./BrandTexture";
 import * as THREE from "three";
 
-const APPLE_PATH = "M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.32.03-1.75-.79-3.27-.79-1.52 0-2 .77-3.24.82-1.3.05-2.28-1.32-3.12-2.54C4.31 16.96 3 12.41 4.91 9.08c.95-1.65 2.67-2.7 4.53-2.73 1.41-.03 2.75.95 3.62.95.87 0 2.5-1.18 4.21-1.01.72.03 2.74.29 4.03 2.18-.1.06-2.41 1.4-2.38 4.21.03 3.36 2.94 4.48 2.98 4.5-.03.09-.46 1.58-1.19 3M14.24 4.43c.73-.83 1.22-1.98 1.09-3.13-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.1 3.02 1.17.09 2.37-.59 3.07-1.42";
+import { APPLE_PATH } from "@/lib/brand-artwork";
 
 function useAppleTexture() {
   const texture = useMemo(() => {
@@ -42,8 +42,8 @@ function useArtwork(kind: "screen" | "lid" | "keys") {
       x.strokeStyle = "#ffffff22"; x.lineWidth = 100;
       for(let i=0;i<4;i++){x.beginPath();x.ellipse(1200,650,480+i*160,700, -.6,0,Math.PI*2);x.stroke();}
       x.textAlign="center"; x.fillStyle="#fff"; x.font="600 104px Arial";
-      x.font="32px Arial"; x.fillText("One brand. Every possibility.",768,620);
-      x.fillStyle="#ffffffaa";x.font="22px Arial";x.fillText("A PRIVATE PARTNERSHIP WITH DEEPAK",768,920);
+      x.font="600 106px Arial"; x.fillText("Own the canvas.",768,710);
+      
     } else if(kind === "lid") {
       x.fillStyle="#d7d8dc"; x.fillRect(0,0,1536,1024);
       for(let row=0;row<4;row++)for(let col=0;col<4;col++){
@@ -121,7 +121,7 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
         </mesh>
         <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
-        <Brand variant="mark" position={[0,-.053,.27]} rotation={[Math.PI/2,0,0]} scale={1.8}/>
+        <Brand variant="mark" position={[0,-.065,.55]} rotation={[Math.PI/2,0,0]} scale={1.8}/>
         <mesh position={[0,-.054,1.175]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[.34,.075]}/><meshBasicMaterial color="#111216"/></mesh>
         <mesh position={[0,-.057,1.19]} rotation={[Math.PI/2,0,0]}><circleGeometry args={[.012,16]}/><meshBasicMaterial color="#283343"/></mesh>
       </group>

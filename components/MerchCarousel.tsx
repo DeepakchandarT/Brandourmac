@@ -3,121 +3,92 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows } from "@react-three/drei";
 import { Component, ReactNode, Suspense, useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Pause, Play, MoveHorizontal } from "lucide-react";
 import * as THREE from "three";
-import { Tee, Pen, Notebook, Bottle } from "./ProductModels";
-import PostizLogo from "./PostizLogo";
+import { Tee, Pen, Notebook, Bottle, Hoodie, Laptop } from "./ProductModels";
 
-const PRODUCTS = ["T-shirt", "Pen", "Notebook", "Water bottle"];
-const OBJECTS = [Tee, Pen, Notebook, Bottle];
-const STEP = Math.PI / 2;
-const modulo = (n: number) => ((n % 4) + 4) % 4;
+const PRODUCTS = ["T-shirt", "Hoodie", "MacBook", "Pen", "Notebook", "Water bottle"];
+const OBJECTS = [Tee, Hoodie, Laptop, Pen, Notebook, Bottle];
+const STEP = Math.PI * 2 / PRODUCTS.length;
 
-class CanvasBoundary extends Component<
-  { fallback: ReactNode; children: ReactNode },
-  { failed: boolean }
-> {
-  state = { failed: false };
-
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-
-  render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
+class CanvasBoundary extends Component<{children:ReactNode;fallback:ReactNode},{failed:boolean}> {
+  state={failed:false};
+  static getDerivedStateFromError(){return {failed:true};}
+  render(){return this.state.failed?this.props.fallback:this.props.children;}
 }
 
-function Orbit({ target, reduced }: { target: React.MutableRefObject<number>; reduced: boolean }) {
-  const groups = useRef<Array<THREE.Group | null>>([]);
-  const angle = useRef(0);
-  const { camera, size } = useThree();
-  useEffect(() => {
-    const c = camera as THREE.PerspectiveCamera;
-    const distance = Math.max(7.8, 4.7 / (2 * Math.tan(THREE.MathUtils.degToRad(c.fov / 2)) * size.width / size.height));
-    c.position.set(0,.2,distance); c.lookAt(0,0,-.5); c.updateProjectionMatrix();
-  }, [camera,size]);
-  useFrame((_,dt) => {
-    angle.current = reduced ? target.current : THREE.MathUtils.damp(angle.current,target.current,5,Math.min(dt,.05));
+function Orbit({ angle, running, reduced, onActive }: {
+  angle: React.MutableRefObject<number>; running:boolean; reduced:boolean; onActive:(index:number)=>void;
+}) {
+  const groups=useRef<Array<THREE.Group|null>>([]);
+  const active=useRef(-1);
+  const {camera,size}=useThree();
+  useEffect(()=>{
+    const c=camera as THREE.PerspectiveCamera;
+    const distance=Math.max(8,4.5/(2*Math.tan(THREE.MathUtils.degToRad(c.fov/2))*size.width/size.height));
+    c.position.set(0,.15,distance);c.lookAt(0,0,0);c.updateProjectionMatrix();
+  },[camera,size]);
+  useFrame((_,dt)=>{
+    if(running&&!reduced) angle.current-=Math.min(dt,.05)*STEP/7;
+    const index=((Math.round(-angle.current/STEP)%PRODUCTS.length)+PRODUCTS.length)%PRODUCTS.length;
+    if(index!==active.current){active.current=index;onActive(index);}
     groups.current.forEach((g,i)=>{
-      if(!g) return;
-      const a = angle.current + i * STEP;
-      const depth = Math.cos(a);
-      g.position.set(Math.sin(a)*3.5, -.08*(1-depth), depth*2.7-2.7);
-      g.rotation.y = a;
-      g.scale.setScalar(.84 + .16*(depth+1)/2);
-      g.visible = !reduced || depth > .9;
+      if(!g)return;
+      const a=angle.current+i*STEP,depth=Math.cos(a);
+      g.position.set(Math.sin(a)*4.9,0,(depth-1)*4.3);
+      // Each item keeps its branded front directed towards the visitor.
+      g.rotation.y=Math.sin(a)*.28;
+      g.scale.setScalar(.72+.28*(depth+1)/2);
+      g.visible=!reduced||i===0;
     });
   });
   return <>
-    <hemisphereLight args={["#ffffff","#b5b2c3",1.5]} />
-    <directionalLight position={[-4,6,5]} intensity={2.5} />
-    <directionalLight position={[5,2,-4]} intensity={1.8} />
-    {OBJECTS.map((Product,i)=><group key={PRODUCTS[i]} ref={node=>{groups.current[i]=node;}}><Product /></group>)}
-    <ContactShadows position={[0,-1.55,-1.5]} scale={12} far={6} opacity={.16} blur={3} resolution={128} />
+    <hemisphereLight args={["#ffffff","#b5b2c3",1.4]}/>
+    <directionalLight position={[-4,6,5]} intensity={2.4}/>
+    <directionalLight position={[5,2,-4]} intensity={1.2}/>
+    {OBJECTS.map((Product,i)=><group key={PRODUCTS[i]} ref={node=>{groups.current[i]=node;}}><Product/></group>)}
+    <ContactShadows position={[0,-1.6,-1.5]} scale={14} far={6} opacity={.15} blur={3} resolution={128}/>
   </>;
 }
 
-export default function MerchCarousel() {
+export default function MerchCarousel(){
   const root=useRef<HTMLDivElement>(null);
-  const inView=useInView(root,{amount:.2});
+  const inView=useInView(root,{amount:.15});
   const reduced=useReducedMotion();
-  const [webgl,setWebgl]=useState(false);
-  const [pageVisible,setPageVisible]=useState(true);
-  const [step,setStep]=useState(0);
+  const angle=useRef(0);
+  const [visible,setVisible]=useState(true);
   const [paused,setPaused]=useState(false);
-  const target=useRef(0);
-  const drag=useRef<{x:number;y:number;angle:number;horizontal:boolean}|null>(null);
+  const [hovered,setHovered]=useState(false);
+  const [active,setActive]=useState(0);
+  const drag=useRef<{x:number;y:number;angle:number;moved:boolean}|null>(null);
   useEffect(()=>{
-    try {
-      const canvas=document.createElement("canvas");
-      const context=canvas.getContext("webgl2")||canvas.getContext("webgl");
-      setWebgl(!!context);
-      context?.getExtension("WEBGL_lose_context")?.loseContext();
-    } catch {setWebgl(false);}
+    const update=()=>setVisible(!document.hidden);
+    document.addEventListener("visibilitychange",update);
+    return()=>document.removeEventListener("visibilitychange",update);
   },[]);
-  useEffect(()=>{target.current=-step*STEP;},[step]);
-  useEffect(()=>{const update=()=>setPageVisible(!document.hidden);document.addEventListener("visibilitychange",update);return()=>document.removeEventListener("visibilitychange",update);},[]);
-  useEffect(()=>{
-    if(paused||reduced||!inView||!pageVisible) return;
-    const timer=window.setInterval(()=>setStep(s=>s+1),5200);
-    return()=>window.clearInterval(timer);
-  },[paused,reduced,inView,pageVisible]);
-  function finishDrag(){
-    if(!drag.current)return;
-    if(drag.current.horizontal){const next=Math.round(-target.current/STEP);target.current=-next*STEP;setStep(next);}
-    drag.current=null;
-  }
-  const staticFallback=<div className="orbit-static-fallback" aria-label={`Postiz branded ${PRODUCTS[modulo(step)]}`}>
-    <PostizLogo/>
-    <strong>{PRODUCTS[modulo(step)]}</strong>
-  </div>;
+  const fallback=<p className="model-loading">Postiz collection: T-shirt, hoodie, MacBook, pen, notebook and bottle.</p>;
   return <div ref={root} className="orbit-showcase">
-    <div className="orbit-stage" aria-label="Drag horizontally to rotate the branded merchandise"
-      onPointerDown={e=>{drag.current={x:e.clientX,y:e.clientY,angle:target.current,horizontal:false};}}
+    <div className="orbit-stage" role="button" tabIndex={0}
+      aria-label={paused?"Resume automatic merchandise rotation":"Pause automatic merchandise rotation"}
+      aria-pressed={paused}
+      onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
+      onKeyDown={e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();setPaused(p=>!p);}}}
+      onPointerDown={e=>{drag.current={x:e.clientX,y:e.clientY,angle:angle.current,moved:false};}}
       onPointerMove={e=>{
         const d=drag.current;if(!d)return;
         const dx=e.clientX-d.x,dy=e.clientY-d.y;
-        if(!d.horizontal && Math.abs(dy)>12 && Math.abs(dy)>Math.abs(dx)){drag.current=null;return;}
-        if(Math.abs(dx)>8){d.horizontal=true;setPaused(true);e.currentTarget.setPointerCapture(e.pointerId);target.current=d.angle+dx/e.currentTarget.clientWidth*Math.PI;}
+        if(!d.moved&&Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){drag.current=null;return;}
+        if(Math.abs(dx)>8){d.moved=true;e.currentTarget.setPointerCapture(e.pointerId);angle.current=d.angle+dx/e.currentTarget.clientWidth*Math.PI;}
       }}
-      onPointerUp={finishDrag} onPointerCancel={finishDrag}>
-      {webgl?<CanvasBoundary fallback={staticFallback}>
-        <Canvas frameloop={inView&&pageVisible?"always":"never"} camera={{position:[0,.2,8],fov:36}} dpr={[1,1.5]} gl={{antialias:true,alpha:true}}
-          fallback={<p className="model-loading">The kit includes a Postiz T-shirt, pen, notebook and water bottle.</p>}>
-          <Suspense fallback={null}><Orbit target={target} reduced={!!reduced} /></Suspense>
+      onPointerUp={()=>{if(drag.current&&!drag.current.moved)setPaused(p=>!p);drag.current=null;}}
+      onPointerCancel={()=>{drag.current=null;}}>
+      <CanvasBoundary fallback={fallback}>
+        <Canvas frameloop={inView&&visible?"always":"never"} camera={{position:[0,.15,8],fov:36}} dpr={[1,2]} gl={{antialias:true,alpha:true}} fallback={fallback}>
+          <Suspense fallback={null}><Orbit angle={angle} running={!paused&&!hovered} reduced={!!reduced} onActive={setActive}/></Suspense>
         </Canvas>
-      </CanvasBoundary>:staticFallback}
+      </CanvasBoundary>
     </div>
-    <div className="orbit-footer">
-      <div className="orbit-caption"><span className="concept-note">The everyday collection</span><h3>{PRODUCTS[modulo(step)]}</h3></div>
-      <div className="tactile-controls" role="group" aria-label="Merchandise rotation controls">
-        <button aria-label="Previous product" onClick={()=>{setPaused(true);setStep(s=>s-1);}}><ArrowLeft size={17}/></button>
-        {!reduced&&<button aria-label={paused?"Resume rotation":"Pause rotation"} onClick={()=>setPaused(p=>!p)}>{paused?<Play size={15}/>:<Pause size={15}/>}</button>}
-        <button aria-label="Next product" onClick={()=>{setPaused(true);setStep(s=>s+1);}}><ArrowRight size={17}/></button>
-      </div>
-    </div>
-    <p className="orbit-hint"><MoveHorizontal size={15}/> Drag to explore · {modulo(step)+1} / 4</p>
-    <div className="orbit-credit"><span>Branding concepts for</span><PostizLogo compact/><strong>Postiz</strong></div>
+    <p style={{textAlign:"center",marginTop:8,fontSize:16,color:"#35313f"}}>{PRODUCTS[active]}</p>
+    <p style={{textAlign:"center",marginTop:8,fontSize:11,color:"#6c6778"}}>{reduced?"Collection preview":paused?"Paused · tap to resume":"Automatically rotating · tap to pause"}</p>
+    <p className="sr-only">Collection: {PRODUCTS.join(", ")}. Drag to explore. Press Enter or Space to pause.</p>
   </div>;
 }

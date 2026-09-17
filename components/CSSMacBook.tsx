@@ -2,9 +2,10 @@
 
 import { motion, useTransform, MotionValue, useSpring } from "framer-motion";
 import Image from "next/image";
+import { APPLE_PATH } from "@/lib/brand-artwork";
 
 const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[28%] w-[28%] fill-[#34353a] drop-shadow-[0_1px_0_rgba(255,255,255,.28)]">
-  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.32.03-1.75-.79-3.27-.79-1.52 0-2 .77-3.24.82-1.3.05-2.28-1.32-3.12-2.54C4.31 16.96 3 12.41 4.91 9.08c.95-1.65 2.67-2.7 4.53-2.73 1.41-.03 2.75.95 3.62.95.87 0 2.5-1.18 4.21-1.01.72.03 2.74.29 4.03 2.18-.1.06-2.41 1.4-2.38 4.21.03 3.36 2.94 4.48 2.98 4.5-.03.09-.46 1.58-1.19 3M14.24 4.43c.73-.83 1.22-1.98 1.09-3.13-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.1 3.02 1.17.09 2.37-.59 3.07-1.42"/>
+  <path d={APPLE_PATH}/>
 </svg>;
 
 /**
@@ -120,8 +121,8 @@ export default function CSSMacBook({
                     className="flex w-full flex-col items-center px-[8%] text-center"
                   >
                     <Image src="/postiz-mark.svg" alt="Postiz" width={112} height={112} className="h-auto w-[24%] max-w-[66px]" />
-                    <span className="mt-[7%] text-[clamp(0.48rem,1.9vw,0.72rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
-                      Lead the room. Never the corner.
+                    <span className="mt-[7%] text-[clamp(0.85rem,3.2vw,1.2rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
+                      Own the canvas.
                     </span>
                   </motion.div>
                 )}

@@ -53,6 +53,7 @@
 .section[data-phase=reveal] .signature path{animation:draw .8s .5s both}.section[data-phase=reveal] .stamp{animation:stamp .45s .95s both cubic-bezier(.2,.9,.3,1.2)}
 .section[data-phase=reveal] .stamp1{animation-delay:1.15s}.section[data-phase=reveal] .stamp2{animation-delay:1.35s}.section[data-phase=reveal] .flightLine{animation:draw 1s 1s both}.section[data-phase=reveal] .plane{animation:fly 1s 1s both}
 .section[data-phase=reveal] .props>*{animation:prop .5s 1.9s both}.section[data-phase=reveal] .props>:nth-child(2){animation-delay:2.1s}.section[data-phase=reveal] .props>:nth-child(3){animation-delay:2.3s}
+.section[data-phase=reveal] [data-seen=false],.section[data-phase=reveal] [data-seen=false] *{animation-play-state:paused!important}
 @keyframes settle{from{opacity:0;transform:rotateY(8deg) translateY(12px)}to{opacity:1;transform:rotateY(0) translateY(0)}}
 @keyframes photo{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
 @keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}

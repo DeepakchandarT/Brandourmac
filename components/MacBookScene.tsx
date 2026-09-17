@@ -113,7 +113,7 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
         {Array.from({length:16},(_,i)=>{
           const row=Math.floor(i/4), col=i%4;
           if((row===1||row===2)&&(col===1||col===2)) return null;
-          return <Brand key={i} variant="mark" position={[-1.375+col*.916,.039,.88-row*.593]} rotation={[-Math.PI/2,0,Math.PI]} scale={.62}/>;
+          return <Brand key={i} variant="wordmark" position={[-1.375+col*.916,.045,.88-row*.593]} rotation={[-Math.PI/2,0,Math.PI]} scale={.56}/>;
         })}
         <mesh position={[0,.041,0]} rotation={[-Math.PI/2,0,Math.PI]}>
           <planeGeometry args={[.68,.68]}/>

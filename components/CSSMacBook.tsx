@@ -142,7 +142,9 @@ export default function CSSMacBook({
                     key={index}
                     className="flex rotate-180 items-center justify-center rounded-[3px] bg-white shadow-[0_2px_5px_rgba(34,28,64,.12)]"
                   >
-                    <Image src="/postiz-mark.svg" alt="" width={112} height={112} className="h-[70%] w-[70%]" />
+                    <span className="relative block w-[86%] overflow-hidden" style={{aspectRatio:"2.84"}}>
+                      <Image src="/postiz-logo-transparent.png" alt="Postiz" width={900} height={203} unoptimized style={{position:"absolute",width:"156.25%",maxWidth:"none",height:"100%",left:"-56.25%",top:0}} />
+                    </span>
                   </div>
                 )})}
               </div>

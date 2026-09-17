@@ -1,15 +1,14 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Globe2, Compass, ArrowUpRight } from "lucide-react";
+import { Globe2, Compass, ArrowUpRight, Pause, Play } from "lucide-react";
 import s from "./Passport.module.css";
-const stamps = [
-  {name:"CAMPUS",line:"Ideas to impact",date:"12 Jan 2024",iso:"2024-01-12"},
-  {name:"CLIENT ROOMS",line:"Conversations to opportunities",date:"23 May 2024",iso:"2024-05-23"},
-  {name:"EVENTS",line:"People to possibilities",date:"14 Sep 2024",iso:"2024-09-14"},
-];
+const destinations = ["College events", "Business meetings", "Client presentations", "Startup events", "Workshops & hackathons", "New cities"];
+const flightPath = "M40 90C40 25 130 20 220 35S400 25 400 90S310 160 220 145S40 155 40 90Z";
 export default function Passport(){
-  const routeMask=useId().replace(/:/g,"");
+  const routePage=useRef<HTMLElement>(null);
+  const [routeVisible,setRouteVisible]=useState(false);
+  const [flightPaused,setFlightPaused]=useState(false);
   const root=useRef<HTMLElement>(null);
   const [visible,setVisible]=useState(false);
   const [phase,setPhase]=useState("static");
@@ -31,40 +30,44 @@ export default function Passport(){
     },{threshold:0,rootMargin:"-90px 0px -90px 0px"});
     observer.observe(element);return()=>{observer.disconnect();groupObserver.disconnect();};
   },[]);
+  useEffect(()=>{
+    const page=routePage.current;if(!page)return;
+    let inView=false;
+    const sync=()=>setRouteVisible(inView&&!document.hidden);
+    const observer=new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;sync();},{threshold:.15,rootMargin:"-72px 0px -80px 0px"});
+    observer.observe(page);document.addEventListener("visibilitychange",sync);
+    return()=>{observer.disconnect();document.removeEventListener("visibilitychange",sync);};
+  },[]);
   return <section ref={root} id="journey" aria-labelledby="passport-title" className={s.section} data-phase={phase}>
     <div className={s.inner}>
       <header className={s.header}>
         <div className={s.eyebrow}><span>02 / 04</span><span aria-hidden="true"/></div>
         <h2 id="passport-title">The person behind<br/><em>the presence.</em></h2>
-        <p>Different places. Same purpose. Building Postiz, one stamp at a time.</p>
+        <p>Different places. Same purpose. Postiz comes with me.</p>
         <div className={s.notes} aria-hidden="true"><span>More Creators, Brighter Places</span><span>Good Work Travels Further</span></div>
       </header>
       <div className={s.spread}>
-        <article data-reveal-group data-seen="false" className={`${s.page} ${s.identity}`} aria-label="Deepak’s Postiz passport of work">
+        <article data-reveal-group data-seen="false" className={`${s.page} ${s.identity}`} aria-label="Deepakchandar’s Postiz passport of work">
           <div className={s.pageLabel}><Globe2 size={18} aria-hidden="true"/><span>POSTIZ · PASSPORT OF WORK</span></div>
           <div className={s.identityBody}>
-            <figure className={s.photo}>{photoFailed?<div className={s.photoPlaceholder} aria-label="Deepak portrait awaiting upload"><span>D</span><small>DEEPAK</small></div>:<Image src="/deepak-passport.webp" width={600} height={800} unoptimized alt="Deepak wearing a dark suit and tie in an office" loading="lazy" onError={()=>setPhotoFailed(true)}/>}</figure>
-            <div className={s.identityText}><span className={s.micro}>NAME / NOM</span><h3>DEEPAK</h3><div className={s.roles}><span>STUDENT</span><span>FOUNDER</span><span>CTO</span></div><p className={s.handwriting}>Same human.<br/>Bigger horizons.</p></div>
+            <figure className={s.photo}>{photoFailed?<div className={s.photoPlaceholder} aria-label="Deepakchandar portrait awaiting upload"><span>D</span><small>DC</small></div>:<Image src="/deepak-passport.webp" width={600} height={800} unoptimized alt="Deepakchandar wearing a dark suit and tie in an office" loading="lazy" onError={()=>setPhotoFailed(true)}/>}</figure>
+            <div className={s.identityText}><span className={s.micro}>NAME / NOM</span><h3>Deepakchandar</h3><div className={s.roles}><span>STUDENT</span><span>FOUNDER</span><span>CTO</span></div><p className={s.handwriting}>Same human.<br/>Bigger horizons.</p></div>
           </div>
           <div className={s.signatureRow}><span className={s.micro}>THE JOURNEY IS PERSONAL.</span><svg className={s.signature} viewBox="0 0 220 65" aria-hidden="true"><path pathLength="1" d="M16 48C34 14 48 7 41 31L26 55M19 27C66-8 83 45 35 47M58 43C76 23 84 42 64 44C58 49 78 52 86 39C99 23 111 39 90 44C90 53 106 45 116 35C107 57 127 38 129 33C139 24 142 48 130 48L122 61M147 37C157 23 168 40 151 46C141 50 152 29 164 33L160 47L175 37C179 19 193 7 187 24L175 48L192 35L183 44L201 48M45 59C91 52 157 56 204 52"/></svg></div>
-          <div className={s.machine} aria-label="Postiz, Deepak. Work, people, places, possibilities."><span aria-hidden="true">POSTIZ&lt;DEEPAK&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span><span aria-hidden="true">WORK&gt;PEOPLE&gt;PLACES&gt;POSSIBILITIES&lt;&lt;</span></div>
+          <div className={s.machine} aria-label="Postiz, Deepakchandar. Work, people, places, possibilities."><span aria-hidden="true">POSTIZ&lt;DEEPAKCHANDAR&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span><span aria-hidden="true">WORK&gt;PEOPLE&gt;PLACES&gt;POSSIBILITIES&lt;&lt;</span></div>
           <span className={s.pageNumber}>01 — THE PERSON</span>
         </article>
-        <article data-reveal-group data-seen="false" className={`${s.page} ${s.visas}`} aria-label="Visas for projects">
-          <div className={s.pageLabel}>VISAS FOR PROJECTS</div><h3 className={s.visaHeading}>Ideas travel further.</h3>
-          <div className={s.stamps}>{stamps.map((stamp,i)=><div key={stamp.name} className={`${s.stamp} ${s[`stamp${i}`]}`} aria-label={`${stamp.name}: ${stamp.line}. Illustrative date ${stamp.date}.`}><strong>{stamp.name}</strong><span>{stamp.line}</span><time dateTime={stamp.iso}>{stamp.date}</time></div>)}</div>
-          <p className={s.concept}>Illustrative stamps · dates shown for the concept</p>
+        <article ref={routePage} className={`${s.page} ${s.visas}`} aria-label="Where I will take my laptop" data-flight={routeVisible&&!flightPaused?"playing":"paused"}>
+          <div className={s.pageLabel}>WHERE MY LAPTOP GOES</div><h3 className={s.visaHeading}>More places.<br/><em>One presence.</em></h3>
           <div className={s.route}>
-            <svg className={s.map} viewBox="0 0 440 125" role="img" aria-label="Travel route: Campus to Client Rooms to Events to New Cities">
-              <path className={s.land} d="M32 29l29-18 30 5 17 18-17 14-8 20-19-4-10-19-20 2zm49 44 21 7 10 22-16 18-9-26zm98-43 28-15 35 6 11 13 31-9 37 6 36-11 43 24-20 17-35-3-13 21-21-8-18-25-29 3-17-8-18 15-11-11-17 5zm22 30 31 0 17 27-17 30-13-6-5-26zm141 32 29-8 24 18-9 13-34-3z"/>
-              <path className={s.track} d="M28 100C95 110 104 54 168 68S277 82 305 47S378 42 412 20"/>
-              <defs><mask id={routeMask}><path className={s.flightLine} pathLength="1" d="M28 100C95 110 104 54 168 68S277 82 305 47S378 42 412 20"/></mask></defs>
-              <path className={s.inkRoute} mask={`url(#${routeMask})`} d="M28 100C95 110 104 54 168 68S277 82 305 47S378 42 412 20"/>
-              <g className={s.plane}><path d="M-10 0l20-5-8 7-1 8-4-6-7 0z"/></g>
-              {[[28,100],[168,68],[305,47],[412,20]].map(([cx,cy])=><circle key={cx} cx={cx} cy={cy} r="3" className={s.dot}/>)}
+            <svg className={s.map} viewBox="0 0 440 180" role="img" aria-label="A continuous flight connecting the places listed below">
+              <ellipse cx="220" cy="90" rx="140" ry="63" className={s.globeRing}/><ellipse cx="220" cy="90" rx="65" ry="63" className={s.globeRing}/><path d="M80 90H360M96 60H344M96 120H344" className={s.globeRing}/>
+              <path className={s.inkRoute} d={flightPath}/>
+              {[[40,90],[100,36],[220,35],[400,90],[330,145],[220,145]].map(([cx,cy],i)=><g key={cx+cy}><circle cx={cx} cy={cy} r="4" className={s.dot}/><text x={cx} y={cy+(cy>90?22:-13)} className={s.routeNumber} textAnchor="middle">0{i+1}</text></g>)}
+              <g className={s.plane}><path d="M11 0L-9-8-5 0-9 8Z"/></g>
             </svg>
-            <ol className={s.routeList}>{["Campus","Client Rooms","Events","New Cities"].map((place,i)=><li key={place}><span>0{i+1}</span>{place}</li>)}</ol>
-            <div className={s.compass}><Compass size={27} strokeWidth={1} aria-hidden="true"/><span>Same purpose, more places.</span></div>
+            <ol className={s.routeList}>{destinations.map((place,i)=><li key={place}><span>0{i+1}</span>{place}</li>)}</ol>
+            <div className={s.routeFooter}><div className={s.compass}><Compass size={23} strokeWidth={1} aria-hidden="true"/><span>Same purpose, more places.</span></div><button type="button" className={s.flightControl} aria-label={flightPaused?"Resume flight animation":"Pause flight animation"} onClick={()=>setFlightPaused(value=>!value)}>{flightPaused?<Play size={13}/>:<Pause size={13}/>}</button></div>
           </div>
           <p className={s.quote}>“My work keeps moving.<br/>Postiz moves with it.”</p><span className={s.pageNumber}>02 — THE POSSIBILITIES</span>
         </article>

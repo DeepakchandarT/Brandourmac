@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "node:crypto";
 import { limited, namespace, readBody, readSession, redis, sameOrigin, SESSION_COOKIE } from "@/lib/campaign";
+import { getPublishedSponsor } from "@/lib/sponsor";
 
 export const dynamic = "force-dynamic";
 const error = (message: string, status: number) => NextResponse.json({ error: message }, { status });
@@ -33,10 +34,11 @@ export async function POST(request: NextRequest) {
       const recipient = process.env.OFFER_EMAIL, apiKey = process.env.RESEND_API_KEY, from = process.env.RESEND_FROM_EMAIL;
       if (recipient && apiKey && from) {
         try {
+          const sponsor=await getPublishedSponsor();
           const result = await fetch("https://api.resend.com/emails", {
             method: "POST", signal: AbortSignal.timeout(6000),
             headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": id },
-            body: JSON.stringify({ from, to: [recipient], reply_to: email, subject: "Postiz × Deepak — Private partnership offer",
+            body: JSON.stringify({ from, to: [recipient], reply_to: email, subject: `${sponsor.name} × Deepak — Private partnership offer`,
               text: [`Offer reference: ${id}`, `Contact: ${contact}`, `Email: ${email}`, `12-month offer: ${currency} ${amount}`, "", note || "No additional notes."].join("\n") }),
           });
           await redis(["SET", `${key}:notification`, result.ok ? "sent" : "failed"]);

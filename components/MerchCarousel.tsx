@@ -5,6 +5,7 @@ import { Component, ReactNode, Suspense, useEffect, useRef, useState } from "rea
 import { useInView, useReducedMotion } from "framer-motion";
 import * as THREE from "three";
 import { Tee, Pen, Notebook, Bottle, Laptop } from "./ProductModels";
+import { useSponsor } from "./SponsorProvider";
 
 const PRODUCTS = ["T-shirt", "MacBook", "Pen", "Notebook", "Water bottle"];
 const OBJECTS = [Tee, Laptop, Pen, Notebook, Bottle];
@@ -51,6 +52,7 @@ function Orbit({ angle, running, reduced, onActive }: {
 }
 
 export default function MerchCarousel(){
+  const sponsor=useSponsor();
   const root=useRef<HTMLDivElement>(null);
   const inView=useInView(root,{amount:.15});
   const reduced=useReducedMotion();
@@ -65,7 +67,7 @@ export default function MerchCarousel(){
     document.addEventListener("visibilitychange",update);
     return()=>document.removeEventListener("visibilitychange",update);
   },[]);
-  const fallback=<p className="model-loading">Postiz collection: T-shirt, MacBook, pen, notebook and bottle.</p>;
+  const fallback=<p className="model-loading">{sponsor.name} collection: T-shirt, MacBook, pen, notebook and bottle.</p>;
   return <div ref={root} className="orbit-showcase">
     <div className="orbit-stage" role="button" tabIndex={0}
       aria-label={paused?"Resume automatic merchandise rotation":"Pause automatic merchandise rotation"}

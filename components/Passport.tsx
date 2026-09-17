@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Globe2, Compass, ArrowUpRight, Pause, Play, Linkedin } from "lucide-react";
 import s from "./Passport.module.css";
+import { useSponsor } from "./SponsorProvider";
 const destinations = ["College events", "Business meetings", "Client presentations", "Startup events", "Workshops & hackathons", "New cities"];
 const flightPath = "M68 175C48 125 85 55 142 62S220 135 269 85S393 78 370 159S280 180 238 211S95 243 68 175Z";
 export default function Passport(){
+  const sponsor=useSponsor();
   const [activePlace,setActivePlace]=useState(0);
   const routePage=useRef<HTMLElement>(null);
   const [routeVisible,setRouteVisible]=useState(false);
@@ -44,18 +46,18 @@ export default function Passport(){
       <header className={s.header}>
         <div className={s.eyebrow}><span>02 / 04</span><span aria-hidden="true"/></div>
         <h2 id="passport-title">The person behind<br/><em>the presence.</em></h2>
-        <p>Different places. Same purpose. Postiz comes with me.</p>
+        <p>Different places. Same purpose. {sponsor.name} comes with me.</p>
         <div className={s.notes} aria-hidden="true"><span>More Creators, Brighter Places</span><span>Good Work Travels Further</span></div>
       </header>
       <div className={s.spread}>
-        <article data-reveal-group data-seen="false" className={`${s.page} ${s.identity}`} aria-label="Deepakchandar’s Postiz passport of work">
-          <div className={s.pageLabel}><Globe2 size={18} aria-hidden="true"/><span>POSTIZ · PASSPORT OF WORK</span></div>
+        <article data-reveal-group data-seen="false" className={`${s.page} ${s.identity}`} aria-label={`Deepakchandar’s ${sponsor.name} passport of work`}>
+          <div className={s.pageLabel}><Globe2 size={18} aria-hidden="true"/><span>{sponsor.name.toUpperCase()} · PASSPORT OF WORK</span></div>
           <div className={s.identityBody}>
             <figure className={s.photo}>{photoFailed?<div className={s.photoPlaceholder} aria-label="Deepakchandar portrait awaiting upload"><span>D</span><small>DC</small></div>:<Image src="/deepak-passport.webp" width={600} height={800} unoptimized alt="Deepakchandar wearing a dark suit and tie in an office" loading="lazy" onError={()=>setPhotoFailed(true)}/>}</figure>
             <div className={s.identityText}><span className={s.micro}>NAME / NOM</span><h3>Deepakchandar</h3><div className={s.roles}><span>STUDENT</span><span>FOUNDER</span><span>CTO</span></div><a className={s.linkedin} href="https://www.linkedin.com/in/deepakchandart/" target="_blank" rel="noopener noreferrer" aria-label="View Deepakchandar on LinkedIn (opens in a new tab)"><Linkedin size={15} aria-hidden="true"/><span>Let’s connect</span><ArrowUpRight size={15} aria-hidden="true"/></a><p className={s.handwriting}>Same human.<br/>Bigger horizons.</p></div>
           </div>
           <div className={s.signatureRow}><span className={s.micro}>THE JOURNEY IS PERSONAL.</span><svg className={s.signature} viewBox="0 0 220 65" aria-hidden="true"><path pathLength="1" d="M16 48C34 14 48 7 41 31L26 55M19 27C66-8 83 45 35 47M58 43C76 23 84 42 64 44C58 49 78 52 86 39C99 23 111 39 90 44C90 53 106 45 116 35C107 57 127 38 129 33C139 24 142 48 130 48L122 61M147 37C157 23 168 40 151 46C141 50 152 29 164 33L160 47L175 37C179 19 193 7 187 24L175 48L192 35L183 44L201 48M45 59C91 52 157 56 204 52"/></svg></div>
-          <div className={s.machine} aria-label="Postiz, Deepakchandar. Work, people, places, possibilities."><span aria-hidden="true">POSTIZ&lt;DEEPAKCHANDAR&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span><span aria-hidden="true">WORK&gt;PEOPLE&gt;PLACES&gt;POSSIBILITIES&lt;&lt;</span></div>
+          <div className={s.machine} aria-label={`${sponsor.name}, Deepakchandar. Work, people, places, possibilities.`}><span aria-hidden="true">{sponsor.name.toUpperCase()}&lt;DEEPAKCHANDAR&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span><span aria-hidden="true">WORK&gt;PEOPLE&gt;PLACES&gt;POSSIBILITIES&lt;&lt;</span></div>
           <span className={s.pageNumber}>01 — THE PERSON</span>
         </article>
         <article ref={routePage} className={`${s.page} ${s.visas}`} aria-label="Where I will take my laptop" data-flight={routeVisible&&!flightPaused?"playing":"paused"}>
@@ -80,7 +82,7 @@ export default function Passport(){
             <ol className={s.routeList}>{destinations.map((place,i)=><li key={place}><button type="button" className={s.destination} aria-pressed={activePlace===i} onClick={()=>setActivePlace(i)}><span>0{i+1}</span><span>{place}</span><ArrowUpRight size={14} aria-hidden="true"/></button></li>)}</ol>
             <div className={s.routeFooter}><div className={s.compass}><Compass size={23} strokeWidth={1} aria-hidden="true"/><span>Same purpose, more places.</span></div><button type="button" className={s.flightControl} aria-label={flightPaused?"Resume flight animation":"Pause flight animation"} onClick={()=>setFlightPaused(value=>!value)}>{flightPaused?<Play size={13}/>:<Pause size={13}/>}</button></div>
           </div>
-          <p className={s.quote}>“My work keeps moving.<br/>Postiz moves with it.”</p><span className={s.pageNumber}>02 — THE POSSIBILITIES</span>
+          <p className={s.quote}>“My work keeps moving.<br/>{sponsor.name} moves with it.”</p><span className={s.pageNumber}>02 — THE POSSIBILITIES</span>
         </article>
       </div>
       <div data-reveal-group data-seen="false" className={s.props} aria-label="Travel essentials">

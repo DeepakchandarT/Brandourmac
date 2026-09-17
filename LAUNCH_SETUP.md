@@ -34,6 +34,27 @@ of email delivery. There is no background email retry worker; failed notificatio
 can be checked in the database and followed up manually. No real email was sent
 during testing.
 
+## Admin portal, sponsor manager and analytics
+
+The protected dashboard is available at `/admin`. Add these server-only variables
+to both Preview and Production, then redeploy:
+
+- `ADMIN_EMAIL`: the email address permitted to sign in. If omitted, `OFFER_EMAIL`
+  is used.
+- `ADMIN_PASSWORD`: a strong, unique password. Never prefix it with `NEXT_PUBLIC_`.
+- `ADMIN_SESSION_SECRET`: an independent random secret of at least 32 characters.
+
+The existing Redis connection and `CAMPAIGN_NAMESPACE` are reused. No additional
+service or client-side analytics key is required. Analytics stores only a random
+first-party visitor identifier, aggregated page/referral counters and a five-minute
+recent-activity window; it does not store visitor names, email addresses or raw IPs.
+
+Sponsor drafts and the published sponsor are stored separately. Postiz remains the
+default until a new draft is explicitly published. Uploaded logos are limited to
+validated PNG, WebP or restricted SVG files of at most 350 KB. The public website
+loads the published sponsor configuration at request time, so publishing does not
+require redesigning or rebuilding its sections.
+
 ## Preview review
 
 1. Configure the Preview environment with a separate namespace and private test code.
@@ -68,5 +89,5 @@ branded panel and report covers. The supplied Postiz logo is used as-is.
 
 ## Verification
 
-Run `node --test tests/campaign.test.cjs` and `npm run build`. The tests use an
+Run `node --test tests/*.test.cjs` and `npm run build`. The tests use an
 in-memory mock of Redis and mock email transport, never live credentials.

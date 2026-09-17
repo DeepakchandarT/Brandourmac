@@ -11,17 +11,23 @@ import LaunchGate from "@/components/LaunchGate";
 import OfferDock from "@/components/OfferDock";
 import { cookies } from "next/headers";
 import { configured, isPublished, readSession, SESSION_COOKIE } from "@/lib/campaign";
+import { getPublishedSponsor } from "@/lib/sponsor";
+import { publicSponsor } from "@/lib/sponsor-types";
+import { SponsorProvider } from "@/components/SponsorProvider";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   let published=false;
   let available=configured();
+  const sponsorConfig=await getPublishedSponsor();
   try {published=await isPublished();} catch {available=false;}
-  if(!published) return <LaunchGate available={available}/>;
+  if(!published) return <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><LaunchGate available={available}/></SponsorProvider>;
   const sponsor=!!readSession(cookies().get(SESSION_COOKIE)?.value);
   return (
-    <main className="relative bg-ink text-bone">
+    <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><main className="relative bg-ink text-bone">
+      <AnalyticsTracker/>
       <Nav />
       <Hero />
       <InteractiveMacBook />
@@ -32,6 +38,6 @@ export default async function Home() {
       <PrivateOffer initialUnlocked={sponsor}/>
       <Footer />
       <OfferDock/>
-    </main>
+    </main></SponsorProvider>
   );
 }

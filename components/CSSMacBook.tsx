@@ -120,7 +120,7 @@ export default function CSSMacBook({
                     style={{ opacity: screenOpacity, y: wordmarkY }}
                     className="flex w-full flex-col items-center px-[8%] text-center"
                   >
-                    <Image src="/postiz-mark.svg" alt="Postiz" width={112} height={112} className="h-auto w-[24%] max-w-[66px]" />
+                    <Image src="/api/sponsor/logo" alt="Your brand" width={260} height={90} unoptimized className="h-auto w-[42%] max-w-[120px]" />
                     <span className="mt-[7%] text-[clamp(0.85rem,3.2vw,1.2rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
                       Own the canvas.
                     </span>
@@ -143,7 +143,7 @@ export default function CSSMacBook({
                     className="flex rotate-180 items-center justify-center rounded-[3px] bg-white shadow-[0_2px_5px_rgba(34,28,64,.12)]"
                   >
                     <span className="relative block w-[86%] overflow-hidden" style={{aspectRatio:"2.84"}}>
-                      <Image src="/postiz-logo-transparent.png" alt="Postiz" width={900} height={203} unoptimized style={{position:"absolute",width:"156.25%",maxWidth:"none",height:"100%",left:"-56.25%",top:0}} />
+                      <Image src="/api/sponsor/logo" alt="Your brand" width={260} height={90} unoptimized className="h-full w-full object-contain" />
                     </span>
                   </div>
                 )})}

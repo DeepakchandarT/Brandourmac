@@ -7,6 +7,7 @@ const ts = require('typescript');
 const root = path.resolve(__dirname, '..');
 const resolve = Module._resolveFilename;
 Module._resolveFilename = function(id, ...args) {
+  if (id === 'server-only') return path.join(root, 'tests/server-only.cjs');
   return resolve.call(this, id.startsWith('@/') ? path.join(root, id.slice(2)) : id, ...args);
 };
 require.extensions['.ts'] = (module, file) => module._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), {

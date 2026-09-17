@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { ArrowLeft, ArrowRight, Pause, Play, ArrowUpRight } from "lucide-react";
 import PostizLogo from "./PostizLogo";
+import { useSponsor } from "./SponsorProvider";
 
 const CHAPTERS = [
-  {month:"01",title:"First appearance",copy:"Photos and activity notes.",x:85,y:397,w:126,tilt:-8},
-  {month:"02",title:"Into the week",copy:"Meetings and everyday work.",x:245,y:376,w:144,tilt:-5},
-  {month:"04",title:"More rooms",copy:"Events and professional settings.",x:425,y:350,w:162,tilt:-2},
-  {month:"06",title:"Halfway",copy:"Six months brought together.",x:625,y:314,w:182,tilt:2},
-  {month:"09",title:"Built to last",copy:"The record keeps growing.",x:845,y:264,w:200,tilt:5},
-  {month:"12",title:"A year, documented",copy:"The complete partnership story.",x:1090,y:179,w:220,tilt:0},
+  {month:"01",title:"The first appearance",copy:"The first photos and activity notes from the partnership.",x:85,y:397,w:126,tilt:-8},
+  {month:"02",title:"Into the working week",copy:"A record of the meetings and everyday work where the brand appears.",x:245,y:376,w:144,tilt:-5},
+  {month:"04",title:"More rooms. More stories.",copy:"Documenting the events and professional settings actually attended.",x:425,y:350,w:162,tilt:-2},
+  {month:"06",title:"The halfway chapter",copy:"Six months of photographs and activity summaries brought together.",x:625,y:314,w:182,tilt:2},
+  {month:"09",title:"A presence that lasts",copy:"Continuing the monthly record as the partnership develops.",x:845,y:264,w:200,tilt:5},
+  {month:"12",title:"A year, documented",copy:"The complete twelve-month story, supported by the real record.",x:1090,y:179,w:220,tilt:0},
 ].map((chapter,i)=>{
   const t=[.04,.2,.38,.57,.77,.94][i],u=1-t;
   return {...chapter,x:u*u*u*30+3*u*u*t*480+3*u*t*t*840+t*t*t*1180,y:u*u*u*404+3*u*u*t*350+3*u*t*t*319+t*t*t*138};
@@ -36,6 +37,7 @@ function Dial({ active, reduced }: { active:number;reduced:boolean }) {
 }
 
 export default function MonthlyReports() {
+  const sponsor=useSponsor();
   const root=useRef<HTMLElement>(null);
   const track=useRef<HTMLDivElement>(null);
   const manual=useRef(false);
@@ -59,9 +61,9 @@ export default function MonthlyReports() {
   function select(i:number){manual.current=true;setPlaying(false);setActive((i+6)%6);}
   return <section id="reports" ref={root} className="timeline-section">
     <div className="timeline-heading">
-      <p className="timeline-label">TWELVE<br/>MONTHS<br/>OF PROOF</p>
-      <h2>Every appearance.<br/><em>Documented.</em></h2>
-      <p className="timeline-intro">Twelve months. Twelve reports.<br/>One living record.</p>
+      <p className="timeline-label">A YEAR<br/>IN THE<br/>MAKING</p>
+      <h2>A living record.<br/><em>One chapter at a time.</em></h2>
+      <p className="timeline-intro">Real appearances. Real photographs.<br/>A new report every month.</p>
     </div>
     <Dial active={active} reduced={!!reduced}/>
     <div ref={track} className="timeline-viewport" tabIndex={0} aria-label="Planned twelve-month reporting timeline. Scroll horizontally to explore.">
@@ -77,7 +79,7 @@ export default function MonthlyReports() {
             style={{width:chapter.w}}
             animate={{rotate:active===i?0:chapter.tilt,y:active===i?-8:0}}
             transition={{duration:reduced?0:.55,ease:[.16,1,.3,1]}}>
-            <span className="report-paper-top">POSTIZ × DEEPAK<span>{chapter.month}</span></span>
+            <span className="report-paper-top">{sponsor.name.toUpperCase()} × DEEPAK<span>{chapter.month}</span></span>
             <span className="report-paper-title">{chapter.title}</span>
             <span className="report-paper-rule"/>
             <span className="report-paper-note">{i===5?"The complete story":"Photos & activity log"}</span>
@@ -94,7 +96,7 @@ export default function MonthlyReports() {
         <button onClick={()=>select(active+1)} aria-label="Next chapter"><ArrowRight size={18}/></button>
       </div><a href="#private-offer">Start our first chapter <ArrowUpRight size={16}/></a></div>
     </div>
-    <p className="timeline-disclosure">Planned chapters. Real photographs and results begin with the partnership.</p>
-    <div className="timeline-signature"><PostizLogo compact/><span>Postiz</span></div>
+    <p className="timeline-disclosure">Campaign not started. These are planned report chapters; photographs and results will appear after real activity.</p>
+    <div className="timeline-signature"><PostizLogo/></div>
   </section>;
 }

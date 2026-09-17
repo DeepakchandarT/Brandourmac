@@ -3,8 +3,10 @@ import { FormEvent, useRef, useState } from "react";
 import { ArrowDownRight, ArrowUpRight, Check, LockKeyhole } from "lucide-react";
 import InvitationForm from "./InvitationForm";
 import PostizLogo from "./PostizLogo";
+import { SponsorName, useSponsor } from "./SponsorProvider";
 
 export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocked?:boolean }) {
+  const sponsor=useSponsor();
   const [unlocked,setUnlocked]=useState(initialUnlocked);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState("");
@@ -29,7 +31,7 @@ export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocke
       <PostizLogo/>
       <h2>What are all 16<br/><em>worth to you?</em></h2>
       <p>One brand. Twelve months. No competition.</p>
-      <div className="previous-bid" aria-label="Postiz previously bid 1,404 US dollars for one of fourteen lid placements">
+      <div className="previous-bid" aria-label={`${sponsor.name} previously bid 1,404 US dollars for one of fourteen lid placements`}>
         <span>YOUR PREVIOUS BID</span>
         <strong>$1,404</strong>
         <p>for 1 of 14 MacBook lid spaces</p>
@@ -39,7 +41,7 @@ export default function PrivateOffer({ initialUnlocked=false }: { initialUnlocke
     </div>
     <div className="offer-form-panel">
       {reference?<div className="offer-success" role="status"><Check size={30}/><h3>Your offer is in.</h3><p>Your proposal has been saved privately. Thank you for taking the first step.</p><span>Reference: {reference}</span></div>:<>
-        <div className="offer-form-heading"><span><LockKeyhole size={15}/>{unlocked?"Invitation verified":"Reserved for Postiz"}</span><h3>Your number.</h3><p>Quote privately. Once agreed, the final partnership price will be displayed here.</p></div>
+        <div className="offer-form-heading"><span><LockKeyhole size={15}/>{unlocked?"Invitation verified":<>Reserved for <SponsorName/></>}</span><h3>Your number.</h3><p>Quote privately. Once agreed, the final partnership price will be displayed here.</p></div>
         {!unlocked?<InvitationForm onSuccess={()=>{setUnlocked(true);setError("");}}/>:<form className="bid-form" onSubmit={submit}>
           <div className="bid-amount-row"><label>Currency<select value={values.currency} onChange={e=>setValues(v=>({...v,currency:e.target.value}))}><option>USD</option><option>EUR</option><option>INR</option></select></label>
           <label>Your offer for 12 months<input aria-label="Your offer amount for twelve months" type="number" inputMode="decimal" min="0.01" max="999999999.99" step="0.01" required placeholder="Your amount" value={values.amount} onChange={e=>setValues(v=>({...v,amount:e.target.value}))}/></label></div>

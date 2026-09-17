@@ -73,7 +73,7 @@
 .map{display:block;width:100%;height:auto;min-height:125px;margin:8px 0 22px}
 .globeRing{fill:none;stroke:#5148e5;stroke-width:.7;opacity:.07}
 .routeNumber{font-family:var(--font-sans),sans-serif;font-size:10px;fill:#767080}
-.plane{transform:none;offset-path:path("M40 90C40 25 130 20 220 35S400 25 400 90S310 160 220 145S40 155 40 90Z");offset-rotate:auto;offset-distance:0%;animation:orbit 18s linear infinite;animation-play-state:paused;fill:#5148e5}
+.plane{transform:none;offset-path:path("M68 175C48 125 85 55 142 62S220 135 269 85S393 78 370 159S280 180 238 211S95 243 68 175Z");offset-rotate:auto;offset-distance:0%;animation:orbit 18s linear infinite;animation-play-state:paused;fill:#5148e5}
 .visas[data-flight=playing] .plane{animation-play-state:running}
 @keyframes orbit{to{offset-distance:100%}}
 .routeList{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border:0;padding:0;margin:0;font-size:12px;line-height:1.5}
@@ -84,3 +84,11 @@
 .quote{margin-top:24px}
 @container(max-width:540px){.identityBody{grid-template-columns:1fr;gap:24px}.photo{width:56%;max-width:180px}.identityText h3{font-size:32px;overflow-wrap:normal}.roles{flex-direction:row;flex-wrap:wrap;gap:12px}.handwriting{margin-top:15px}.routeList{grid-template-columns:1fr;font-size:13px}.routeList li{padding:12px 0}.visaHeading{font-size:32px}.map{margin-bottom:15px}.machine{font-size:7.5px}}
 @media(prefers-reduced-motion:reduce){.plane{animation:none!important;offset-distance:15%}.flightControl{display:none}}
+
+.linkedin{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:#5148e5;margin-top:20px;padding:8px 0;text-decoration:none;border-bottom:1px solid #5148e525}.linkedin svg:last-child{transition:transform .2s}.linkedin:hover svg:last-child{transform:translate(2px,-2px)}.linkedin:focus-visible,.destination:focus-visible{outline:2px solid #5148e5;outline-offset:4px}
+.photo{transition:transform .3s,box-shadow .3s}.photo:hover{transform:rotate(0deg) translateY(-3px);box-shadow:2px 9px 18px #28232b13}
+.mapCanvas{margin:16px 0 15px;overflow:hidden;border-radius:3px;background:#fafafd}.mapCanvas .map{margin:0;min-height:0}.cityBlocks{fill:#eeeef3;stroke:#e5e5ed;stroke-width:.7}.river{fill:none;stroke:#e5e9f5;stroke-width:14}.street{fill:none;stroke:#fff;stroke-width:7}.mapCanvas .inkRoute{stroke:#8375c6;stroke-width:1.6;stroke-dasharray:3 5}.pinHalo{fill:#5148e5;opacity:0;transition:opacity .3s}.pinCore{fill:#fff;stroke:#a69ccc;stroke-width:1.2;transition:fill .3s}.pinNumber{font-family:var(--font-sans),sans-serif;font-size:8px;fill:#756696}.activePin .pinHalo{opacity:.12}.activePin .pinCore{fill:#5148e5;stroke:#5148e5}.activePin .pinNumber{fill:#fff}.plane{stroke:#fff;stroke-width:1.5;paint-order:stroke fill;filter:drop-shadow(0 2px 2px #5148e525)}.north{fill:none;stroke:#898391;stroke-width:1}.north text{fill:#898391;stroke:none;font-size:8px}
+.mapCaption{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-top:1px solid #eeeeF4;min-height:48px}.mapCaption>span{font-size:8px;letter-spacing:.14em;color:#8a8495}.mapCaption strong{font-size:11px;font-weight:500;color:#5148a0;text-align:right}
+.routeList li{padding:0}.destination{width:100%;display:flex;align-items:center;gap:10px;padding:14px 0;background:none;border:0;text-align:left;color:#686373;cursor:pointer;font-size:inherit;line-height:inherit}.destination>span:first-child{font-size:9px;color:#9187ae}.destination>span:nth-child(2){flex:1}.destination>svg{opacity:0;transform:translate(-3px,3px);transition:opacity .2s,transform .2s}.destination:hover>svg,.destination[aria-pressed=true]>svg{opacity:1;transform:translate(0,0)}.destination[aria-pressed=true]{color:#5148e5}.destination:hover{color:#5148e5}
+@container(max-width:540px){.identityBody{gap:20px}.photo{width:67%;max-width:210px}.linkedin{font-size:12px}.routeList li{padding:0}.mapCaption{padding:12px}.mapCaption strong{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.photo:hover{transform:rotate(-2deg)}.linkedin svg,.destination>svg,.photo,.pinCore,.pinHalo{transition:none!important}}

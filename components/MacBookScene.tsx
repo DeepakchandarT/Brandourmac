@@ -43,7 +43,6 @@ function useArtwork(kind: "screen" | "lid" | "keys") {
       for(let i=0;i<4;i++){x.beginPath();x.ellipse(1200,650,480+i*160,700, -.6,0,Math.PI*2);x.stroke();}
       x.textAlign="center"; x.fillStyle="#fff"; x.font="600 104px Arial";
       x.font="600 106px Arial"; x.fillText("Own the canvas.",768,710);
-      
     } else if(kind === "lid") {
       x.fillStyle="#d7d8dc"; x.fillRect(0,0,1536,1024);
       for(let row=0;row<4;row++)for(let col=0;col<4;col++){
@@ -121,7 +120,7 @@ function Hardware({progress, reduced}: {progress:MotionValue<number>;reduced:boo
         </mesh>
         <RoundedBox args={[4.07,.018,2.66]} radius={.008} position={[0,-.039,0]}><meshStandardMaterial color="#101114" roughness={.24}/></RoundedBox>
         <mesh position={[0,-.05,-.025]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[3.91,2.46]}/><meshBasicMaterial map={screen} toneMapped={false}/></mesh>
-        <Brand variant="mark" position={[0,-.065,.55]} rotation={[Math.PI/2,0,0]} scale={1.8}/>
+        <Brand variant="wordmark" position={[0,-.065,.55]} rotation={[Math.PI/2,0,0]} scale={1.25}/>
         <mesh position={[0,-.054,1.175]} rotation={[Math.PI/2,0,0]}><planeGeometry args={[.34,.075]}/><meshBasicMaterial color="#111216"/></mesh>
         <mesh position={[0,-.057,1.19]} rotation={[Math.PI/2,0,0]}><circleGeometry args={[.012,16]}/><meshBasicMaterial color="#283343"/></mesh>
       </group>

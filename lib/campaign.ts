@@ -44,6 +44,14 @@ export async function publishCampaign() {
   await redis(["SET", `${namespace()}:published`, new Date().toISOString(), "NX"]);
 }
 
+export async function lockCampaign() {
+  await redis(["DEL", `${namespace()}:published`]);
+}
+
+export async function unlockCampaign() {
+  await redis(["SET", `${namespace()}:published`, new Date().toISOString()]);
+}
+
 function digest(value: string) { return createHash("sha256").update(value).digest(); }
 export function validCode(code: unknown) {
   return typeof code === "string" && code.length <= 256 && configured() &&

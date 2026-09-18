@@ -1,3 +1,4 @@
+"use client";
 import { useSponsor } from "./SponsorProvider";
 
 const PILLARS = [

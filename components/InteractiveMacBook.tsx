@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useScroll, useMotionValue, useMotionValueEvent, animate, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useSponsor } from "./SponsorProvider";
+import CSSMacBook from "./CSSMacBook";
 const Scene = dynamic(()=>import("./MacBookScene"),{ssr:false,loading:()=> <div className="model-loading" role="status">Preparing the laptop…</div>});
 
 export default function InteractiveMacBook(){
@@ -13,6 +14,13 @@ export default function InteractiveMacBook(){
   const progress=useMotionValue(.12);
   const [phase,setPhase]=useState(0);
   const animation=useRef<ReturnType<typeof animate> | null>(null);
+  const [webglReady,setWebglReady]=useState<boolean|null>(null);
+  useEffect(()=>{
+    const canvas=document.createElement("canvas");
+    let context:WebGLRenderingContext|null=null;
+    try { context=canvas.getContext("webgl2")||canvas.getContext("webgl"); } catch { context=null; }
+    setWebglReady(!!context);
+  },[]);
   useEffect(()=>{if(reduced) progress.set(.55);return ()=>animation.current?.stop();},[reduced,progress]);
   useMotionValueEvent(scrollYProgress,"change",v=>{if(!reduced){animation.current?.stop();progress.set(v);}});
   useMotionValueEvent(progress,"change",v=>setPhase(v<.27?0:v<.72?1:2));
@@ -20,7 +28,7 @@ export default function InteractiveMacBook(){
   return <section ref={ref} id="idea" className="laptop-story">
     <div className="laptop-sticky">
       <div className="laptop-canvas" role="img" aria-label={`Interactive silver laptop with detailed keyboard, trackpad and sixteen ${sponsor.name} lid placements`}>
-        <Scene progress={progress} reduced={!!reduced}/>
+        {webglReady === true ? <Scene progress={progress} reduced={!!reduced}/> : webglReady === false ? <CSSMacBook progress={progress} brandedWhenOpen/> : <div className="model-loading" role="status">Preparing the laptop…</div>}
       </div>
       <div className="laptop-controls" role="group" aria-label="Laptop views">
         {["The lid","Open it","All yours"].map((label,i)=><button key={label} className="focus-ring" aria-pressed={phase===i} onClick={()=>select([0,.55,1][i])}>{label}</button>)}

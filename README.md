@@ -1,92 +1,52 @@
-# Postiz × Deepak — Partnership Proposal Site
+# Postiz × Deepak
 
-A premium, single-page proposal site pitching a 12-month sponsorship: all 16
-branding surfaces of Deepak's MacBook Air, dedicated entirely to Postiz.
+A twelve-month partnership proposal: all sixteen laptop placements, a T-shirt,
+pen, notebook and water bottle, with monthly documentation of real activity.
 
-Built with Next.js 14 (App Router), TypeScript, Tailwind CSS, Framer Motion,
-and React Three Fiber for the interactive MacBook visualization.
+Built with Next.js 14, TypeScript, Framer Motion and React Three Fiber.
 
-## Getting started
+## Run locally
+
+Install dependencies with `npm install`, copy `.env.example` to `.env.local`,
+configure the server values, then run `npm run dev` and open localhost:3000.
+The page remains behind the invitation gate until it has been activated.
+
+## Configure and launch
+
+Read [LAUNCH_SETUP.md](LAUNCH_SETUP.md) before deploying. A persistent Redis
+database, private invitation code and session secret are required. Preview and
+Production must have separate namespaces. The server never ships these secrets
+to the browser.
+
+A valid code makes the campaign public for everyone. Only invitation holders
+with an unexpired signed cookie can submit an offer. Offers are stored privately;
+email notifications are optional. The shared code is an invitation credential,
+not verification of the holder's identity.
+
+## Experience
+
+- The supplied Postiz logo links to `https://postiz.com/` in the navigation and
+  product branding. The raster asset is preserved without alteration.
+- A scroll-controlled laptop opens to reveal a detailed keyboard and branded lid.
+- Four branded objects rotate around a common vertical axis. Visitors can drag,
+  pause or use previous/next controls. Reduced motion shows one object at a time.
+- The upright book leans into four staggered books; their labels appear as they settle.
+- A six-chapter reporting timeline has a curved track, flat report covers and
+  a recessed dial. Chapters are clearly labelled as planned until real content exists.
+- A persistent offer link leads to the private form, which validates and saves
+  offers on the server. Invitation sessions last seven days.
+
+The final reporting chapter currently uses a tall branded report cover. A supplied
+portrait and real campaign photos can replace the typographic covers; no fictional
+activity or stock event photography is presented as completed work.
+
+## Verification
 
 ```bash
-npm install
-npm run dev
-```
-
-Open http://localhost:3000.
-
-## Deploying
-
-The project is a standard Next.js app and deploys to Vercel with no extra
-configuration:
-
-```bash
+node --test tests/campaign.test.cjs
 npm run build
 ```
 
-Push to a Git repo and import it in Vercel, or run `vercel` from the CLI.
-
-## Before this goes live
-
-**Branding placeholders.** The site currently uses generic wordmark text
-("POSTIZ") in plain type — not Postiz's actual logo, colors, or brand assets.
-Do not swap in Postiz's real logo, brand color, or trademarked assets until
-Postiz has given explicit permission to use them in this proposal. Once
-approved, the two places to update are:
-
-- `components/MacBookScene.tsx` — the `<Text>` on the laptop screen inside
-  the 3D scene, and the fallback in `components/StaticMacBook.tsx`.
-- The favicon/metadata in `app/layout.tsx`, if you add one.
-
-**Photo and copy placeholders.** These are intentionally unfilled and should
-stay that way until real content exists:
-
-- `components/About.tsx` — swap the placeholder box for an actual photo
-  of Deepak.
-- `components/MonthlyReports.tsx` — the `METRICS` array and photo grid are
-  built to be edited every month. Never fill in a number that hasn't
-  actually happened; leave it as "Coming soon" until it has.
-
-**Contact link.** The final CTA in `components/FinalCTA.tsx` currently points
-to a placeholder `mailto:` address — replace it with Deepak's real contact
-email or a scheduling link.
-
-## Project structure
-
-```
-app/
-  layout.tsx        Root layout, fonts, metadata
-  page.tsx           Composes all sections in order
-  globals.css        Design tokens, base styles, reduced-motion handling
-components/
-  Nav.tsx                  Sticky nav with scroll-aware background
-  Hero.tsx                 Full-screen hero, closed MacBook, cursor parallax
-  MacBookScene.tsx         R3F/Three.js MacBook — hinge, 16 hoverable spots
-  StaticMacBook.tsx        Lightweight SVG fallback for mobile / reduced motion
-  InteractiveMacBook.tsx   Scroll-driven open/close + branding reveal
-  Differentiator.tsx       4×4 grid animating numbers into "POSTIZ"
-  WhereItTravels.tsx       Abstract map visualization, no fabricated stats
-  About.tsx                Deepak's introduction + photo placeholder
-  PostizPresence.tsx       Laptop / Apparel / Documentation pillars
-  MonthlyReports.tsx       Editable monthly reporting dashboard
-  LongTerm.tsx             1 MacBook → entire team progression
-  Proposal.tsx             Stats summary + CTA
-  FAQ.tsx                  Accordion
-  FinalCTA.tsx             Closing full-screen CTA
-  Footer.tsx
-  Reveal.tsx               Shared scroll-reveal + section primitives
-lib/
-  useMediaQuery.ts   Mobile + prefers-reduced-motion detection
-```
-
-## Notes on the 3D scene
-
-`MacBookScene.tsx` is an original, procedurally built laptop (no external
-model or scanned assets), so there's nothing to license or attribute. It:
-
-- Renders closed in the hero, floating gently and tilting toward the cursor.
-- Opens progressively as the visitor scrolls through the "16 spots" section,
-  driven by a single scroll-linked value rather than scroll-jacking.
-- Falls back to a static SVG on mobile and when the visitor has
-  `prefers-reduced-motion` enabled, per the brief's performance and
-  accessibility requirements.
+The automated route tests use mocked storage and email. They do not publish a real
+campaign or send emails. Visual review is still required on the configured preview,
+particularly for the 3D orbit, logo placement and mobile timeline.

@@ -2,35 +2,31 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
+import PostizLogo from "./PostizLogo";
 
 const LINKS = [
-  { label: "The Idea", href: "#idea" },
-  { label: "The Journey", href: "#journey" },
-  { label: "Partner", href: "#proposal" },
+  { label: "The Canvas", href: "#idea" },
+  { label: "The Presence", href: "#journey" },
+  { label: "Quote your price", href: "#private-offer" },
 ];
 
 export default function Nav() {
   const { scrollY } = useScroll();
-  const bg = useTransform(scrollY, [0, 120],["rgba(246,244,239,0)", "rgba(246,244,239,0.82)"] );
+  const bg = useTransform(scrollY, [0, 120],["rgba(250,250,250,0.97)", "rgba(250,250,250,1)"] );
   const borderOpacity = useTransform(scrollY, [0, 120], [0, 0.08]);
   const [open, setOpen] = useState(false);
 
   return (
     <motion.header
       style={{ backgroundColor: bg }}
-      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-line bg-white/95"
     >
       <motion.div
         style={{ opacity: borderOpacity }}
         className="absolute bottom-0 left-0 right-0 h-px bg-white"
       />
-      <nav className="container-edge flex items-center justify-between h-20">
-        <a
-          href="#top"
-          className="text-sm tracking-[0.25em] font-medium text-bone focus-ring"
-        >
-          DEEPAK
-        </a>
+      <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
+        <div className="brand-lockup"><a href="#top">DEEPAK</a><span aria-hidden="true">×</span><PostizLogo /></div>
 
         <ul className="hidden md:flex items-center gap-10">
           {LINKS.map((l) => (
@@ -47,8 +43,10 @@ export default function Nav() {
 
         <button
           aria-label="Toggle menu"
+          aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="md:hidden flex flex-col gap-1.5 w-6 focus-ring"
+          className="md:hidden flex flex-col justify-center gap-1.5 w-11 h-11 px-2 focus-ring"
+          aria-controls="mobile-navigation"
         >
           <span
             className={`h-px bg-bone transition-transform duration-300 ${
@@ -57,14 +55,14 @@ export default function Nav() {
           />
           <span
             className={`h-px bg-bone transition-opacity duration-300 ${
-              open ? "opacity-0" : "opacity-100"
+              open ? "-translate-y-[4px] -rotate-45" : ""
             }`}
           />
         </button>
       </nav>
 
       {open && (
-        <div className="md:hidden container-edge pb-8 flex flex-col gap-5 border-t border-line pt-6">
+        <div id="mobile-navigation" className="md:hidden container-edge pb-8 flex flex-col gap-5 border-t border-line pt-6">
           {LINKS.map((l) => (
             <a
               key={l.href}

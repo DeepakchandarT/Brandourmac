@@ -8,13 +8,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-          ink: "#f6f4ef",
-            surface: "#edeae2",
+          ink: "#fafafa",
+            surface: "#f0f0f3",
               line: "rgba(17,17,18,0.08)",
                 linestrong: "rgba(17,17,18,0.16)",
                   bone: "#131313",
                     mute: "#68676c",
-                      accent: "#4640de",
+                      accent: "#5148e5",
                       },
       
       fontFamily: {
@@ -22,7 +22,7 @@ const config: Config = {
         sans: ["var(--font-sans)", "sans-serif"],
       },
       letterSpacing: {
-        tightest2: "-0.045em",
+        tightest2: "-0.035em",
       },
       transitionTimingFunction: {
         expensive: "cubic-bezier(0.16, 1, 0.3, 1)",

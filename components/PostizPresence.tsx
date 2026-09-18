@@ -1,47 +1,18 @@
-import { Reveal } from "./Reveal";
+"use client";
+import { useSponsor } from "./SponsorProvider";
 
 const PILLARS = [
-  {
-    n: "01",
-    title: "Laptop",
-    copy: "Postiz branding across all 16 available surfaces.",
-  },
-  {
-    n: "02",
-    title: "Apparel",
-    copy: "Postiz-branded apparel at appropriate professional events.",
-  },
-  {
-    n: "03",
-    title: "Documentation",
-    copy: "Monthly photographs documenting where the brand travels.",
-  },
+  { title: "Owned", copy: "All 16 MacBook spaces" },
+  { title: "Worn", copy: "The Postiz T-shirt" },
+  { title: "Carried", copy: "Pen, notebook and bottle" },
+  { title: "Proved", copy: "A monthly photo record" },
 ];
 
 export default function PostizPresence() {
-  return (
-    <section className="relative container-edge py-28 md:py-40 border-t border-line">
-      <Reveal>
-        <h2 className="font-display font-light text-balance text-4xl md:text-6xl leading-[1.05] tracking-tightest2 max-w-2xl">
-          Not an ad.
-          <br />
-          <span className="italic">A presence.</span>
-        </h2>
-      </Reveal>
-
-      <div className="mt-20 grid md:grid-cols-3 gap-px bg-line">
-        {PILLARS.map((p, i) => (
-          <Reveal key={p.n} delay={i * 0.1}>
-            <div className="bg-ink p-10 h-full flex flex-col gap-6">
-              <span className="text-[13px] tracking-[0.18em] text-mute">
-                {p.n}
-              </span>
-              <h3 className="font-display text-2xl">{p.title}</h3>
-              <p className="text-mute text-balance">{p.copy}</p>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
+  const sponsor=useSponsor();
+  const pillars=PILLARS.map(p=>p.title==="Worn"?{...p,copy:`The ${sponsor.name} T-shirt`}:p);
+  return <section className="container-edge border-t border-line presence-section">
+    <h2 className="section-title">Worn. Carried.<br /><span className="text-accent">Remembered.</span></h2>
+    <dl className="presence-list">{pillars.map(p => <div key={p.title}><dt>{p.title}</dt><dd>{p.copy}</dd></div>)}</dl>
+  </section>;
 }

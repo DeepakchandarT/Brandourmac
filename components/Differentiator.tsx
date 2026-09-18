@@ -8,16 +8,14 @@ export default function Differentiator() {
         <div>
           <Reveal>
             <h2 className="font-display font-light text-balance text-4xl md:text-6xl leading-[1.05] tracking-tightest2">
-              You tried to win one spot.
+              You bid for one space.
               <br />
-              <span className="italic">I&rsquo;m offering you all of them.</span>
+              <span className="italic">I&rsquo;m offering you the whole stage.</span>
             </h2>
           </Reveal>
           <Reveal delay={0.15}>
             <p className="mt-8 text-lg text-mute max-w-md text-balance">
-              Instead of occupying a single advertising position, Postiz would
-              receive the complete branding surface of my MacBook — and every
-              piece of branded merch that goes with it.
+              All 16 placements. The full everyday kit. One exclusive partnership.
             </p>
           </Reveal>
         </div>

@@ -1,6 +1,13 @@
 "use client";
 
 import { motion, useTransform, MotionValue, useSpring } from "framer-motion";
+import Image from "next/image";
+import { APPLE_PATH } from "@/lib/brand-artwork";
+import { useSponsor } from "./SponsorProvider";
+
+const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[28%] w-[28%] fill-[#34353a] drop-shadow-[0_1px_0_rgba(255,255,255,.28)]">
+  <path d={APPLE_PATH}/>
+</svg>;
 
 /**
  * A pure CSS/3D-transform MacBook. No WebGL, so it's cheap enough for any
@@ -16,6 +23,8 @@ export default function CSSMacBook({
   idleFloat?: boolean;
   brandedWhenOpen?: boolean;
 }) {
+  const sponsor=useSponsor();
+  const logoSrc=`/api/sponsor/logo?v=${sponsor.version}`;
   const smooth = useSpring(progress, { stiffness: 120, damping: 22, mass: 0.6 });
 
   // Lid closed ≈ 100deg (folded flat over the base), open ≈ 8deg.
@@ -90,7 +99,7 @@ export default function CSSMacBook({
             className="absolute left-0 right-0 bottom-full mx-auto"
           >
             <div
-              className="relative mx-auto rounded-t-[10px] rounded-b-[2px] overflow-hidden"
+              className="relative mx-auto rounded-t-[10px] rounded-b-[2px]"
               style={{
                 width: "100%",
                 aspectRatio: "16 / 10.2",
@@ -99,22 +108,48 @@ export default function CSSMacBook({
                 boxShadow:
                   "0 10px 30px -12px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.25)",
                 padding: "3.2%",
+                transformStyle: "preserve-3d",
               }}
             >
-              <div className="w-full h-full rounded-[6px] bg-[#050506] flex items-center justify-center relative overflow-hidden">
+              <div
+                className="absolute inset-[3.2%] rounded-[6px] bg-[#050506] flex items-center justify-center overflow-hidden"
+                style={{ backfaceVisibility: "hidden" }}
+              >
                 {/* camera notch */}
                 <div className="absolute top-[6%] left-1/2 -translate-x-1/2 w-[5%] aspect-square rounded-full bg-black ring-1 ring-white/10" />
 
                 {brandedWhenOpen && (
-                  <motion.span
+                  <motion.div
                     style={{ opacity: screenOpacity, y: wordmarkY }}
-                    className="text-[#f5f4f1] font-sans font-medium tracking-[0.02em] text-[clamp(0.62rem,2.6vw,0.95rem)] text-center leading-snug px-[8%]"
+                    className="flex w-full flex-col items-center px-[8%] text-center"
                   >
-                    You&rsquo;re the hero,
-                    <br />
-                    not a sidekick.
-                  </motion.span>
+                    <Image src={logoSrc} alt={sponsor.hasLogo ? `${sponsor.name} logo` : "Your brand"} width={260} height={90} unoptimized className="h-auto w-[42%] max-w-[120px]" />
+                    <span className="mt-[7%] text-[clamp(0.85rem,3.2vw,1.2rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
+                      Own the canvas.
+                    </span>
+                  </motion.div>
                 )}
+              </div>
+
+              <div
+                className="absolute inset-[3.2%] rounded-[6px] grid grid-cols-4 gap-[2.3%] p-[2.3%] bg-[#c6c7cb]"
+                style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
+              >
+                {Array.from({ length: 16 }).map((_, index) => {
+                  const row=Math.floor(index/4), col=index%4;
+                  const center=(row===1||row===2)&&(col===1||col===2);
+                  return center ? <div key={index} className="flex items-center justify-center">
+                    {index===5&&<div className="absolute inset-0 flex items-center justify-center"><AppleMark/></div>}
+                  </div> : (
+                  <div
+                    key={index}
+                    className="flex rotate-180 items-center justify-center rounded-[3px] bg-white shadow-[0_2px_5px_rgba(34,28,64,.12)]"
+                  >
+                    <span className="relative block w-[86%] overflow-hidden" style={{aspectRatio:"2.84"}}>
+                      <Image src={logoSrc} alt={sponsor.hasLogo ? `${sponsor.name} logo` : "Your brand"} width={260} height={90} unoptimized className="h-full w-full object-contain" />
+                    </span>
+                  </div>
+                )})}
               </div>
             </div>
           </motion.div>

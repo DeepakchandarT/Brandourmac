@@ -18,9 +18,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Postiz × Deepak — A Brand Partnership Proposal",
+  title: "Postiz × Deepak — Own the Canvas",
   description:
-    "A 12-month proposal offering Postiz all 16 branding surfaces of Deepak's MacBook Air.",
+    "All 16 MacBook spaces. One brand. Twelve months.",
 };
 
 export default function RootLayout({

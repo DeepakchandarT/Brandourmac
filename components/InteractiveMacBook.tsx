@@ -1,51 +1,40 @@
 "use client";
-
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useScroll, useMotionValue, useMotionValueEvent, animate, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { usePrefersReducedMotion } from "@/lib/useMediaQuery";
+import { useSponsor } from "./SponsorProvider";
 import CSSMacBook from "./CSSMacBook";
+const Scene = dynamic(()=>import("./MacBookScene"),{ssr:false,loading:()=> <div className="model-loading" role="status">Preparing the laptop…</div>});
 
-const MacBookScene = dynamic(() => import("./MacBookScene"), { ssr: false });
-
-export default function InteractiveMacBook() {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduceMotion = usePrefersReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end end"],
-  });
-
-  const labelOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
-  const labelY = useTransform(scrollYProgress, [0.75, 0.9], [16, 0]);
-
-  return (
-    <section id="idea" ref={ref} className="relative h-[320vh] bg-ink">
-      <div className="sticky top-0 h-[100svh] flex flex-col items-center justify-center overflow-hidden">
-        <div className="w-[92vw] max-w-[820px] h-[52vh]">
-          {reduceMotion ? (
-            <CSSMacBook progress={scrollYProgress} />
-          ) : (
-            <MacBookScene progress={scrollYProgress} interactive={false} />
-          )}
-        </div>
-
-        <motion.div
-          style={{ opacity: labelOpacity, y: labelY }}
-          className="absolute bottom-16 md:bottom-24 text-center container-edge"
-        >
-          <p className="font-display italic text-2xl md:text-4xl mb-2">
-            16 spots. One brand.
-          </p>
-          <p className="text-4xl md:text-6xl font-display font-light tracking-tightest2 mb-3">
-            16 / 16
-          </p>
-          <p className="text-[13px] tracking-[0.18em] text-mute">
-            DEDICATED TO POSTIZ
-          </p>
-        </motion.div>
+export default function InteractiveMacBook(){
+  const sponsor=useSponsor();
+  const ref=useRef<HTMLElement>(null);
+  const reduced=useReducedMotion();
+  const {scrollYProgress}=useScroll({target:ref,offset:["start 65%","end 95%"]});
+  const progress=useMotionValue(.12);
+  const [phase,setPhase]=useState(0);
+  const animation=useRef<ReturnType<typeof animate> | null>(null);
+  const [webglReady,setWebglReady]=useState<boolean|null>(null);
+  useEffect(()=>{
+    const canvas=document.createElement("canvas");
+    let context:WebGLRenderingContext|null=null;
+    try { context=canvas.getContext("webgl2")||canvas.getContext("webgl"); } catch { context=null; }
+    setWebglReady(!!context);
+  },[]);
+  useEffect(()=>{if(reduced) progress.set(.55);return ()=>animation.current?.stop();},[reduced,progress]);
+  useMotionValueEvent(scrollYProgress,"change",v=>{if(!reduced){animation.current?.stop();progress.set(v);}});
+  useMotionValueEvent(progress,"change",v=>setPhase(v<.27?0:v<.72?1:2));
+  function select(v:number){animation.current?.stop();animation.current=animate(progress,v,{duration:reduced?0:1.35,ease:[.22,1,.36,1]});}
+  return <section ref={ref} id="idea" className="laptop-story">
+    <div className="laptop-sticky">
+      <div className="laptop-canvas" role="img" aria-label={`Interactive silver laptop with detailed keyboard, trackpad and sixteen ${sponsor.name} lid placements`}>
+        {webglReady === true ? <Scene progress={progress} reduced={!!reduced}/> : webglReady === false ? <CSSMacBook progress={progress} brandedWhenOpen/> : <div className="model-loading" role="status">Preparing the laptop…</div>}
       </div>
-    </section>
-  );
+      <div className="laptop-controls" role="group" aria-label="Laptop views">
+        {["The lid","Open it","All yours"].map((label,i)=><button key={label} className="focus-ring" aria-pressed={phase===i} onClick={()=>select([0,.55,1][i])}>{label}</button>)}
+      </div>
+      <p className="laptop-caption">{["16 placements. Reserved for one brand.","Built for the work. Branded for the room.","Not a shared space. Your entire canvas."][phase]}</p>
+      <span className="scroll-hint">Scroll to explore, or choose a view</span>
+    </div>
+  </section>;
 }

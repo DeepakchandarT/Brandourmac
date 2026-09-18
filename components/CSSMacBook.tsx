@@ -3,6 +3,7 @@
 import { motion, useTransform, MotionValue, useSpring } from "framer-motion";
 import Image from "next/image";
 import { APPLE_PATH } from "@/lib/brand-artwork";
+import { useSponsor } from "./SponsorProvider";
 
 const AppleMark = () => <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[28%] w-[28%] fill-[#34353a] drop-shadow-[0_1px_0_rgba(255,255,255,.28)]">
   <path d={APPLE_PATH}/>
@@ -22,6 +23,8 @@ export default function CSSMacBook({
   idleFloat?: boolean;
   brandedWhenOpen?: boolean;
 }) {
+  const sponsor=useSponsor();
+  const logoSrc=`/api/sponsor/logo?v=${sponsor.version}`;
   const smooth = useSpring(progress, { stiffness: 120, damping: 22, mass: 0.6 });
 
   // Lid closed ≈ 100deg (folded flat over the base), open ≈ 8deg.
@@ -120,7 +123,7 @@ export default function CSSMacBook({
                     style={{ opacity: screenOpacity, y: wordmarkY }}
                     className="flex w-full flex-col items-center px-[8%] text-center"
                   >
-                    <Image src="/api/sponsor/logo" alt="Your brand" width={260} height={90} unoptimized className="h-auto w-[42%] max-w-[120px]" />
+                    <Image src={logoSrc} alt={sponsor.hasLogo ? `${sponsor.name} logo` : "Your brand"} width={260} height={90} unoptimized className="h-auto w-[42%] max-w-[120px]" />
                     <span className="mt-[7%] text-[clamp(0.85rem,3.2vw,1.2rem)] font-medium leading-snug tracking-[0.02em] text-[#f5f4f1]">
                       Own the canvas.
                     </span>
@@ -143,7 +146,7 @@ export default function CSSMacBook({
                     className="flex rotate-180 items-center justify-center rounded-[3px] bg-white shadow-[0_2px_5px_rgba(34,28,64,.12)]"
                   >
                     <span className="relative block w-[86%] overflow-hidden" style={{aspectRatio:"2.84"}}>
-                      <Image src="/api/sponsor/logo" alt="Your brand" width={260} height={90} unoptimized className="h-full w-full object-contain" />
+                      <Image src={logoSrc} alt={sponsor.hasLogo ? `${sponsor.name} logo` : "Your brand"} width={260} height={90} unoptimized className="h-full w-full object-contain" />
                     </span>
                   </div>
                 )})}

@@ -5,7 +5,8 @@ import * as THREE from "three";
 import { trackSponsorClick, useSponsor } from "./SponsorProvider";
 
 export function useBrandTexture(variant: "wordmark" | "mark" = "wordmark") {
-  const source = useTexture("/api/sponsor/logo");
+  const sponsor=useSponsor();
+  const source = useTexture(`/api/sponsor/logo?v=${sponsor.version}`);
   const texture = useMemo(() => {
     const copy = source.clone();
     copy.colorSpace = THREE.SRGBColorSpace;

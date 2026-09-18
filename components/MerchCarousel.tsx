@@ -61,11 +61,18 @@ export default function MerchCarousel(){
   const [paused,setPaused]=useState(false);
   const [hovered,setHovered]=useState(false);
   const [active,setActive]=useState(0);
+  const [webglReady,setWebglReady]=useState<boolean|null>(null);
   const drag=useRef<{x:number;y:number;angle:number;moved:boolean}|null>(null);
   useEffect(()=>{
     const update=()=>setVisible(!document.hidden);
     document.addEventListener("visibilitychange",update);
     return()=>document.removeEventListener("visibilitychange",update);
+  },[]);
+  useEffect(()=>{
+    const canvas=document.createElement("canvas");
+    let context:WebGLRenderingContext|null=null;
+    try { context=canvas.getContext("webgl2")||canvas.getContext("webgl"); } catch { context=null; }
+    setWebglReady(!!context);
   },[]);
   const fallback=<p className="model-loading">{sponsor.name} collection: T-shirt, MacBook, pen, notebook and bottle.</p>;
   return <div ref={root} className="orbit-showcase">
@@ -83,11 +90,11 @@ export default function MerchCarousel(){
       }}
       onPointerUp={()=>{if(drag.current&&!drag.current.moved)setPaused(p=>!p);drag.current=null;}}
       onPointerCancel={()=>{drag.current=null;}}>
-      <CanvasBoundary fallback={fallback}>
+      {webglReady===true ? <CanvasBoundary fallback={fallback}>
         <Canvas frameloop={inView&&visible?"always":"never"} camera={{position:[0,.15,8],fov:36}} dpr={[1,2]} gl={{antialias:true,alpha:true}} fallback={fallback}>
           <Suspense fallback={null}><Orbit angle={angle} running={!paused&&!hovered} reduced={!!reduced} onActive={setActive}/></Suspense>
         </Canvas>
-      </CanvasBoundary>
+      </CanvasBoundary> : fallback}
     </div>
     <p style={{textAlign:"center",marginTop:8,fontSize:16,color:"#35313f"}}>{PRODUCTS[active]}</p>
     <p style={{textAlign:"center",marginTop:8,fontSize:11,color:"#6c6778"}}>{reduced?"Collection preview":paused?"Paused · tap to resume":"Automatically rotating · tap to pause"}</p>

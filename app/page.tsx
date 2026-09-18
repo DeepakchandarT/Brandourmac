@@ -24,7 +24,11 @@ export default async function Home() {
   const sponsorConfig=await getPublishedSponsor();
   try {published=await isPublished();} catch {available=false;}
   if(!published) return <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><LaunchGate available={available}/></SponsorProvider>;
-  const sponsor=!!readSession(cookies().get(SESSION_COOKIE)?.value);
+  // A homepage must never fail because the request cookie store is unavailable.
+  // The offer API still performs the authoritative session check before saving.
+  let sponsor=false;
+  try { sponsor=!!readSession(cookies().get(SESSION_COOKIE)?.value); }
+  catch { sponsor=false; }
   return (
     <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><main className="relative bg-ink text-bone">
       <AnalyticsTracker/>

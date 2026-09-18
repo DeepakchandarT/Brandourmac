@@ -7,5 +7,5 @@ export async function GET(){
   if(!sponsor.logoDataUrl)return new NextResponse(plate(),{headers:{"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});
   const match=sponsor.logoDataUrl.match(/^data:(image\/(?:png|webp)|image\/svg\+xml);base64,([A-Za-z0-9+/=]+)$/);
   if(!match)return new NextResponse(plate(),{headers:{"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"}});
-  return new NextResponse(plate(`data:${match[1]};base64,${match[2]}`),{headers:{"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff","Content-Security-Policy":"default-src 'none'; style-src 'unsafe-inline'; sandbox"}});
+  return new NextResponse(plate(`data:${match[1]};base64,${match[2]}`),{headers:{"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"public, max-age=300","X-Content-Type-Options":"nosniff","Content-Security-Policy":"default-src 'none'; img-src data:; style-src 'unsafe-inline'; sandbox"}});
 }

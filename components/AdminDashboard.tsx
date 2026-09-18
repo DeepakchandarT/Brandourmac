@@ -1,14 +1,15 @@
 "use client";
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
-import { ArrowUpRight, Eye, LogOut, RefreshCw, Save, Upload, Users, Radio, MousePointerClick } from "lucide-react";
+import { ArrowUpRight, Eye, LogOut, RefreshCw, Save, Upload, Users, Radio, MousePointerClick, LockKeyhole, UnlockKeyhole } from "lucide-react";
 import Image from "next/image";
 import type { SponsorConfig } from "@/lib/sponsor-types";
 
 type Row={label:string;count:number};
 type Analytics={visitorsToday:number;uniqueVisitors:number;onlineVisitors:number;totalPageViews:number;history:Row[];pages:Row[];referrals:Row[];proposalViews:number;sponsorClicks:number;onlineWindowMinutes:number};
 const metric=(value:number)=>new Intl.NumberFormat("en-US").format(value);
-export default function AdminDashboard({initialAnalytics,initialDraft,initialPublished}:{initialAnalytics:Analytics;initialDraft:SponsorConfig;initialPublished:SponsorConfig}){
+export default function AdminDashboard({initialAnalytics,initialDraft,initialPublished,initialCampaignOpen}:{initialAnalytics:Analytics;initialDraft:SponsorConfig;initialPublished:SponsorConfig;initialCampaignOpen:boolean}){
   const [analytics,setAnalytics]=useState(initialAnalytics),[draft,setDraft]=useState(initialDraft),[published,setPublished]=useState(initialPublished);
+  const [campaignOpen,setCampaignOpen]=useState(initialCampaignOpen);
   const [name,setName]=useState(draft.name),[website,setWebsite]=useState(draft.website),[logoPreview,setLogoPreview]=useState(draft.logoDataUrl),[busy,setBusy]=useState(""),[message,setMessage]=useState("");
   const max=useMemo(()=>Math.max(1,...analytics.history.map(v=>v.count)),[analytics]);
   const previewWebsite=useMemo(()=>{try{const url=new URL(website);return ["http:","https:"].includes(url.protocol)&&!url.username&&!url.password?url.toString():null;}catch{return null;}},[website]);
@@ -16,11 +17,16 @@ export default function AdminDashboard({initialAnalytics,initialDraft,initialPub
   async function save(event:FormEvent){event.preventDefault();setBusy("save");setMessage("");const response=await fetch("/api/admin/sponsor",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,website})});const result=await response.json();if(response.ok){setDraft(result);setMessage("Draft saved. Review the preview, then publish.");}else setMessage(result.error);setBusy("");}
   async function upload(event:ChangeEvent<HTMLInputElement>){const file=event.target.files?.[0];if(!file)return;setLogoPreview(URL.createObjectURL(file));setBusy("upload");setMessage("");const form=new FormData();form.set("logo",file);const response=await fetch("/api/admin/sponsor/logo",{method:"POST",body:form});const result=await response.json();if(response.ok){setDraft(result);setLogoPreview(result.logoDataUrl);setMessage("Logo added to the draft.");}else setMessage(result.error);setBusy("");}
   async function publish(){setBusy("publish");setMessage("");const response=await fetch("/api/admin/sponsor/publish",{method:"POST"});const result=await response.json();if(response.ok){setPublished(result);setDraft(result);setMessage("Sponsor published to the website.");}else setMessage(result.error);setBusy("");}
+  async function toggleCampaign(){const action=campaignOpen?"lock":"unlock";setBusy("campaign");setMessage("");const response=await fetch("/api/admin/campaign",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action})});const result=await response.json();if(response.ok){setCampaignOpen(result.open);setMessage(result.open?"Website unlocked. Visitors can view the proposal.":"Website locked. Visitors must enter the invitation code again.");}else setMessage(result.error||"Unable to update website access.");setBusy("");}
   async function logout(){await fetch("/api/admin/logout",{method:"POST"});location.assign("/admin/login");}
   return <main className="admin-shell">
     <aside className="admin-sidebar"><a href="/" className="admin-wordmark">DEEPAK</a><nav><a href="#overview">Overview</a><a href="#traffic">Traffic</a><a href="#sponsor">Sponsor manager</a></nav><button onClick={logout}><LogOut size={15}/> Sign out</button></aside>
     <div className="admin-content">
       <header className="admin-header"><div><h1>Campaign dashboard</h1><p>Live proposal performance and sponsor control.</p></div><button className="admin-secondary" onClick={refresh} disabled={busy==="refresh"}><RefreshCw size={15} className={busy==="refresh"?"is-spinning":""}/> Refresh</button></header>
+      <section className="admin-access-panel" aria-label="Website access control">
+        <div className="admin-access-copy"><span className={campaignOpen?"access-dot access-dot-open":"access-dot"}/><div><strong>Website is {campaignOpen?"open":"locked"}</strong><p>{campaignOpen?"Visitors can view the proposal without entering the invitation code.":"Visitors see the invitation screen and must enter the private code to open the proposal."}</p></div></div>
+        <button className={campaignOpen?"admin-secondary":"admin-primary"} onClick={toggleCampaign} disabled={busy==="campaign"}>{campaignOpen?<LockKeyhole size={15}/>:<UnlockKeyhole size={15}/>} {busy==="campaign"?"Updating…":campaignOpen?"Lock website":"Unlock website"}</button>
+      </section>
       <section id="overview" className="admin-metrics" aria-label="Analytics overview">
         {[{label:"Visitors today",value:analytics.visitorsToday,icon:Users},{label:"Unique visitors",value:analytics.uniqueVisitors,icon:Users},{label:"Online now",value:analytics.onlineVisitors,icon:Radio,note:`Active in ${analytics.onlineWindowMinutes} min`},{label:"Total page views",value:analytics.totalPageViews,icon:Eye},{label:"Proposal views",value:analytics.proposalViews,icon:Eye},{label:"Sponsor-link clicks",value:analytics.sponsorClicks,icon:MousePointerClick}].map(item=><article key={item.label}><div><span>{item.label}</span><item.icon size={16}/></div><strong>{metric(item.value)}</strong>{item.note&&<small>{item.note}</small>}</article>)}
       </section>

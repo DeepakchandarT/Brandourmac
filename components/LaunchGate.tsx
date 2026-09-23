@@ -14,6 +14,6 @@ export default function LaunchGate({ available }: { available:boolean }) {
       <p className="gate-disclosure">Open once. View publicly. Quote privately.</p>
       {!available&&<p className="gate-status" role="status">The invitation is being prepared. Please check back shortly.</p>}
     </div>
-    <footer><span>One brand. Every spot. One exclusive partnership.</span><span className="gate-footer-lock"><LockKeyhole size={13} aria-hidden="true"/> Private invitation</span></footer>
+    <footer><span>Inspired by <a href="https://brandmymac.com/" target="_blank" rel="noreferrer">Vincent’s BrandMyMac</a>. Built as BrandMyReach.</span><span className="gate-footer-lock"><LockKeyhole size={13} aria-hidden="true"/> Private invitation</span></footer>
   </main>;
 }

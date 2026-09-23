@@ -35,7 +35,8 @@ export async function redis<T>(command: (string | number)[]): Promise<T> {
 }
 
 export async function isPublished() {
-  if (!configured()) return false;
+  // Admin unlock depends on persisted state, not invitation credentials.
+  // Redis failures propagate so callers keep the public site closed.
   return (await redis<string | null>(["GET", `${namespace()}:published`])) !== null;
 }
 

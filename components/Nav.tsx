@@ -28,6 +28,11 @@ export default function Nav() {
       <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
         <a className="brandmyreach-lockup" href="#top" aria-label="BrandMyReach home">
           <Image src="/brand/brandmyreach-wordmark.png" alt="BrandMyReach" width={225} height={54} priority />
+          <svg className="brandmyreach-rays" viewBox="0 0 22 20" aria-hidden="true">
+            <path d="M2 17C4 15 5 13 5 10" />
+            <path d="M8 15C9 12 9 9 8 6" />
+            <path d="M14 15C16 13 18 11 20 8" />
+          </svg>
         </a>
 
         <ul className="hidden md:flex items-center gap-10">

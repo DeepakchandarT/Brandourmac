@@ -33,3 +33,12 @@ export async function analyticsDashboard(){
   const h=flatHash(history),sort=(value:unknown)=>Object.entries(flatHash(value)).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([label,count])=>({label,count}));
   return {visitorsToday:Number(todayUnique)||0,uniqueVisitors:Number(unique)||0,onlineVisitors:Number(online)||0,totalPageViews:Number(total)||0,history:dates.map(label=>({label:label.slice(5),count:h[label]||0})),pages:sort(pages),referrals:sort(referrals),proposalViews:flatHash(events).proposalViews||0,sponsorClicks:flatHash(events).sponsorClicks||0,onlineWindowMinutes:ONLINE_WINDOW_MS/60000};
 }
+
+/** Aggregate-only counters safe to show on the public landing page. */
+export async function publicActivity(){
+  const [unique,online]=await Promise.all([
+    redis<number>(["PFCOUNT",key("unique:total")]),
+    redis<number>(["ZCOUNT",key("online"),Date.now()-ONLINE_WINDOW_MS,"+inf"]),
+  ]);
+  return {visitors:Number(unique)||0,online:Number(online)||0};
+}

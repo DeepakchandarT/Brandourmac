@@ -8,9 +8,14 @@ const draftKey = () => `${namespace()}:sponsor:draft`;
 function parse(value: string | null): SponsorConfig | null {
   if (!value) return null;
   try {
-    const data = JSON.parse(value) as SponsorConfig;
+    const data = JSON.parse(value) as Partial<SponsorConfig>;
     if (typeof data.name !== "string" || typeof data.website !== "string" || typeof data.version !== "number") return null;
-    return data;
+    return {
+      ...DEFAULT_SPONSOR,
+      ...data,
+      fundsRaised: typeof data.fundsRaised === "number" && Number.isFinite(data.fundsRaised) && data.fundsRaised >= 0 ? data.fundsRaised : 0,
+      fundingCurrency: data.fundingCurrency && ["USD", "EUR", "INR"].includes(data.fundingCurrency) ? data.fundingCurrency : "USD",
+    };
   } catch { return null; }
 }
 
@@ -24,14 +29,19 @@ export async function getDraftSponsor() {
   catch { return DEFAULT_SPONSOR; }
 }
 
-export function validateSponsorDetails(nameValue: unknown, websiteValue: unknown) {
+export function validateSponsorDetails(nameValue: unknown, websiteValue: unknown, fundsRaisedValue: unknown = 0, currencyValue: unknown = "USD") {
   const name = typeof nameValue === "string" ? nameValue.trim() : "";
   const website = typeof websiteValue === "string" ? websiteValue.trim() : "";
   if (!name || name.length > 80) throw new Error("Company name must be between 1 and 80 characters.");
   let url: URL;
   try { url = new URL(website); } catch { throw new Error("Enter a valid sponsor website URL."); }
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error("Sponsor URL must use HTTP or HTTPS.");
-  return { name, website: url.toString() };
+  const rawAmount = typeof fundsRaisedValue === "number" ? String(fundsRaisedValue) : typeof fundsRaisedValue === "string" ? fundsRaisedValue.trim() : "";
+  if (!/^\d{1,12}(\.\d{1,2})?$/.test(rawAmount)) throw new Error("Confirmed sponsorship amount must be a non-negative amount with up to two decimals.");
+  const fundsRaised = Number(rawAmount);
+  if (!Number.isFinite(fundsRaised) || fundsRaised > 1_000_000_000_000) throw new Error("Confirmed sponsorship amount is too large.");
+  if (!["USD", "EUR", "INR"].includes(String(currencyValue))) throw new Error("Choose USD, EUR or INR for the confirmed amount.");
+  return { name, website: url.toString(), fundsRaised, fundingCurrency: currencyValue as SponsorConfig["fundingCurrency"] };
 }
 
 export async function saveSponsorDraft(update: Partial<SponsorConfig>) {

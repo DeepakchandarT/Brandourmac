@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "node:crypto";
-import { limited, namespace, readBody, readSession, redis, sameOrigin, SESSION_COOKIE } from "@/lib/campaign";
-import { getPublishedSponsor } from "@/lib/sponsor";
+import { isPublished, limited, namespace, readBody, redis, sameOrigin } from "@/lib/campaign";
 
 export const dynamic = "force-dynamic";
 const error = (message: string, status: number) => NextResponse.json({ error: message }, { status });
 
 export async function POST(request: NextRequest) {
   if (!sameOrigin(request)) return error("Please submit your offer from this website.", 403);
-  const session = readSession(request.cookies.get(SESSION_COOKIE)?.value);
-  if (!session) return error("Please enter your invitation code again to submit an offer.", 401);
+  try { if (!await isPublished()) return error("The sponsorship proposal is currently closed.", 403); }
+  catch { return error("The proposal is temporarily unavailable. Please try again shortly.", 503); }
   let body;
   try { body = await readBody(request); } catch { return error("The offer could not be read. Please check the form.", 400); }
   const contact = typeof body.contact === "string" ? body.contact.trim() : "";
@@ -24,8 +23,9 @@ export async function POST(request: NextRequest) {
     return error("Enter your name, a valid email, currency and a positive offer amount (up to two decimals).", 400);
   }
   try {
-    if (await limited(request, "offers", 10, session.id)) return error("Too many submissions. Please try again in 15 minutes.", 429);
-    const id = createHash("sha256").update(`${session.id}:${requestId}`).digest("hex").slice(0, 20);
+    if (await limited(request, "offers", 10)) return error("Too many submissions. Please try again in 15 minutes.", 429);
+    const visitor=request.cookies.get("brand_visitor")?.value || request.headers.get("x-vercel-forwarded-for") || "shared";
+    const id = createHash("sha256").update(`${visitor}:${requestId}`).digest("hex").slice(0, 20);
     const key = `${namespace()}:offer:${id}`;
     const entry = { id, contact, email, amount, currency, note, createdAt: new Date().toISOString() };
     // Atomic NX makes a retry safe if a successful response was lost in transit.
@@ -34,11 +34,10 @@ export async function POST(request: NextRequest) {
       const recipient = process.env.OFFER_EMAIL, apiKey = process.env.RESEND_API_KEY, from = process.env.RESEND_FROM_EMAIL;
       if (recipient && apiKey && from) {
         try {
-          const sponsor=await getPublishedSponsor();
           const result = await fetch("https://api.resend.com/emails", {
             method: "POST", signal: AbortSignal.timeout(6000),
             headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": id },
-            body: JSON.stringify({ from, to: [recipient], reply_to: email, subject: `${sponsor.name} × Deepak — Private partnership offer`,
+            body: JSON.stringify({ from, to: [recipient], reply_to: email, subject: "BrandMyReach — Private sponsorship proposal",
               text: [`Offer reference: ${id}`, `Contact: ${contact}`, `Email: ${email}`, `12-month offer: ${currency} ${amount}`, "", note || "No additional notes."].join("\n") }),
           });
           await redis(["SET", `${key}:notification`, result.ok ? "sent" : "failed"]);

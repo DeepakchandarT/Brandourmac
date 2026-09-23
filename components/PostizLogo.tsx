@@ -11,8 +11,9 @@ export default function PostizLogo({ className = "", compact = false }: { classN
       width={260}
       height={90}
       sizes={compact ? "40px" : "(max-width: 640px) 88px, 120px"}
-      priority
       unoptimized
+      loading="lazy"
+      decoding="async"
       style={{height:"auto",objectFit:"contain"}}
     />
   </a>;

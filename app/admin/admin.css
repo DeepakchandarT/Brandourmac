@@ -5,3 +5,10 @@
 .admin-access-panel{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:24px;padding:18px 20px;background:#fff;border:1px solid var(--admin-line);border-radius:14px}.admin-access-copy{display:flex;align-items:flex-start;gap:12px}.admin-access-copy strong{display:block;font-size:14px;font-weight:500}.admin-access-copy p{margin-top:5px;color:var(--admin-muted);font-size:12px;line-height:1.5}.access-dot{display:block;flex:none;width:9px;height:9px;margin-top:4px;border-radius:999px;background:#c48b45;box-shadow:0 0 0 4px #c48b4520}.access-dot-open{background:#438b69;box-shadow:0 0 0 4px #438b6920}
 @media(max-width:600px){.admin-access-panel{align-items:stretch;flex-direction:column}.admin-access-panel button{width:100%}}
 @media(prefers-reduced-motion:reduce){.is-spinning{animation:none}}
+.admin-wordmark{display:block;width:100%;line-height:0}
+.admin-wordmark img{display:block;width:100%;height:auto;max-height:36px;object-fit:contain;object-position:left center}
+.admin-back{display:block;width:min(190px,calc(100vw - 40px));line-height:0}
+.admin-back img{display:block;width:100%;height:auto;max-height:36px;object-fit:contain;object-position:left center}
+.sponsor-funding-fields{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:14px}
+.sponsor-funding-fields select{width:100%;padding:12px 13px;border:1px solid #dcdbe2;border-radius:8px;background:#fafafd;font-size:14px;color:var(--admin-ink)}
+@media(max-width:600px){.sponsor-funding-fields{grid-template-columns:minmax(0,1fr) 82px;gap:10px}}

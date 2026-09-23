@@ -19,8 +19,8 @@ const ITEMS = [
     a: "Proposed initial term: 12 months.",
   },
   {
-    q: "Is Postiz the only brand on the MacBook?",
-    a: "Yes. The proposal offers Postiz all 16 available branding spaces.",
+    q: "Will there be more than one sponsor?",
+    a: "No. Any suitable company can submit a private proposal, and one confirmed sponsor receives all 16 available branding spaces.",
   },
 ];
 

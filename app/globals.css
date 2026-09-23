@@ -253,6 +253,7 @@ main > section:not(#top):not(#idea):not(#final-cta) {padding-block:80px;}
 #final-cta .neo-panel {border:0;background:transparent;padding-block:24px;}
 @media(max-width:640px){
  .hero-copy {padding-top:108px;}
+ .hero-copy h1 {font-size:clamp(36px,11vw,46px);}
  .hero-copy p {font-size:15px;margin:20px auto;}
  .laptop-story {height:165svh;margin-top:0;}
  .laptop-sticky {top:62px;height:calc(100svh - 72px);max-height:610px;}
@@ -267,3 +268,47 @@ main > section:not(#top):not(#idea):not(#final-cta) {padding-block:80px;}
  .laptop-sticky{position:relative;top:0;height:auto;padding-bottom:40px;}
  * {animation-duration:.01ms!important;transition-duration:.01ms!important;}
 }
+
+/* BrandMyReach identity and live sponsorship status */
+.brandmyreach-lockup{display:inline-flex;align-items:center;width:min(215px,48vw);min-width:0;line-height:0;}
+.brandmyreach-lockup img{display:block;width:100%;height:auto;max-height:40px;object-fit:contain;object-position:left center;}
+.gate-header>a{display:inline-flex;width:min(215px,58vw);line-height:0;}
+.gate-header img{display:block;width:100%;height:auto;max-height:42px;object-fit:contain;object-position:left center;}
+.live-activity{display:flex;justify-content:center;align-items:center;gap:8px;margin:0 auto 18px!important;max-width:none!important;font-size:12px!important;line-height:1.2!important;letter-spacing:.015em;color:#62636b!important;font-variant-numeric:tabular-nums;}
+.live-activity-dot{width:7px;height:7px;flex:none;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px #22c55e1c;}
+.live-now{color:#22C55E;font-weight:600;}
+.mobile-live-number{display:none;}
+.hero-funding{display:flex;flex-direction:column;align-items:center;gap:5px;margin:-6px auto 20px;}
+.hero-funding strong{font-size:14px;line-height:1.25;font-weight:600;color:#22C55E;font-variant-numeric:tabular-nums;}
+.hero-funding span{font-size:12px;line-height:1.4;color:#74747d;}
+.hero-copy .primary-action{margin-bottom:0;}
+.proposal-privacy-note{display:grid;gap:7px;margin-top:30px;max-width:50ch;font-size:13px;line-height:1.55;color:#6f6879;}
+.proposal-privacy-note strong{font-weight:600;color:#292632;}
+.proposal-privacy-note span{font-size:12px;color:#77717f;}
+.postiz-logo{max-width:100%;min-width:0;}
+.postiz-logo img{max-width:100%;max-height:60px;object-fit:contain;object-position:center;}
+.footer-brandmark{display:block;width:min(150px,42vw);height:auto;max-height:30px;object-fit:contain;object-position:left center;}
+.preview-canvas img{width:min(100%,210px);height:auto;max-height:90px;object-fit:contain;}
+@media(max-width:767px){
+ .live-activity{font-size:11px!important;margin-bottom:14px!important;}
+ .desktop-live-number{display:none;}
+ .mobile-live-number{display:inline;color:#62636b;}
+ .hero-funding{margin-top:-4px;margin-bottom:17px;}
+ .hero-funding span{font-size:11px;}
+ .proposal-privacy-note{margin-top:24px;}
+ .brandmyreach-lockup{width:min(178px,calc(100vw - 116px));}
+ .brandmyreach-lockup img{max-height:32px;}
+ .private-offer-section{gap:36px;}
+ .offer-form-panel{padding:24px 20px;min-width:0;}
+ .bid-amount-row{grid-template-columns:minmax(72px,82px) minmax(0,1fr);gap:9px;}
+ .bid-amount-row input{font-size:19px;}
+ .bid-amount-row select{padding-inline:8px;}
+ .offer-introduction h2{font-size:clamp(42px,12vw,52px);}
+ .previous-bid strong{font-size:clamp(64px,18vw,78px);}
+}
+@media(max-width:360px){
+ .brandmyreach-lockup{width:142px;}
+ .mobile-live-number{font-size:10px;}
+ .offer-form-panel{padding-inline:16px;}
+}
+html,body {max-width:100%;overflow-x:clip;}

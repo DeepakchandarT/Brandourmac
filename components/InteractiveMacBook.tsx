@@ -33,7 +33,7 @@ export default function InteractiveMacBook(){
       <div className="laptop-controls" role="group" aria-label="Laptop views">
         {["The lid","Open it","All yours"].map((label,i)=><button key={label} className="focus-ring" aria-pressed={phase===i} onClick={()=>select([0,.55,1][i])}>{label}</button>)}
       </div>
-      <p className="laptop-caption">{["16 placements. Reserved for one brand.","Built for the work. Branded for the room.","Not a shared space. Your entire canvas."][phase]}</p>
+      <p className="laptop-caption">{["16 placements. One exclusive sponsor.","Built for the work. Branded for the room.","Not a shared space. Your entire canvas."][phase]}</p>
       <span className="scroll-hint">Scroll to explore, or choose a view</span>
     </div>
   </section>;

@@ -1,11 +1,8 @@
-# Launching the Postiz invitation
+# Opening the BrandMyReach proposal
 
-The website now starts behind a server-rendered invitation gate. A valid invitation
-code permanently marks this campaign as public in Redis. Subsequent visitors can
-see the proposal without a code; only a signed invitation session can submit offers.
-The code is a shared invitation credential, not proof of someone's identity. Keep
-it within the Postiz team. Sessions last seven days. Rotating the invitation code
-or session secret revokes existing sessions without making the site private again.
+The website starts behind a server-rendered lock. The owner can open or re-lock it
+from `/admin`. When open, any suitable company can send a private proposal without
+an invitation code. The invite code is used only to open the locked site.
 
 ## One-time Vercel configuration
 
@@ -24,9 +21,7 @@ Never prefix these variables with `NEXT_PUBLIC_`, commit real values, or send th
 in chat. Redeploy after setting them. Missing configuration or a storage outage
 fails closed and displays the invitation screen.
 
-The campaign code may reference Postiz's 20 November 2024 Product Hunt
-announcement and the complete partnership. Keep the complete value only in
-Vercel and share it only with the invited Postiz team.
+Keep the complete invite code only in Vercel. Do not put it in public website copy.
 
 Optional notification settings: `OFFER_EMAIL`, `RESEND_API_KEY`, and
 `RESEND_FROM_EMAIL` (a verified sender). The complete offer is stored regardless
@@ -49,9 +44,11 @@ service or client-side analytics key is required. Analytics stores only a random
 first-party visitor identifier, aggregated page/referral counters and a five-minute
 recent-activity window; it does not store visitor names, email addresses or raw IPs.
 
-Sponsor drafts and the published sponsor are stored separately. Postiz remains the
-default until a new draft is explicitly published. Uploaded logos are limited to
-validated PNG, WebP or restricted SVG files of at most 350 KB. The public website
+Sponsor drafts and the published sponsor are stored separately. The default is a
+generic “Your Brand” placeholder until a draft is explicitly published. The manager
+also stores the confirmed sponsorship amount and currency; it defaults to USD 0 and
+should be changed only after an agreement is confirmed. Uploaded logos are limited
+to validated PNG, WebP or restricted SVG files of at most 350 KB. The public website
 loads the published sponsor configuration at request time, so publishing does not
 require redesigning or rebuilding its sections.
 
@@ -59,9 +56,9 @@ require redesigning or rebuilding its sections.
 
 1. Configure the Preview environment with a separate namespace and private test code.
 2. Open the branch deployment. Before entering a code, only the gate should appear.
-3. Enter the test code. This intentionally publishes only the Preview namespace.
-4. Open another browser or an incognito window. The proposal should be visible,
-   but the private offer form must still require the code.
+3. Enter the test code or use `/admin` to unlock the Preview namespace.
+4. Open another browser or an incognito window. The proposal should be visible and
+   the private offer form should accept a proposal without an invite code.
 5. Test an offer using non-sensitive test details. The success reference identifies
    its database entry. Test offers stay in Preview; they are not production bids.
 6. Review the mobile orbit, timeline, book movement and logo links, then approve
@@ -77,15 +74,15 @@ require redesigning or rebuilding its sections.
 Use the provider dashboard to inspect offers. No public API exposes bidder details.
 Choose a retention period and remove records when they are no longer needed.
 Use durable storage with eviction disabled for these records; keep backups.
-Re-locking requires deliberately deleting only the exact campaign's `published`
-key in the database. Redeploying alone does not re-lock it or erase offers.
+Use the `/admin` access control to re-lock the site. This does not erase offers.
 
 ## Reporting assets
 
 The reporting timeline is an interactive preview of planned milestones, not a
 claim of completed activity. Its cards currently contain report titles, not stock
 photos. Supply Deepak's portrait and actual campaign photos to replace the final
-branded panel and report covers. The supplied Postiz logo is used as-is.
+branded panel and report covers. The BrandMyReach wordmark is used for site identity;
+sponsor marks are loaded from the published sponsor configuration.
 
 ## Verification
 

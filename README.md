@@ -1,7 +1,8 @@
-# Postiz × Deepak
+# BrandMyReach
 
-A twelve-month partnership proposal: all sixteen laptop placements, a T-shirt,
-pen, notebook and water bottle, with monthly documentation of real activity.
+A twelve-month exclusive sponsorship opportunity: all sixteen laptop placements,
+apparel and accessories, with monthly documentation of real activity. Companies
+can submit private proposals; one confirmed sponsor receives the complete presence.
 
 Built with Next.js 14, TypeScript, Framer Motion and React Three Fiber.
 
@@ -9,7 +10,7 @@ Built with Next.js 14, TypeScript, Framer Motion and React Three Fiber.
 
 Install dependencies with `npm install`, copy `.env.example` to `.env.local`,
 configure the server values, then run `npm run dev` and open localhost:3000.
-The page remains behind the invitation gate until it has been activated.
+The page remains behind the owner-controlled lock until it is opened.
 
 ## Configure and launch
 
@@ -18,35 +19,30 @@ database, private invitation code and session secret are required. Preview and
 Production must have separate namespaces. The server never ships these secrets
 to the browser.
 
-A valid code makes the campaign public for everyone. Only invitation holders
-with an unexpired signed cookie can submit an offer. Offers are stored privately;
-email notifications are optional. The shared code is an invitation credential,
-not verification of the holder's identity.
+Opening the site makes the proposal public. Any suitable company can submit an
+offer while it is open; offers are rate limited and stored privately. Email
+notifications are optional. The invitation code controls access to the locked
+site and is not required to submit a proposal after the site is open.
 
 ## Experience
 
-- The supplied Postiz logo links to `https://postiz.com/` in the navigation and
-  product branding. The raster asset is preserved without alteration.
+- The BrandMyReach wordmark appears in the site identity and social preview.
 - A scroll-controlled laptop opens to reveal a detailed keyboard and branded lid.
-- Four branded objects rotate around a common vertical axis. Visitors can drag,
-  pause or use previous/next controls. Reduced motion shows one object at a time.
-- The upright book leans into four staggered books; their labels appear as they settle.
-- A six-chapter reporting timeline has a curved track, flat report covers and
-  a recessed dial. Chapters are clearly labelled as planned until real content exists.
-- A persistent offer link leads to the private form, which validates and saves
-  offers on the server. Invitation sessions last seven days.
-
-The final reporting chapter currently uses a tall branded report cover. A supplied
-portrait and real campaign photos can replace the typographic covers; no fictional
-activity or stock event photography is presented as completed work.
+- Sponsor name, URL and logo come from one published sponsor configuration and
+  update across the site's placements after publishing.
+- Five branded objects rotate around a common vertical axis. Visitors can drag
+  or pause the carousel. Reduced motion shows a static collection preview.
+- The reporting timeline is clearly labelled as planned until real content exists.
+- Live visitor and online counts use first-party aggregate analytics; no sample
+  numbers are shown.
 
 ## Verification
 
 ```bash
-node --test tests/campaign.test.cjs
+node --test tests/*.test.cjs
 npm run build
 ```
 
 The automated route tests use mocked storage and email. They do not publish a real
-campaign or send emails. Visual review is still required on the configured preview,
-particularly for the 3D orbit, logo placement and mobile timeline.
+campaign or send emails. Visual review is still useful on the configured preview,
+particularly for 3D logo placement and the mobile layout.

@@ -26,8 +26,8 @@ export default function LongTerm() {
           </Reveal>
           <Reveal delay={0.18}>
             <p className="text-lg text-mute max-w-md text-balance">
-              If the company grows successfully, Postiz could become the
-              preferred social-media management platform for our team.
+              If the company grows successfully, our confirmed sponsor could become a
+              preferred partner as the team expands.
             </p>
           </Reveal>
         </div>

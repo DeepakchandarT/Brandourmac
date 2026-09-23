@@ -143,7 +143,7 @@ export default function PresenceBookStack() {
     <div
       ref={root}
       className="book-stage"
-      aria-label="Where Postiz will be present"
+      aria-label="Where the sponsor will be present"
     >
       <motion.svg className="book-route" viewBox="0 0 620 430" aria-hidden="true" style={{opacity:reduceMotion?0:routeOpacity}}>
         <defs><marker id="route-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5148e5"/></marker></defs>
@@ -165,7 +165,7 @@ export default function PresenceBookStack() {
             style={{ opacity: reduceMotion ? 1 : uprightLabelOpacity }}
           >
             <span className="whitespace-nowrap text-sm text-white [writing-mode:vertical-rl] sm:text-base">
-              Postiz goes with me
+              The sponsor goes with me
             </span>
           </motion.div>
         </motion.div>
@@ -194,7 +194,7 @@ export default function PresenceBookStack() {
         className="relative z-30 mx-auto mt-3 max-w-md text-center text-sm leading-relaxed text-mute"
         style={{ opacity: reduceMotion ? 1 : captionOpacity }}
       >
-        From campus to client rooms—Postiz travels with me.
+        From campus to client rooms—the partnership travels with me.
       </motion.p>
     </div>
   );

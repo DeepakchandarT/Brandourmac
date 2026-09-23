@@ -1,6 +1,8 @@
 export type SponsorConfig = {
   name: string;
   website: string;
+  fundsRaised: number;
+  fundingCurrency: "USD" | "EUR" | "INR";
   logoDataUrl: string | null;
   logoMime: "image/png" | "image/webp" | "image/svg+xml" | null;
   version: number;
@@ -8,10 +10,12 @@ export type SponsorConfig = {
 };
 
 export const DEFAULT_SPONSOR: SponsorConfig = {
-  name: "Postiz",
-  website: "https://postiz.com/",
+  name: "Your Brand",
+  website: "/",
+  fundsRaised: 0,
+  fundingCurrency: "USD",
   // The default intentionally renders the requested YOUR BRAND placeholder.
-  // Existing Postiz assets remain in /public and are not deleted.
+  // Existing example assets remain available; public placements use the sponsor manager.
   logoDataUrl: null,
   logoMime: null,
   version: 1,
@@ -19,5 +23,5 @@ export const DEFAULT_SPONSOR: SponsorConfig = {
 };
 
 export function publicSponsor(config: SponsorConfig) {
-  return { name: config.name, website: config.website, version: config.version, hasLogo: !!config.logoDataUrl };
+  return { name: config.name, website: config.website, fundsRaised: config.fundsRaised, fundingCurrency: config.fundingCurrency, version: config.version, hasLogo: !!config.logoDataUrl };
 }

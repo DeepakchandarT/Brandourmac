@@ -82,10 +82,19 @@ test('cross-origin launch is rejected without publishing', async () => {
   const response = await invite.POST(request('invite', { code: process.env.SPONSOR_INVITE_CODE }, null, 'https://elsewhere.test'));
   assert.equal(response.status, 403); assert.equal(store.size, 0);
 });
-test('public site does not give anonymous visitors bidding permission', async () => {
+test('any company can submit a private offer when the campaign is open', async () => {
   await campaign.publishCampaign();
   assert.equal(await campaign.isPublished(), true);
-  assert.equal((await offer.POST(request('offer', validOffer()))).status, 401);
+  const first = await offer.POST(request('offer', validOffer()));
+  const second = await offer.POST(request('offer', validOffer()));
+  const a = await first.json(), b = await second.json();
+  assert.equal(first.status, 200); assert.equal(a.saved, true); assert.equal(a.reference, b.reference);
+  assert.equal(a.email, undefined);
+  assert.equal([...store.keys()].filter(k => k.startsWith('test-campaign:offer:')).length, 1);
+});
+test('locked campaign rejects anonymous offers', async () => {
+  assert.equal((await offer.POST(request('offer', validOffer()))).status, 403);
+  assert.equal([...store.keys()].filter(k => k.startsWith('test-campaign:offer:')).length, 0);
 });
 test('excessive invitation guesses are limited', async () => {
   for (let i = 0; i < 10; i++) assert.equal((await invite.POST(request('invite', { code: 'wrong' }))).status, 401);
@@ -105,6 +114,7 @@ test('malformed and oversized input never publishes the campaign', async () => {
   assert.equal(await campaign.isPublished(), false);
 });
 test('valid offer is private, durable and idempotent on retry', async () => {
+  await campaign.publishCampaign();
   const token = campaign.createSession();
   const first = await offer.POST(request('offer', validOffer(), token));
   const second = await offer.POST(request('offer', validOffer(), token));
@@ -116,6 +126,7 @@ test('valid offer is private, durable and idempotent on retry', async () => {
   assert.equal(a.email, undefined); assert.equal(emailAttempts, 0);
 });
 test('email failure does not lose or duplicate a saved offer', async () => {
+  await campaign.publishCampaign();
   Object.assign(process.env, { OFFER_EMAIL: 'owner@example.com', RESEND_API_KEY: 'test-only', RESEND_FROM_EMAIL: 'test@example.com' });
   const token = campaign.createSession();
   const response = await offer.POST(request('offer', validOffer(), token));
@@ -125,11 +136,12 @@ test('email failure does not lose or duplicate a saved offer', async () => {
   await offer.POST(request('offer', validOffer(), token));
   assert.equal(emailAttempts, 1);
 });
-test('negative amounts, invalid email, unsupported currency and forged session are rejected', async () => {
-  const token = campaign.createSession();
+test('negative amounts, invalid email and unsupported currency are rejected; invitation cookies are unnecessary', async () => {
+  await campaign.publishCampaign();
   for (const fields of [{ amount: '-1' }, { email: 'not-an-email' }, { currency: 'XYZ' }, { amount: 'Infinity' }]) {
-    assert.equal((await offer.POST(request('offer', { ...validOffer(), ...fields }, token))).status, 400);
+    assert.equal((await offer.POST(request('offer', { ...validOffer(), ...fields }))).status, 400);
   }
-  assert.equal((await offer.POST(request('offer', validOffer(), 'forged'))).status, 401);
-  assert.equal([...store.keys()].filter(k => k.includes(':offer:')).length, 0);
+  const response=await offer.POST(request('offer', validOffer(), 'not-a-real-invite'));
+  assert.equal(response.status, 200);
+  assert.equal([...store.keys()].filter(k => k.startsWith('test-campaign:offer:')).length, 1);
 });

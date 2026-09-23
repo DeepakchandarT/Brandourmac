@@ -44,6 +44,9 @@ test('sponsor URLs reject executable protocols and embedded credentials', () => 
   assert.equal(sponsor.validateSponsorDetails('Postiz', 'https://postiz.com').website, 'https://postiz.com/');
   assert.throws(() => sponsor.validateSponsorDetails('Postiz', 'javascript:alert(1)'));
   assert.throws(() => sponsor.validateSponsorDetails('Postiz', 'https://user:pass@example.com'));
+  assert.equal(sponsor.validateSponsorDetails('Example', 'https://example.com', '1250.50', 'USD').fundsRaised, 1250.5);
+  assert.throws(() => sponsor.validateSponsorDetails('Example', 'https://example.com', '-1', 'USD'));
+  assert.throws(() => sponsor.validateSponsorDetails('Example', 'https://example.com', '1', 'GBP'));
 });
 
 test('unsafe SVG uploads are rejected while a simple logo is accepted', async () => {

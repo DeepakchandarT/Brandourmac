@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
-import PostizLogo from "./PostizLogo";
+import Image from "next/image";
 
 const LINKS = [
   { label: "The Canvas", href: "#idea" },
@@ -26,7 +26,9 @@ export default function Nav() {
         className="absolute bottom-0 left-0 right-0 h-px bg-white"
       />
       <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
-        <div className="brand-lockup"><a href="#top">DEEPAK</a><span aria-hidden="true">×</span><PostizLogo /></div>
+        <a className="brandmyreach-lockup" href="#top" aria-label="BrandMyReach home">
+          <Image src="/brand/brandmyreach-wordmark.png" alt="BrandMyReach" width={225} height={54} priority />
+        </a>
 
         <ul className="hidden md:flex items-center gap-10">
           {LINKS.map((l) => (

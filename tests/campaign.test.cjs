@@ -37,6 +37,7 @@ beforeEach(() => {
     else if (cmd === 'SET') {
       if (args.includes('NX') && store.has(args[0])) result = null;
       else { store.set(args[0], args[1]); result = 'OK'; }
+    } else if (cmd === 'DEL') { result = store.delete(args[0]) ? 1 : 0;
     } else if (cmd === 'EVAL') {
       const key = args[2]; result = (store.get(key) || 0) + 1; store.set(key, result);
     } else throw new Error(`Unexpected command: ${cmd}`);
@@ -105,8 +106,18 @@ test('missing configuration and storage outages fail closed', async () => {
   assert.equal((await invite.POST(request('invite', { code: process.env.SPONSOR_INVITE_CODE }))).status, 503);
   delete process.env.SPONSOR_SESSION_SECRET;
   assert.equal(campaign.configured(), false);
-  assert.equal(await campaign.isPublished(), false);
+  await assert.rejects(campaign.isPublished(), /Simulated outage/);
   assert.equal((await invite.POST(request('invite', { code: process.env.SPONSOR_INVITE_CODE }))).status, 503);
+});
+test('admin unlock and relock work without invitation credentials', async () => {
+  delete process.env.SPONSOR_INVITE_CODE;
+  delete process.env.SPONSOR_SESSION_SECRET;
+  assert.equal(await campaign.isPublished(), false);
+  await campaign.unlockCampaign();
+  assert.equal(await campaign.isPublished(), true);
+  assert.equal((await invite.POST(request('invite', { code: 'anything' }))).status, 503);
+  await campaign.lockCampaign();
+  assert.equal(await campaign.isPublished(), false);
 });
 test('malformed and oversized input never publishes the campaign', async () => {
   assert.equal((await invite.POST(request('invite', { code: 'a'.repeat(9000) }))).status, 400);

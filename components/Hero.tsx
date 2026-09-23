@@ -6,7 +6,6 @@ export default function Hero({ fundsRaised = 0, fundingCurrency = "USD" }: { fun
     style: "currency", currency: fundingCurrency, minimumFractionDigits: 0, maximumFractionDigits: 2,
   }).format(fundsRaised);
   return <section id="top" className="hero-copy container-edge">
-    <LiveActivity />
     <h1>Don&rsquo;t rent a corner.<br/><span>Own the canvas.</span></h1>
     <p>All 16 MacBook spaces. One brand. Twelve months.</p>
     <div className="hero-funding" aria-label="Sponsorship funding status">
@@ -14,5 +13,6 @@ export default function Hero({ fundsRaised = 0, fundingCurrency = "USD" }: { fun
       <span>One exclusive partnership · 16/16 available</span>
     </div>
     <a className="primary-action focus-ring" href="#private-offer">Submit a proposal <ArrowUpRight size={17} aria-hidden="true"/></a>
+    <LiveActivity />
   </section>;
 }

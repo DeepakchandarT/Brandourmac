@@ -1,7 +1,6 @@
 "use client";
 import { FormEvent, useRef, useState } from "react";
 import { ArrowDownRight, ArrowUpRight, Check, LockKeyhole } from "lucide-react";
-import PostizLogo from "./PostizLogo";
 
 export default function PrivateOffer() {
   const [busy,setBusy]=useState(false);
@@ -23,13 +22,12 @@ export default function PrivateOffer() {
   }
   return <section id="private-offer" className="private-offer-section container-edge">
     <div className="offer-introduction">
-      <PostizLogo/>
       <h2>What are all 16<br/><em>worth to you?</em></h2>
       <p>One brand. Twelve months. No competition.</p>
-      <div className="previous-bid" aria-label="All sixteen sponsorship spaces are available to one exclusive partner">
-        <span>ONE EXCLUSIVE SPONSOR</span>
-        <strong>16/16</strong>
-        <p>Every BrandMyReach placement, together.</p>
+      <div className="previous-bid" aria-label="Historical BrandMyMac bid reference: Postiz bid 1,404 dollars for one MacBook lid placement">
+        <span>A PAST BRANDMYMAC BID</span>
+        <strong>$1,404</strong>
+        <p>Postiz bid this for one MacBook lid space. This proposal covers the complete BrandMyReach presence.</p>
         <ArrowDownRight className="bid-direction-arrow" aria-hidden="true" />
       </div>
       <p className="offer-scope">All 16 spaces. The full kit. Twelve monthly reports.</p>

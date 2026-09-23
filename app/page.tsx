@@ -22,7 +22,8 @@ export default async function Home() {
   let available=configured();
   const sponsorConfig=await getPublishedSponsor();
   try {published=await isPublished();} catch {available=false;}
-  if(!published) return <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><LaunchGate available={available}/></SponsorProvider>;
+  const previewReviewMode = process.env.VERCEL_ENV === "preview" && process.env.VERCEL_GIT_COMMIT_REF === "preview/brandmyreach-wordmark";
+  if(!published && !previewReviewMode) return <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><LaunchGate available={available}/></SponsorProvider>;
   return (
     <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><main className="relative bg-ink text-bone">
       <AnalyticsTracker/>

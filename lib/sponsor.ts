@@ -15,6 +15,7 @@ function parse(value: string | null): SponsorConfig | null {
       ...data,
       fundsRaised: typeof data.fundsRaised === "number" && Number.isFinite(data.fundsRaised) && data.fundsRaised >= 0 ? data.fundsRaised : 0,
       fundingCurrency: data.fundingCurrency && ["USD", "EUR", "INR"].includes(data.fundingCurrency) ? data.fundingCurrency : "USD",
+      showLiveVisitors: typeof data.showLiveVisitors === "boolean" ? data.showLiveVisitors : DEFAULT_SPONSOR.showLiveVisitors,
     };
   } catch { return null; }
 }
@@ -57,6 +58,15 @@ export async function publishSponsor() {
   await redis(["SET", publishedKey(), JSON.stringify(published)]);
   await redis(["SET", draftKey(), JSON.stringify(published)]);
   return published;
+}
+
+export async function setLiveVisitorVisibility(visible: boolean) {
+  const [draft, published] = await Promise.all([getDraftSponsor(), getPublishedSponsor()]);
+  const updatedAt = new Date().toISOString();
+  const nextDraft = { ...draft, showLiveVisitors: visible, version: draft.version + 1, updatedAt };
+  const nextPublished = { ...published, showLiveVisitors: visible, version: published.version + 1, updatedAt };
+  await redis(["MSET", draftKey(), JSON.stringify(nextDraft), publishedKey(), JSON.stringify(nextPublished)]);
+  return { draft: nextDraft, published: nextPublished };
 }
 
 export function validateSponsorLogo(file: File) {

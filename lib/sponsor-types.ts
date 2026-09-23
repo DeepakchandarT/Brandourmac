@@ -3,6 +3,7 @@ export type SponsorConfig = {
   website: string;
   fundsRaised: number;
   fundingCurrency: "USD" | "EUR" | "INR";
+  showLiveVisitors: boolean;
   logoDataUrl: string | null;
   logoMime: "image/png" | "image/webp" | "image/svg+xml" | null;
   version: number;
@@ -14,6 +15,7 @@ export const DEFAULT_SPONSOR: SponsorConfig = {
   website: "/",
   fundsRaised: 0,
   fundingCurrency: "USD",
+  showLiveVisitors: true,
   // The default intentionally renders the requested YOUR BRAND placeholder.
   // Existing example assets remain available; public placements use the sponsor manager.
   logoDataUrl: null,
@@ -23,5 +25,5 @@ export const DEFAULT_SPONSOR: SponsorConfig = {
 };
 
 export function publicSponsor(config: SponsorConfig) {
-  return { name: config.name, website: config.website, fundsRaised: config.fundsRaised, fundingCurrency: config.fundingCurrency, version: config.version, hasLogo: !!config.logoDataUrl };
+  return { name: config.name, website: config.website, fundsRaised: config.fundsRaised, fundingCurrency: config.fundingCurrency, showLiveVisitors: config.showLiveVisitors, version: config.version, hasLogo: !!config.logoDataUrl };
 }

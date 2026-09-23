@@ -279,9 +279,6 @@ main > section:not(#top):not(#idea):not(#final-cta) {padding-block:80px;}
 .live-activity-dot{width:7px;height:7px;flex:none;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px #22c55e1c;}
 .live-now{color:#22C55E;font-weight:600;}
 .mobile-live-number{display:none;}
-.hero-funding{display:flex;flex-direction:column;align-items:center;gap:5px;margin:-6px auto 20px;}
-.hero-funding strong{font-size:14px;line-height:1.25;font-weight:600;color:#22C55E;font-variant-numeric:tabular-nums;}
-.hero-funding span{font-size:12px;line-height:1.4;color:#74747d;}
 .hero-copy .primary-action{margin-bottom:0;}
 .proposal-privacy-note{display:grid;gap:7px;margin-top:30px;max-width:50ch;font-size:13px;line-height:1.55;color:#6f6879;}
 .proposal-privacy-note strong{font-weight:600;color:#292632;}
@@ -295,8 +292,6 @@ main > section:not(#top):not(#idea):not(#final-cta) {padding-block:80px;}
  .hero-copy>.live-activity{margin-top:22px!important;margin-bottom:0!important;}
  .desktop-live-number{display:none;}
  .mobile-live-number{display:inline;color:#62636b;}
- .hero-funding{margin-top:-4px;margin-bottom:17px;}
- .hero-funding span{font-size:11px;}
  .proposal-privacy-note{margin-top:24px;}
  .brandmyreach-lockup{width:min(178px,calc(100vw - 116px));}
  .brandmyreach-lockup img{max-height:32px;}

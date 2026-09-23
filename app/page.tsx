@@ -27,7 +27,7 @@ export default async function Home() {
     <SponsorProvider sponsor={publicSponsor(sponsorConfig)}><main className="relative bg-ink text-bone">
       <AnalyticsTracker/>
       <Nav />
-      <Hero fundsRaised={sponsorConfig.fundsRaised} fundingCurrency={sponsorConfig.fundingCurrency} />
+      <Hero />
       <InteractiveMacBook />
       <Differentiator />
       <WhereItTravels />

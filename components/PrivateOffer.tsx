@@ -23,19 +23,19 @@ export default function PrivateOffer() {
   return <section id="private-offer" className="private-offer-section container-edge">
     <div className="offer-introduction">
       <h2>What are all 16<br/><em>worth to you?</em></h2>
-      <p>One brand. Twelve months. No competition.</p>
+      <p>One brand. Twelve months.</p>
       <div className="previous-bid" aria-label="Historical BrandMyMac bid reference: Postiz bid 1,404 dollars for one MacBook lid placement">
         <span>A PAST BRANDMYMAC BID</span>
         <strong>$1,404</strong>
-        <p>Postiz bid this for one MacBook lid space. This proposal covers the complete BrandMyReach presence.</p>
+        <p>Postiz bid for one MacBook lid space.</p>
         <ArrowDownRight className="bid-direction-arrow" aria-hidden="true" />
       </div>
-      <p className="offer-scope">All 16 spaces. The full kit. Twelve monthly reports.</p>
-      <p className="proposal-privacy-note"><strong>Private while you bid. Public when you win.</strong><span>Your proposal stays private until confirmed. Once confirmed, it will be publicly displayed here.</span></p>
+      <p className="offer-scope">All 16 spaces. Full kit. Twelve monthly reports.</p>
+      <p className="proposal-privacy-note"><strong>Private while you bid. Public when you win.</strong><span>Your offer stays private until confirmed, then appears here.</span></p>
     </div>
     <div className="offer-form-panel">
       {reference?<div className="offer-success" role="status"><Check size={30}/><h3>Your offer is in.</h3><p>Your proposal has been saved privately. Thank you for taking the first step.</p><span>Reference: {reference}</span></div>:<>
-        <div className="offer-form-heading"><span><LockKeyhole size={15}/>PRIVATE SPONSORSHIP PROPOSAL</span><h3>Your number.</h3><p>Submit a private offer for the complete BrandMyReach presence.</p></div>
+        <div className="offer-form-heading"><span><LockKeyhole size={15}/>PRIVATE SPONSORSHIP PROPOSAL</span><h3>Your number.</h3></div>
         <form className="bid-form" onSubmit={submit}>
           <div className="bid-amount-row"><label>Currency<select value={values.currency} onChange={e=>setValues(v=>({...v,currency:e.target.value}))}><option>USD</option><option>EUR</option><option>INR</option></select></label>
           <label>Your offer for 12 months<input aria-label="Your offer amount for twelve months" type="number" inputMode="decimal" min="0.01" max="999999999.99" step="0.01" required placeholder="Your amount" value={values.amount} onChange={e=>setValues(v=>({...v,amount:e.target.value}))}/></label></div>

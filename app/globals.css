@@ -322,9 +322,9 @@ html,body {max-width:100%;overflow-x:clip;}
 
 /* Compact text-only BrandMyReach wordmark and one-time reveal */
 .brandmyreach-lockup{display:inline-flex;align-items:center;width:max-content;max-width:calc(100vw - 140px);height:auto;overflow:visible;line-height:1;flex:none;}
-.brandmyreach-wordmark{position:relative;display:inline-block;white-space:nowrap;font-family:var(--font-display),Georgia,serif;font-size:22px;font-style:italic;font-weight:500;letter-spacing:-.025em;line-height:1;color:#101014;font-optical-sizing:auto;clip-path:inset(0 100% 0 0);animation:brandmyreach-type 520ms steps(12,end) 80ms both;}
+.brandmyreach-wordmark{position:relative;display:inline-block;white-space:nowrap;font-family:var(--font-display),Georgia,serif;font-size:22px;font-style:italic;font-weight:500;letter-spacing:-.025em;line-height:1;color:#101014;font-optical-sizing:auto;clip-path:inset(0 100% 0 0);animation:brandmyreach-type 1s steps(12,end) 80ms both;}
 .brandmyreach-wordmark::after{content:"";position:absolute;top:.12em;right:-4px;width:1.5px;height:.82em;background:#5148e5;opacity:0;animation:brandmyreach-cursor 720ms steps(1,end) 600ms 1 forwards;}
-@keyframes brandmyreach-type{to{clip-path:inset(0 0 0 0);}}
+@keyframes brandmyreach-type{to{clip-path:inset(0 -.14em 0 0);}}
 @keyframes brandmyreach-cursor{0%{opacity:1;}25%{opacity:0;}50%{opacity:1;}75%,100%{opacity:0;}}
 @media(max-width:767px){.brandmyreach-wordmark{font-size:20px;}}
 @media(max-width:360px){.brandmyreach-wordmark{font-size:18px;}}

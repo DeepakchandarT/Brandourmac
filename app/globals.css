@@ -350,3 +350,14 @@ html,body {max-width:100%;overflow-x:clip;}
  .collection-section .orbit-stage{aspect-ratio:1.18;min-height:0;}
  .orbit-product-name{margin-top:6px;font-size:15px;}
 }
+
+/* A soft frameless floor beneath the collection. */
+.collection-section .orbit-stage{position:relative;isolation:isolate;}
+.collection-section .orbit-stage::after{content:"";position:absolute;pointer-events:none;z-index:-1;left:20%;right:20%;bottom:13%;height:8%;background:radial-gradient(ellipse,rgba(39,36,49,.1),rgba(39,36,49,0) 70%);}
+@media(max-width:767px){
+ .collection-section .orbit-stage{aspect-ratio:1.15;max-height:400px;min-height:0;}
+ .collection-visual{max-width:480px;}
+ .collection-section .orbit-stage::after{left:28%;right:28%;bottom:10%;height:6%;}
+ .collection-layout{gap:16px;}
+ .orbit-product-name{margin-top:0;}
+}

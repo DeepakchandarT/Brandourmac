@@ -11,6 +11,7 @@ const OBJECTS = [Tee, Laptop, Pen, Notebook, Bottle];
 const STEP = Math.PI * 2 / PRODUCTS.length;
 const ORBIT_RADIUS = 3.1;
 const ORBIT_DEPTH = 3.2;
+const MOBILE_ORBIT_RADIUS = 3.9;
 
 class CanvasBoundary extends Component<{children:ReactNode;fallback:ReactNode},{failed:boolean}> {
   state={failed:false};
@@ -36,7 +37,7 @@ function Orbit({ angle, running, reduced, mobile, onActive }: {
     for(let step=0;step<180;step++){
       const a=step*Math.PI*2/180, depth=Math.cos(a);
       const scale=.72+.28*(depth+1)/2;
-      const x=Math.abs(Math.sin(a)*ORBIT_RADIUS);
+      const x=Math.abs(Math.sin(a)*(mobile?MOBILE_ORBIT_RADIUS:ORBIT_RADIUS));
       const front=(depth-1)*ORBIT_DEPTH+1.5*scale;
       distance=Math.max(distance,
         front+(x+2*scale)*1.08/tanH,
@@ -54,7 +55,7 @@ function Orbit({ angle, running, reduced, mobile, onActive }: {
       groups.current.forEach((g,i)=>{
         if(!g)return;
         const a=angle.current+i*STEP,depth=Math.cos(a);
-        g.position.set(Math.sin(a)*ORBIT_RADIUS,0,(depth-1)*ORBIT_DEPTH);
+        g.position.set(Math.sin(a)*MOBILE_ORBIT_RADIUS,0,(depth-1)*ORBIT_DEPTH);
         g.rotation.y=Math.sin(a)*.28;
         g.scale.setScalar(.72+.28*(depth+1)/2);
         g.visible=true;

@@ -69,10 +69,19 @@ export async function setLiveVisitorVisibility(visible: boolean) {
   return { draft: nextDraft, published: nextPublished };
 }
 
+export async function setSponsorLogo(logoDataUrl: string, logoMime: SponsorConfig["logoMime"]) {
+  const [draft, published] = await Promise.all([getDraftSponsor(), getPublishedSponsor()]);
+  const updatedAt = new Date().toISOString();
+  const nextDraft = { ...draft, logoDataUrl, logoMime, version: draft.version + 1, updatedAt };
+  const nextPublished = { ...published, logoDataUrl, logoMime, version: published.version + 1, updatedAt };
+  await redis(["MSET", draftKey(), JSON.stringify(nextDraft), publishedKey(), JSON.stringify(nextPublished)]);
+  return { draft: nextDraft, published: nextPublished };
+}
+
 export function validateSponsorLogo(file: File) {
   const allowed = new Set(["image/png", "image/webp", "image/svg+xml"]);
   if (!allowed.has(file.type)) throw new Error("Use a PNG, WebP or SVG logo.");
-  if (file.size < 1 || file.size > 350_000) throw new Error("Logo must be smaller than 350 KB.");
+  if (file.size < 1 || file.size > 1_000_000) throw new Error("Logo must be smaller than 1 MB.");
 }
 
 export async function logoData(file: File) {

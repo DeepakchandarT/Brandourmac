@@ -24,7 +24,7 @@ export default function Nav() {
         style={{ opacity: borderOpacity }}
         className="absolute bottom-0 left-0 right-0 h-px bg-white"
       />
-      <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
+      <nav className="px-5 md:px-8 flex items-center justify-between gap-8 h-16 md:h-[4.5rem]">
         <a className="brandmyreach-lockup" href="#top" aria-label="BrandMyReach home">
           <span className="brandmyreach-wordmark">BrandMyReach</span>
         </a>

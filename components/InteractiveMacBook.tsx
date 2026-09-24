@@ -17,9 +17,13 @@ export default function InteractiveMacBook(){
   const [webglReady,setWebglReady]=useState<boolean|null>(null);
   useEffect(()=>{
     const canvas=document.createElement("canvas");
+    canvas.width=canvas.height=1;
     let context:WebGLRenderingContext|null=null;
     try { context=canvas.getContext("webgl2")||canvas.getContext("webgl"); } catch { context=null; }
-    setWebglReady(!!context);
+    const supported=!!context;
+    // Release the one-pixel capability probe before the 3D scene creates its renderer.
+    try { context?.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}
+    setWebglReady(supported);
   },[]);
   useEffect(()=>{if(reduced) progress.set(.55);return ()=>animation.current?.stop();},[reduced,progress]);
   useMotionValueEvent(scrollYProgress,"change",v=>{if(!reduced){animation.current?.stop();progress.set(v);}});

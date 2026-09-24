@@ -10,6 +10,8 @@ import { useSponsor } from "./SponsorProvider";
 const PRODUCTS = ["T-shirt", "MacBook", "Pen", "Notebook", "Water bottle"];
 const OBJECTS = [Tee, Laptop, Pen, Notebook, Bottle];
 const STEP = Math.PI * 2 / PRODUCTS.length;
+const ORBIT_RADIUS = 3.1;
+const ORBIT_DEPTH = 3.2;
 
 class CanvasBoundary extends Component<{children:ReactNode;fallback:ReactNode},{failed:boolean}> {
   state={failed:false};
@@ -25,8 +27,22 @@ function Orbit({ angle, running, reduced, onActive }: {
   const {camera,size}=useThree();
   useEffect(()=>{
     const c=camera as THREE.PerspectiveCamera;
-    const distance=Math.max(8,4.5/(2*Math.tan(THREE.MathUtils.degToRad(c.fov/2))*size.width/size.height));
-    c.position.set(0,.15,distance);c.lookAt(0,0,0);c.updateProjectionMatrix();
+    if (!size.width || !size.height) return;
+    const tanV=Math.tan(THREE.MathUtils.degToRad(c.fov/2));
+    const tanH=tanV*size.width/size.height;
+    let distance=7.5;
+    // Fit the entire rotating envelope, including the widest model and
+    // its front edge. Keep the camera fixed during rotation to avoid pumping.
+    for(let step=0;step<180;step++){
+      const a=step*Math.PI*2/180, depth=Math.cos(a);
+      const scale=.72+.28*(depth+1)/2;
+      const x=Math.abs(Math.sin(a)*ORBIT_RADIUS);
+      const front=(depth-1)*ORBIT_DEPTH+1.5*scale;
+      distance=Math.max(distance,
+        front+(x+2*scale)*1.08/tanH,
+        front+(1.9*scale+.1)*1.08/tanV);
+    }
+    c.position.set(0,.1,distance);c.lookAt(0,.1,0);c.updateProjectionMatrix();
   },[camera,size]);
   useFrame((_,dt)=>{
     if(running&&!reduced) angle.current-=Math.min(dt,.05)*STEP/7;
@@ -35,7 +51,7 @@ function Orbit({ angle, running, reduced, onActive }: {
     groups.current.forEach((g,i)=>{
       if(!g)return;
       const a=angle.current+i*STEP,depth=Math.cos(a);
-      g.position.set(Math.sin(a)*4.9,0,(depth-1)*4.3);
+      g.position.set(Math.sin(a)*ORBIT_RADIUS,0,(depth-1)*ORBIT_DEPTH);
       // Each item keeps its branded front directed towards the visitor.
       g.rotation.y=Math.sin(a)*.28;
       g.scale.setScalar(.72+.28*(depth+1)/2);
@@ -96,8 +112,8 @@ export default function MerchCarousel(){
         </Canvas>
       </CanvasBoundary> : fallback}
     </div>
-    <p style={{textAlign:"center",marginTop:8,fontSize:16,color:"#35313f"}}>{PRODUCTS[active]}</p>
-    <p style={{textAlign:"center",marginTop:8,fontSize:11,color:"#6c6778"}}>{reduced?"Collection preview":paused?"Paused · tap to resume":"Automatically rotating · tap to pause"}</p>
+    <p className="orbit-product-name">{PRODUCTS[active]}</p>
+    <p className="orbit-playback-note">{reduced?"Collection preview":paused?"Paused · tap to resume":"Automatically rotating · tap to pause"}</p>
     <p className="sr-only">Collection: {PRODUCTS.join(", ")}. Drag to explore. Press Enter or Space to pause.</p>
   </div>;
 }

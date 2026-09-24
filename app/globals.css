@@ -329,3 +329,24 @@ html,body {max-width:100%;overflow-x:clip;}
 @media(max-width:767px){.brandmyreach-wordmark{font-size:20px;}}
 @media(max-width:360px){.brandmyreach-wordmark{font-size:18px;}}
 @media(prefers-reduced-motion:reduce){.brandmyreach-wordmark{clip-path:none;animation:none;}.brandmyreach-wordmark::after{display:none;}}
+
+/* Fit the collection to its column on every screen. */
+.collection-layout{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;gap:28px;max-width:1440px;margin-inline:auto;}
+.collection-copy,.collection-visual{min-width:0;}
+.collection-copy{max-width:44rem;}
+.collection-heading{margin:0;font-size:clamp(32px,4.2vw,54px);line-height:1.12;letter-spacing:-.035em;text-wrap:balance;}
+.collection-description{margin-top:24px;max-width:32rem;font-size:clamp(16px,1.4vw,18px);line-height:1.65;}
+.collection-visual{width:100%;max-width:760px;justify-self:center;}
+.collection-section .orbit-stage{height:auto;aspect-ratio:1.5;max-height:460px;min-height:240px;}
+.orbit-product-name{text-align:center;margin:12px 0 0;font-size:16px;line-height:1.4;color:#35313f;}
+.orbit-playback-note{text-align:center;margin:6px 0 0;font-size:11px;line-height:1.5;color:#6c6778;}
+@media(min-width:1024px){
+ .collection-layout{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,4vw,64px);}
+ .collection-section .orbit-stage{aspect-ratio:1.35;min-height:300px;}
+}
+@media(max-width:600px){
+ .collection-layout{gap:20px;}
+ .collection-description{margin-top:20px;}
+ .collection-section .orbit-stage{aspect-ratio:1.18;min-height:0;}
+ .orbit-product-name{margin-top:6px;font-size:15px;}
+}

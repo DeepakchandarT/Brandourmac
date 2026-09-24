@@ -9,9 +9,9 @@ import { useSponsor } from "./SponsorProvider";
 const PRODUCTS = ["T-shirt", "MacBook", "Pen", "Notebook", "Water bottle"];
 const OBJECTS = [Tee, Laptop, Pen, Notebook, Bottle];
 const STEP = Math.PI * 2 / PRODUCTS.length;
-const ORBIT_RADIUS = 3.1;
+const ORBIT_RADIUS = 3.35;
 const ORBIT_DEPTH = 3.2;
-const MOBILE_ORBIT_RADIUS = 3.9;
+const MOBILE_ORBIT_RADIUS = 4.15;
 
 class CanvasBoundary extends Component<{children:ReactNode;fallback:ReactNode},{failed:boolean}> {
   state={failed:false};

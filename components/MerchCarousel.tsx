@@ -42,33 +42,21 @@ function Orbit({ angle, running, reduced, mobile, onActive }: {
         front+(x+2*scale)*1.08/tanH,
         front+(1.9*scale+.1)*1.08/tanV);
     }
-    if(mobile){
-      distance=6.6;
-      for(let step=0;step<180;step++){
-        const a=step*Math.PI*2/180,depth=Math.cos(a);
-        const scale=.3+.7*Math.pow((depth+1)/2,5);
-        const front=(depth-1)*3.4+1.5*scale;
-        distance=Math.max(distance,
-          front+(Math.abs(Math.sin(a)*2.2)+1.85*scale)*1.06/tanH,
-          front+(1.9*scale+.1)*1.06/tanV);
-      }
-    }
     c.position.set(0,.1,distance);c.lookAt(0,.1,0);c.updateProjectionMatrix();
   },[camera,size,mobile]);
   useFrame((_,dt)=>{
     const delta=Math.min(dt,.05);
     if(mobile){
       gl.domElement.style.opacity="1";
-      if(running&&!reduced) angle.current-=delta*STEP/6;
+      if(running&&!reduced) angle.current-=delta*STEP/7;
       const index=((Math.round(-angle.current/STEP)%PRODUCTS.length)+PRODUCTS.length)%PRODUCTS.length;
       if(index!==active.current){active.current=index;onActive(index);}
       groups.current.forEach((g,i)=>{
         if(!g)return;
         const a=angle.current+i*STEP,depth=Math.cos(a);
-        // Stronger depth and smaller neighbours keep the front item prominent.
-        g.position.set(Math.sin(a)*2.2,0,(depth-1)*3.4);
-        g.rotation.y=Math.sin(a)*.14;
-        g.scale.setScalar(.3+.7*Math.pow((depth+1)/2,5));
+        g.position.set(Math.sin(a)*ORBIT_RADIUS,0,(depth-1)*ORBIT_DEPTH);
+        g.rotation.y=Math.sin(a)*.28;
+        g.scale.setScalar(.72+.28*(depth+1)/2);
         g.visible=true;
       });
     }else{

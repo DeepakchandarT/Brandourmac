@@ -21,8 +21,8 @@
 .roles{display:flex;flex-direction:column;gap:7px;font-size:10px;letter-spacing:.16em}
 .handwriting{font-family:var(--font-display),serif;font-style:italic;font-size:17px;line-height:1.45;color:#5148a0;margin-top:25px}
 .signatureRow{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:auto;padding:12px 0 20px}
-.signature{width:145px;max-width:50%;height:48px;fill:none;stroke:#343149;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.signature path{stroke-dasharray:1;stroke-dashoffset:0}
+.signature{position:relative;display:inline-block;width:max-content;max-width:58%;padding:0 8px 5px 2px;color:#343149;font-family:var(--font-signature),"Segoe Script",cursive;font-size:clamp(25px,3.1cqi,38px);font-weight:600;line-height:1;letter-spacing:-.045em;white-space:nowrap;transform:rotate(-7deg);transform-origin:left bottom}
+.signature::after{content:"";position:absolute;left:3%;right:-4%;bottom:0;height:1.5px;background:#343149;transform:rotate(-2deg);transform-origin:left center;opacity:.8}
 .machine{padding:17px 0 10px;border-top:1px solid #e2e2e8;font-family:monospace;font-size:clamp(7px,1.1vw,12px);letter-spacing:.055em;line-height:1.8;white-space:nowrap}
 .machine span{display:block}.pageNumber{font-size:8px;letter-spacing:.13em;color:#8b8479;margin-top:17px}
 .visaHeading{font-family:var(--font-display),serif;font-size:30px;font-weight:400;letter-spacing:-.025em;margin:12px 0 24px}
@@ -50,13 +50,13 @@
 .rail a{width:24px;height:28px;display:grid;place-items:center}.rail a span{width:4px;height:4px;border-radius:50%;background:#b8b3c4}.rail a[aria-current] span{background:#5148e5;box-shadow:0 0 0 4px #5148e518}.rail a:focus-visible{outline:2px solid #5148e5;outline-offset:-2px;border-radius:10px}
 .section[data-phase=waiting] .identity,.section[data-phase=waiting] .props>*{opacity:0}
 .section[data-phase=reveal] .identity{animation:settle .5s both}.section[data-phase=reveal] .visas{animation-delay:.18s}.section[data-phase=reveal] .photo{animation:photo .5s .3s both}
-.section[data-phase=reveal] .signature path{animation:draw .8s .5s both}.section[data-phase=reveal] 
+.section[data-phase=reveal] .signature{animation:sign .85s .5s both}.section[data-phase=reveal] 
 .section[data-phase=reveal] .section[data-phase=reveal] 
 .section[data-phase=reveal] .props>*{animation:prop .5s 1.9s both}.section[data-phase=reveal] .props>:nth-child(2){animation-delay:2.1s}.section[data-phase=reveal] .props>:nth-child(3){animation-delay:2.3s}
 .section[data-phase=reveal] [data-seen=false],.section[data-phase=reveal] [data-seen=false] *{animation-play-state:paused!important}
 @keyframes settle{from{opacity:0;transform:rotateY(8deg) translateY(12px)}to{opacity:1;transform:rotateY(0) translateY(0)}}
 @keyframes photo{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
-@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes sign{from{opacity:0;clip-path:inset(0 100% 0 0);transform:rotate(-7deg) translateY(4px)}to{opacity:1;clip-path:inset(0 -8% 0 0);transform:rotate(-7deg) translateY(0)}}
 @keyframes stamp{0%{opacity:0;scale:1.4}65%{opacity:.75;scale:.98}100%{opacity:1;scale:1}}
 
 @keyframes prop{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
@@ -64,7 +64,7 @@
 @container (max-width:540px){.identityBody{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin:25px 0}.identityText h3{font-size:27px}.roles{font-size:9px;letter-spacing:.1em}.handwriting{font-size:14px;margin-top:20px}.pageLabel{font-size:8px;letter-spacing:.09em}.machine{font-size:8px;letter-spacing:0}.signatureRow{gap:7px}.signatureRow>.micro{max-width:90px;font-size:7px}.props{grid-template-columns:1fr 1fr;gap:25px 16px}.badge{padding:12px;font-size:10px}.badge strong{font-size:10px}.penArea{grid-column:1/-1;grid-row:2;width:65%;justify-self:center;padding:10px 0}.pen span{font-size:7px}.boarding{padding:14px 12px}.boarding strong{font-size:23px}.boarding>span:not(.micro){font-size:8px}.visaHeading{font-size:28px}.routeList{font-size:9px}.quote{font-size:22px}}
 @container (max-width:350px){.routeList{display:grid;grid-template-columns:1fr;gap:10px;border-left:1px dashed #6551a060;padding-left:12px;margin:24px 0 18px;font-size:11px}.routeList li{flex-direction:row;gap:12px}.routeList li>span{font-size:9px}.page{padding:24px 18px 18px}}
 @media(max-width:600px){.section{padding:58px 32px 120px 20px!important}.header{margin-bottom:28px}.header h2{font-size:36px}.header>p{font-size:12px}.notes{font-size:12px;gap:10px;margin-top:19px;flex-direction:column}}
-@media(prefers-reduced-motion:reduce){.section[data-phase] *{animation:none!important;opacity:1!important;scroll-behavior:auto!important}.signature path,.flightLine{stroke-dashoffset:0!important}}
+@media(prefers-reduced-motion:reduce){.section[data-phase] *{animation:none!important;opacity:1!important;scroll-behavior:auto!important}.signature,.flightLine{clip-path:none!important}}
 
 /* The route remains readable immediately; only its plane runs continuously. */
 .identityText{min-width:0}.identityText h3{font-size:clamp(20px,2.15cqi,28px);overflow-wrap:anywhere}

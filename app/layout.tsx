@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Dancing_Script, Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -7,6 +7,13 @@ const fraunces = Fraunces({
   variable: "--font-display",
   weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+const signature = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-signature",
+  weight: ["500", "600"],
   display: "swap",
 });
 
@@ -42,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${signature.variable}`}>
       <body>{children}</body>
     </html>
   );

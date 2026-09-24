@@ -7,6 +7,14 @@ export function namespace() {
   return process.env.CAMPAIGN_NAMESPACE || `postiz:${process.env.VERCEL_ENV === "production" ? "production" : `preview:${process.env.VERCEL_GIT_COMMIT_REF || "local"}`}`;
 }
 
+// Website access must not change when Vercel creates a new immutable preview URL.
+// CAMPAIGN_NAMESPACE remains available for isolated tests or intentionally separate campaigns.
+function campaignAccessKey() {
+  return process.env.CAMPAIGN_NAMESPACE
+    ? `${process.env.CAMPAIGN_NAMESPACE}:published`
+    : "brandmyreach:campaign:published";
+}
+
 export function configured() {
   return !!(redisCredentials().url && redisCredentials().token &&
     process.env.SPONSOR_INVITE_CODE && process.env.SPONSOR_INVITE_CODE.length >= 12 &&
@@ -37,20 +45,20 @@ export async function redis<T>(command: (string | number)[]): Promise<T> {
 export async function isPublished() {
   // Admin unlock depends on persisted state, not invitation credentials.
   // Redis failures propagate so callers keep the public site closed.
-  return (await redis<string | null>(["GET", `${namespace()}:published`])) !== null;
+  return (await redis<string | null>(["GET", campaignAccessKey()])) !== null;
 }
 
 export async function publishCampaign() {
   // NX preserves the original launch time across subsequent invitation logins.
-  await redis(["SET", `${namespace()}:published`, new Date().toISOString(), "NX"]);
+  await redis(["SET", campaignAccessKey(), new Date().toISOString(), "NX"]);
 }
 
 export async function lockCampaign() {
-  await redis(["DEL", `${namespace()}:published`]);
+  await redis(["DEL", campaignAccessKey()]);
 }
 
 export async function unlockCampaign() {
-  await redis(["SET", `${namespace()}:published`, new Date().toISOString()]);
+  await redis(["SET", campaignAccessKey(), new Date().toISOString()]);
 }
 
 function digest(value: string) { return createHash("sha256").update(value).digest(); }

@@ -319,14 +319,9 @@ html,body {max-width:100%;overflow-x:clip;}
 @media(prefers-reduced-motion:reduce){.brandmyreach-rays{animation:none;}}
 
 
-/* Compact BrandMyReach header mark */
-.brandmyreach-lockup{display:block;width:160px;height:30px;overflow:hidden;position:relative;flex:none;line-height:0;}
-.brandmyreach-lockup img{position:absolute;display:block;width:150%;height:auto;max-width:none;left:-25.7%;top:-24px;object-fit:contain;mix-blend-mode:multiply;}
-@media(max-width:767px){
- .brandmyreach-lockup{width:min(142px,calc(100vw - 116px));height:27px;}
- .brandmyreach-lockup img{top:-22px;}
-}
-@media(max-width:360px){
- .brandmyreach-lockup{width:126px;height:24px;}
- .brandmyreach-lockup img{top:-20px;}
-}
+
+/* Compact text-only BrandMyReach wordmark */
+.brandmyreach-lockup{display:inline-flex;align-items:center;width:max-content;max-width:calc(100vw - 116px);height:auto;overflow:visible;line-height:1;}
+.brandmyreach-wordmark{display:block;white-space:nowrap;font-family:var(--font-display),Georgia,serif;font-size:22px;font-style:italic;font-weight:600;letter-spacing:-.045em;line-height:1;color:#111114;transform:skewX(-2deg);transform-origin:left center;}
+@media(max-width:767px){.brandmyreach-wordmark{font-size:20px;}}
+@media(max-width:360px){.brandmyreach-wordmark{font-size:18px;}}

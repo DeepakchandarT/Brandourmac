@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState } from "react";
 
@@ -28,14 +26,7 @@ export default function Nav() {
       />
       <nav className="px-5 md:px-8 flex items-center justify-between h-16 md:h-[4.5rem]">
         <a className="brandmyreach-lockup" href="#top" aria-label="BrandMyReach home">
-          <Image
-            src="/brand/brandmyreach-wordmark-script.png"
-            alt="BrandMyReach"
-            width={2172}
-            height={724}
-            sizes="(max-width: 767px) 180px, 210px"
-            priority
-          />
+          <span className="brandmyreach-wordmark">BrandMyReach</span>
         </a>
 
         <ul className="hidden md:flex items-center gap-10">

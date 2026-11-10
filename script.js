@@ -36,46 +36,20 @@ $('#next').addEventListener('click',()=>ar.scrollBy({left:step(),behavior:'smoot
 ar.addEventListener('scroll',()=>{const i=Math.round(ar.scrollLeft/step())+1;$('#article-count').textContent=String(i).padStart(2,'0')+' — 04';$('#prev').disabled=ar.scrollLeft<5;$('#next').disabled=ar.scrollLeft+ar.clientWidth>=ar.scrollWidth-5});
 $('#prev').disabled=true;
 
-/* ---------- KINETIC TYPE (style from reference video) ---------- */
-/* Each band is a stage: a sequence of beats. A beat = a word + a motion + a colour treatment. */
+/* ---------- KINETIC PORTRAIT BANDS ---------- */
 const kinetic=(()=>{
- const stages=$$('.kinetic');
- const wait=ms=>new Promise(r=>setTimeout(r,ms));
- function lines(stage,word){ // repeating rows, like the "AAAA" wall
-  const wall=stage.querySelector('.k-wall');wall.innerHTML='';
-  const rows=Math.ceil(stage.clientHeight/46)+1;
-  for(let i=0;i<rows;i++){const r=document.createElement('div');r.textContent=(word+' ').repeat(40);r.style.animationDuration=(3+(i%3))+'s';r.style.animationDirection=i%2?'reverse':'normal';wall.appendChild(r)}
- }
- async function play(stage){
-  if(stage._run)return;stage._run=true;
-  const word=stage.querySelector('.k-word'),beats=JSON.parse(stage.dataset.beats);
-  const theme=stage.dataset.theme||'red';
-  while(stage._live){
-   for(const b of beats){
-    if(!stage._live)break;
-    stage.dataset.bg=b.bg||theme;
-    stage.classList.toggle('wall',!!b.wall);
-    if(b.wall)lines(stage,b.w);
-    word.className='k-word '+(b.fx||'rise')+' '+(b.style||'fill');
-    word.textContent=b.wall?'':b.w;
-    word.style.animation='none';void word.offsetWidth;word.style.animation='';
-    await wait(b.t||700);
-   }
-   if(stage.dataset.once!==undefined)break;
-  }
-  stage._run=false;
- }
- const io=new IntersectionObserver(es=>es.forEach(e=>{const s=e.target;s._live=e.isIntersecting&&!reduce;if(s._live)play(s);if(!e.isIntersecting)s.classList.remove('on');else s.classList.add('on')}),{threshold:.35});
- stages.forEach(s=>io.observe(s));
- /* static fallback for reduced motion */
- if(reduce)stages.forEach(s=>{const b=JSON.parse(s.dataset.beats).slice(-1)[0];s.querySelector('.k-word').textContent=b.w});
- return{refresh(){stages.forEach(s=>{io.unobserve(s);io.observe(s)})}};
+ const bands=$$('.kband'),timers=new Map();
+ function wall(b){const w=b.querySelector('.kb-wall');if(!b.dataset.wall||w.childElementCount)return;const rows=Math.ceil(b.clientHeight/62)+1;for(let i=0;i<rows;i++){const d=document.createElement('div');d.textContent=(b.dataset.wall+' ').repeat(30);d.style.animationDuration=(6+i%4*2)+'s';if(i%2)d.style.animationDirection='reverse';w.appendChild(d)}}
+ const io=new IntersectionObserver(es=>es.forEach(e=>{const b=e.target;
+  if(e.isIntersecting){wall(b);b.classList.add('on');if(!reduce&&!timers.has(b)){let p=0;b.dataset.ph=0;timers.set(b,setInterval(()=>{p=(p+1)%4;b.dataset.ph=p},1300))}}
+  else{b.classList.remove('on');clearInterval(timers.get(b));timers.delete(b)}}),{threshold:.3});
+ bands.forEach(b=>io.observe(b));
+ return{refresh(){bands.forEach(b=>{io.unobserve(b);io.observe(b)})}};
 })();
-
-/* ---------- FINALE: SHOW UP / Again Tomorrow / — Sidd Ahmed ---------- */
+/* ---------- FINALE ---------- */
 const fin=$('#finale');
 if(fin){
- const fio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fin.classList.add('go');fio.disconnect()}}),{threshold:.4});
+ const fio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fin.classList.add('go');fio.disconnect()}}),{threshold:.35});
  fio.observe(fin);
  $('#finale-replay').addEventListener('click',()=>{fin.classList.remove('go');void fin.offsetWidth;fin.classList.add('go')});
 }
